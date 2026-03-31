@@ -1,80 +1,108 @@
-# HGS 纯净联动版总包
+# HGS 正式发布版总览
 
+这是按“**Manifest 驱动、多角色、多工具、治理文档约束、只保留正式运行集**”原则整理后的正式发布仓库。
 
+## 当前正式运行特点
 
-## 本包特点
+- 只有 **1 个正式入口**：`Release/00_HGS_Master_Loader.md`
+- 只有 **1 个正式装配清单**：`Release/MANIFEST.json`
+- 角色、工具、协议、治理文档都以 Manifest 登记为准
+- 旧版 legacy 文件允许保留追溯，但**不进入正式装配链**
+- 主链路固定为：
+  `真相Owner → P9审查派单 → P8执行 → 体验/QA/SRE → P9复审 → P10终审(按需) → Docs沉淀 → Closeout`
 
-- 只有 **1 个总入口**：`HGS_AutoLoop_Master_SKILL.md`
-- 不保留任何兼容包装文件
-- 不保留任何废弃入口
-- 不保留重复版本号文件名
-- 角色文件全部收敛为单一正式版
-- 对 P9 / P8 Enhanced / 各专项 P8 做了逐份审查后合并，避免“新版有协议、旧版有细节”的断层
-- P10/P9审查 → P9派单 → P8执行 → 用户/代理体验 → P9复审 → P10终审（按需） → 收口 ✅
+---
 
+## 当前正式仓库结构
 
+```text
+HGS_Skill/
+├─ README.md
+└─ Release/
+   ├─ MANIFEST.json
+   ├─ 00_HGS_Master_Loader.md
+   ├─ roles/
+   ├─ tools/
+   ├─ protocols/
+   └─ docs/
+```
 
-## 本包文件
+---
 
-1. `HGS_AutoLoop_Master_SKILL.md`：唯一主入口
-2. `P10_CTO_SKILL.md`：战略裁剪
-3. `P9_Principal_SKILL.md`：审查、派单、复审
-4. `P8_PUA_Enhanced_SKILL.md`：通用深化执行兜底
-5. `P8_Backend_PUA_SKILL.md`
-6. `P8_Frontend_PUA_SKILL.md`
-7. `P8_LanrenJingling_PUA_SKILL.md`
-8. `P8_PCConsole_PUA_SKILL.md`
-9. `P8_Agent_PUA_SKILL.md`
-10. `P8_EndUser_PUA_SKILL.md`
-11. `P8_Agent_Review_Protocol.md`
-12. `P8_EndUser_Review_Protocol.md`
-13. `RE_REVIEW_PROTOCOL.md`
-14. `00_全局严审与清理报告.md`
+## 推荐加载方式
 
-## 加载口令
+只以 `Release/` 为正式运行源：
 
-1. ```
-   读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
-   
-   1. 先读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
-   2. 再读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
-   3. 按 `MANIFEST.json` 的 `load_order` 继续加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
-   4. 执行模式固定为 `full_loop`
-   5. 我后续上传的文件默认进入这条链路：
-      `P10/P9审查 → P9派单 → P8执行 → 用户/代理体验 → P9复审 → P10终审/收口`
-   6. 除非触发高风险停机条件，否则不要再让我手动点名角色或确认下一步
-   7. 本轮以 `MANIFEST.json + Master Loader + Roles + Protocols` 为唯一有效装配源，禁止混用其他旧入口或旧版本 Skill
-   ```
+```text
+读取 `Release/MANIFEST.json`，并按其中的 `load_order / tool_load_order / documentation_load_order` 装配整个 HGS 正式发布版。
+本轮只承认 `Release/` 下且已登记在 `MANIFEST.json` 中的文件为有效 Skill 源。
+执行模式：`full_loop`。
+我后续上传的文件默认进入：
+真相Owner识别 → P9审查派单 → P8执行 → 体验验证 / QA / SRE → P9复审 → P10终审（按需） → Docs沉淀 → Closeout。
+命中 `risk_gates` 时显式停下。
+```
 
-   
+---
 
-## 升级口令
+## 当前正式装配范围
 
-- ```
-  立即将本对话中此前已加载的旧 HGS 链路全部标记为失效，不再继续沿用其入口、状态机、停机条件、派单规则与协议格式。
-  
-  从现在开始，重新装配并加载以下 GitHub 发布版，作为本对话唯一有效的 HGS Skill 链路：
-  
-  1. 读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
-  2. 读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
-  3. 按 `MANIFEST.json` 的 `load_order` 加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
-  4. 本对话后续一律以这套 `Release` 发布版为唯一有效装配源，禁止混用旧入口、旧协议、旧派单格式、旧停机条件
-  5. 若旧链路已生成中间产物，则将其视为“历史上下文”，必须按新链路重新解释；如与新协议冲突，以新协议为准
-  6. 执行模式固定为 `full_loop`
-  7. 升级原则改为：
-     `当前角色先自救 → 内部协商/上级裁决 → P9协调 → P10重裁 → 内部方案穷尽后才升级问我`
-  8. 除非命中真正的高风险硬停机条件，否则不要因为常规不确定性回头问我
-  
-  升级完成后，请先输出：
-  
-  - 当前生效版本
-  - 已加载的 roles / protocols 清单
-  - 本对话中哪些旧链路规则已被废止
-  ```
+### 1. Roles
+以 `Release/MANIFEST.json` 的 `roles` 与 `load_order` 为准。
 
-  
+### 2. Tools
+以 `Release/MANIFEST.json` 的 `tools` 与 `tool_load_order` 为准。
+
+### 3. Protocols
+以 `Release/MANIFEST.json` 的 `protocols` 为准。
+
+### 4. Governance Docs
+以 `Release/MANIFEST.json` 的 `governance_docs` 与 `documentation_load_order` 为准。
+
+---
+
+## 当前治理约束
+
+装配时默认承认以下两份治理文档：
+
+- `Release/docs/角色调用关系总表.md`
+- `Release/docs/工具调用关系总表.md`
+
+这两份文档用于约束：
+
+- 谁先看
+- 谁能拍板
+- 哪些场景必须先跑工具
+- 哪些工具不能替代真相 Owner
+- 哪些输出必须落到协议字段
+
+---
+
+## 当前已降权的旧文件
+
+以下文件保留在仓库中仅供历史追溯，不属于正式装配链：
+
+- `Release/roles/32_P8_Frontend_PUA_SKILL.md`
+- `Release/roles/33_P8_PCConsole_PUA_SKILL.md`
+
+它们已分别被以下正式角色替代：
+
+- `Release/roles/32A_P8_UI_Surface_Engineer_SKILL.md`
+- `Release/roles/32B_P8_Frontend_Logic_Engineer_SKILL.md`
+- `Release/roles/33A_P8_Console_Runtime_Engineer_SKILL.md`
+- `Release/roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md`
+
+---
 
 ## 使用结论
 
-从现在开始，**不要再混用旧入口文件**。
-这个总包就是新的唯一基线。
+从现在开始：
+
+- 不要再混用旧入口文件
+- 不要把未登记在 Manifest 的文件当 active chain 加载
+- 不要跳过 tools / docs 直接宣称“正式发布链已完整生效”
+
+这个仓库当前的唯一正式基线，就是：
+
+```text
+Release/MANIFEST.json + Release/00_HGS_Master_Loader.md + 已登记的 roles/tools/protocols/docs
+```

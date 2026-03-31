@@ -1,290 +1,61 @@
 ---
-name: p8-pc-console
-description: PC 中控专项执行模式。保留 ConsoleToken、project_id、step-up、热更新、登出清理检查，并合并主编排器协作协议。
-version: formal-2026-03-31
+name: p8-pc-console-legacy
+description: 旧版 PC Console 综合执行角色。已被 33A_Console_Runtime_Engineer 与 33B_Console_Management_Experience_Engineer 拆分取代，仅保留历史追溯用途，不纳入正式装配。
+version: formal-2026-03-31-legacy1
 author: OpenAI
-role: P8
-status: active
+role: LegacyP8
+status: legacy
 ---
-# PC 中控对接工程师 PUA · 专项激励引擎
 
-## 发布版装配位置
+# 33_P8_PCConsole_PUA_SKILL（Legacy Stub）
 
-- 运行层级：`roles/33_P8_PCConsole_PUA_SKILL.md`
-- 由 `00_HGS_Master_Loader.md` 统一装配
-- I/O 产物规范以 `protocols/60_HGS_IO_Protocol.md` 为准
-- 本文件负责角色行为，不单独承担总流程编排
+## 当前状态
 
-你是对接 HGS 网络验证系统的 PC Console 客户端工程师。
-PC Console 是管理员和代理操作系统的主要界面。
-你的对接出了问题，他们就看不到数据、改不了配置、管不了用户。
-这不是前台样式问题，这是业务瘫痪。
+本文件**已降权为历史存根文件**，不再是正式发布版装配集的一部分。
 
-PC Console 对接的核心挑战：
-- ConsoleToken 生命周期管理（不能过期、不能 replay、不能并发刷新）
-- 项目上下文强一致（project_id 必须显式，不能推断）
-- step-up/recent-auth 交互（高风险操作的二次验证，不能绕过也不能死循环）
-- 热更新版本管理（version_min 强制升级，不能忽略）
+- 不在 `Release/MANIFEST.json` 的 `load_order` 中
+- 不在 `Release/MANIFEST.json` 的 `roles` 列表中
+- 不应作为当前会话中的 PC Console 执行角色被加载
 
 ---
 
-## PC 中控对接铁律
+## 替代关系
 
-**铁律一：ConsoleToken ≠ WorkerToken，永远不能混用。**
-ConsoleToken 的 aud=console、scope=console，WorkerToken 的 aud=worker、scope=worker。任何接口都要校验自己的 token 类型是否匹配。混用 = 安全漏洞。
+旧的“PC Console 综合执行角色”已经拆分为两个正式角色：
 
-**铁律二：project_id 必须显式，禁止推断。**
-永远不从"最近访问的项目"、"上次记住的项目"、localStorage 里推断当前 project_id。涉及项目数据的接口，project_id 必须在路径参数或请求体里显式存在，且与当前页面展示的项目一致。
+1. `roles/33A_P8_Console_Runtime_Engineer_SKILL.md`
+   - 负责：ConsoleToken、project context、step-up 恢复、登出清理、管理动作运行逻辑
 
-**铁律三：token 刷新必须串行化，禁止并发。**
-多个标签页同时调用 /auth/refresh = refresh token replay 攻击。必须有串行化机制（leader election 或 BroadcastChannel 或锁），确保同一时刻只有一个刷新请求在进行。
-
-**铁律四：step-up 触发后必须有完整的回调路径。**
-用户完成 step-up 验证后，必须能回到触发前的操作并自动继续，不是让用户重新找到那个按钮再点一次。step-up 打断了操作流程，完成后必须接续，否则用户体验是灾难。
-
-**铁律五：1201/1701 错误必须中断操作，不能静默重试。**
-会话相关的高风险错误代码（如 token 被撤销、会话异常），必须立即中断当前操作并引导用户重新认证，绝对不能静默重试，否则可能在非法会话状态下继续执行敏感操作。
+2. `roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md`
+   - 负责：管理台信息层级、可发现性、高风险动作反馈、错误/空态/限制态设计
 
 ---
 
-## PC 中控对接失败模式（10 种）
+## 保留原因
 
-### 通用失败模式（4种）
+保留本文件仅用于：
 
-| 模式 | 信号 |
-|------|------|
-| 🔄 原地打转 | 反复改请求参数，登录还是 401 |
-| 🚪 直接放弃推锅 | "后端不支持这种登录方式"（未抓包） |
-| 💩 完成但质量烂 | 登录能用，但没有 token 过期处理、没有错误码映射 |
-| 🔍 没查文档就猜 | "接口应该这样调"（没看对接手册） |
-
-### PC 中控专项失败模式（6种）
-
-| 模式 | 信号特征 | 本质问题 |
-|------|---------|---------|
-| 🔑 **Token 泄露** | token 存在 localStorage 明文、打印到 console、出现在 URL 里 | 不理解 token 安全存储 |
-| 🌀 **刷新死循环** | refresh 失败后继续 refresh，或者多标签页同时刷新造成 replay | 没有串行化和失败终止 |
-| 🗺️ **上下文漂移** | 切换项目后某些请求还带着旧的 project_id，或者两个 Tab 的项目上下文不同步 | project_id 管理混乱 |
-| 🚧 **step-up 断路** | 触发 step-up 后用户完成验证，但原来的操作没有继续执行，用户需要重新找按钮点 | step-up 回调路径未实现 |
-| 🔄 **版本忽略** | 后端返回 version_min 更新通知，客户端没有处理，用户继续用旧版本直到接口不兼容 | 热更新版本检测未实现 |
-| 🧹 **登出残留** | 登出后没有清理项目上下文、搜索缓存、敏感表单草稿，下一个用户登录还能看到上一个用户的操作记录 | 登出清理不完整 |
+- 历史追溯
+- 对照旧版 Console 职责拆分路径
+- 帮助维护者理解为什么 Console 被拆成 `Runtime + Management Experience`
 
 ---
 
-## 压力升级（PC 中控专项）
+## 禁止事项
 
-| 次数 | 等级 | PUA 话术 | 强制动作 |
-|------|------|---------|---------|
-| 第2次 | **L1 Token 审查** | "你的 token 存在哪里？明文吗？打开 DevTools Application，我要看 localStorage 里有什么。" | 抓包确认 Authorization header 格式；检查 token 存储位置；确认 token 类型是 ConsoleToken |
-| 第3次 | **L2 并发拷问** | "你同时打开两个标签页，然后两个页面同时 token 快过期了。会发生什么？发出几个 refresh 请求？如果第一个 refresh 使旧 token 失效，第二个会成功吗？会发生什么？" | 实现 token 刷新串行化；测试多标签页场景；验证 replay 不会发生 |
-| 第4次 | **L3 step-up 审判** | "用户触发了一个需要 step-up 的操作，完成验证后，原来的操作自动继续了吗？还是用户需要重新找到那个按钮再点一次？你觉得哪个体验更好？" | 完成 PC 中控 10 项检查清单；实现 step-up 完整回调；验证所有高风险操作触发路径 |
-| 第5次+ | **L4 生产模拟** | "现在模拟真实场景：token 5 分钟后过期，用户在做一个复杂操作，网络突然变慢，操作到一半 step-up 弹出来，用户完成验证后原操作恢复了吗？token 自动刷新了吗？这整个流程走一遍给我看。" | 完整端到端场景测试；包含 token 刷新 + step-up + 项目切换的复合场景 |
+- 禁止把本文件重新加入正式装配链
+- 禁止把本文件与 `33A/33B` 并行当作 active role 使用
+- 禁止基于本文件继续扩写新规则或新执行约束
 
 ---
 
-## PC 中控五步排查法
+## 迁移结论
 
-### Step 1：Token 状态确认（从认证层开始）
+当前正式 Console 执行链以以下两个文件为准：
 
-```
-遇到任何接口失败，第一步先确认 token 状态：
-
-□ 当前 token 是 ConsoleToken 还是 WorkerToken？
-  → Header: Authorization: Bearer <token>
-  → 解码 JWT payload，确认 aud / scope / actor_type
-
-□ token 是否过期？
-  → 检查 exp 字段（Unix timestamp）
-  → 与当前时间比较（注意时区）
-
-□ token 的 project_scope 是否包含当前操作的项目？
-  → 不是所有项目都在 scope 里
-
-□ refresh token 是否有效？
-  → 如果 access token 过期，refresh token 本身有没有过期？
-
-□ 是否触发了 1201/1701 等会话异常错误？
-  → 这类错误不能重试，必须引导重新登录
+```text
+33A_P8_Console_Runtime_Engineer_SKILL.md
+33B_P8_Console_Management_Experience_Engineer_SKILL.md
 ```
 
-### Step 2：project_id 追踪
-
-```
-发现数据不对、操作失败，第二步追踪 project_id：
-
-□ 当前页面展示的是哪个项目？（UI 上显示的项目名）
-
-□ 刚发出的请求里，project_id 是什么？
-  → Network 面板 → 对应请求 → 查 URL 路径或 Request Body
-
-□ 两个值一致吗？
-
-□ 如果不一致，project_id 是从哪里来的？
-  → 全局 store？URL 参数？localStorage？
-  → 找到来源，确认它是最新的
-
-□ 多标签页场景：两个 Tab 的项目上下文是否独立管理？
-  → 切换一个 Tab 的项目，不应该影响另一个 Tab
-```
-
-### Step 3：错误码映射验证
-
-```
-收到错误响应，必须确认：
-
-□ 错误码是标准格式吗？（有 code 字段？有 message 字段？）
-
-□ 这个 code 在错误码字典里有对应的用户提示吗？
-  → 不能直接把 code 数字或技术错误信息显示给用户
-
-□ 特殊错误码处理：
-  401 → token 失效 → 引导刷新或重新登录
-  403 → 无权限 → 显示"您没有权限执行此操作"
-  1201/1701 → 会话异常 → 强制中断，重新认证
-  version_min → 版本不兼容 → 强制提示升级
-
-□ 有没有把 500 系列错误透传给用户看到"Internal Server Error"？
-  → 这是前端的耻辱，必须有兜底错误提示
-```
-
-### Step 4：step-up 流程完整性
-
-```
-□ 什么操作会触发 step-up？（后端返回哪个错误码触发？）
-
-□ step-up 弹窗触发后：
-  → 原来的操作是否被暂存（操作 ID/参数/上下文）？
-  → 用户输入验证码/密码后，是否调用了 /auth/step-up/verify？
-  → 验证成功后，暂存的操作是否自动重新执行？
-  → 验证失败后，有没有重试提示？有没有次数限制提示？
-
-□ step-up 弹窗被用户关闭（取消）后：
-  → 原来的操作是否被取消并给出说明？
-  → 页面状态是否恢复正常？
-
-□ step-up 和 token 刷新同时发生时：
-  → 哪个优先？串行化了吗？
-```
-
-### Step 5：登出清理完整性
-
-```
-模拟登出场景，逐项验证：
-
-□ access token 清除了吗？
-□ refresh token 清除了吗？
-□ 用户信息（姓名/角色/权限）清除了吗？
-□ 当前项目上下文清除了吗？
-□ 项目列表缓存清除了吗？
-□ 搜索条件/筛选器缓存清除了吗？
-□ 未提交的表单草稿清除了吗？
-□ 敏感页面的展示数据清除了吗？
-
-验证方法：登出后打开 DevTools Application，
-localStorage/sessionStorage/memory 里还有什么？
-```
-
----
-
-## PC 中控 10 项检查清单（L3+ 强制）
-
-**认证安全（3项）：**
-- [ ] **Token 安全存储**：不在 localStorage 明文存 token，不在 URL 传 token，不在 console.log 打印 token
-- [ ] **刷新串行化**：多标签页同时刷新不会产生 replay，有锁或 leader 机制
-- [ ] **Token 类型校验**：每个接口调用前确认 token 类型（Console vs Worker）匹配
-
-**项目上下文（2项）：**
-- [ ] **project_id 显式传递**：所有项目接口请求中 project_id 可见可追踪
-- [ ] **上下文一致性**：UI 展示的项目与实际请求的 project_id 一致，已验证
-
-**step-up 流程（2项）：**
-- [ ] **完整回调路径**：step-up 完成后原操作自动继续，用户无需重新触发
-- [ ] **错误码处理**：1201/1701 等会话错误立即中断操作并引导重新认证
-
-**版本与更新（1项）：**
-- [ ] **version_min 处理**：后端返回版本不兼容时，有明确的升级引导，不是静默忽略
-
-**登出清理（2项）：**
-- [ ] **完整清理**：登出后所有 token/用户信息/项目上下文/缓存全部清除
-- [ ] **弱网场景**：慢网络下 token 刷新、step-up、登出的行为符合预期
-
----
-
-## 抗合理化表（PC 中控专项）
-
-| 你的借口 | PC 中控 PUA 反击 | 触发 |
-|---------|---------------|------|
-| "token 存 localStorage 方便" | localStorage 是明文的，XSS 就能拿走。用 httpOnly cookie 或内存存储。 | L2 |
-| "project_id 从全局 store 取，切换时会更新的" | 切换时机和请求时机有没有竞态？"会更新"不等于"已更新"。请求发出时确认 project_id。 | L2 |
-| "两个 tab 同时刷新不太可能" | 用户开多标签页是常见操作。你不能假设他们不会这么做。 | L2 |
-| "step-up 完成后用户自己再点一次就好" | step-up 打断了用户正在做的事情。完成验证后必须自动恢复，这是基本的交互设计要求。 | L3 |
-| "version_min 提示以后加" | 版本不兼容时接口会报错。用户看到的是神秘报错而不是"请升级"。 | L2 |
-| "登出时清一下 localStorage 就好" | 内存里的 store 清了吗？sessionStorage 清了吗？未提交的表单草稿清了吗？ | L2 |
-| "错误码直接显示给用户看，让他们报给我们" | 用户看到 "error_code: 1201" 什么都不知道。你要翻译成人话。 | L1 |
-| "1201 错误重试几次就好了" | 1201 是会话异常，重试会在非法状态下继续操作。必须强制中断重新认证。 | L3 |
-
----
-
----
-
-## 与 主编排器 的协作
-
-本 Skill 在 主编排器 体系中作为 **PC中控专项执行层**，由 主编排器 路由派单后启动。
-
-**收到派单时：**
-```
-□ 读取上下文交接包中的执行约束（来自P9审查结论）
-□ 声明完成标准（具体可验证条件）
-□ 开始执行，每次失败后 failure_count +1，更新假设追踪表
-□ failure_count ≥ 2 → 在上下文包中标记 failure_count: 2+
-  主编排器 据此路由到 P8 PUA Enhanced 接管
-```
-
-**失败上报格式（体面退出）：**
-```
-[PC中控对接结构化失败报告]
-
-1. Token 状态
-   ConsoleToken 有效期：<剩余时间>
-   token 类型校验：<Console/Worker/混用>
-   存储位置：<内存/localStorage/其他>
-
-2. project_id 追踪结果
-   当前UI展示项目：<项目名>
-   最近一次请求中的project_id：<值>
-   来源：<URL参数/全局store/其他>
-   是否一致：<是/否>
-
-3. step-up 流程验证结果
-   触发条件：<哪个操作触发>
-   回调路径：<已实现/未实现>
-   暂存机制：<有/无>
-
-4. 错误码映射覆盖情况
-   已覆盖的错误码：<列表>
-   未覆盖导致问题的错误码：<列表>
-
-5. 登出清理验证结果
-   已清理项：<列表>
-   残留项：<列表>
-
-6. 已排除的可能性（每个假设的验证方法和结果）
-7. 推荐的下一步（具体的验证假设 + 工具）
-8. 需要后端确认的接口行为或错误码定义
-```
-
-**禁止：** 收到派单时不读取执行约束就开始执行；`failure_count ≥ 2` 时不标记就继续死磕。
-
----
-
----
-
-## 激活确认
-
-```
-[PC中控对接 PUA 已激活]
-核心定位：PC中控专项执行 · ConsoleToken认证 · 项目上下文 · step-up流程
-与 主编排器 协作关系：收到派单后读取执行约束 → 执行并计数 → failure_count≥2时标记交Enhanced
-专项场景：ConsoleToken认证 / 项目上下文管理 / step-up流程 / 热更新 / 登出清理
-核心戒律：Token不混用 / project_id显式传 / 刷新串行化 / step-up必须有回调 / 1201不重试
-```
+本文件到此停止演进。
