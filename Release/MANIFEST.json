@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int1",
+  "package_version": "formal-2026-03-31-int2",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -53,7 +53,11 @@
     "tools/95_Test_Matrix_Builder_SKILL.md",
     "tools/96_Regression_Checklist_SKILL.md",
     "tools/101_Compatibility_Matrix_SKILL.md",
-    "tools/106_SOP_Generator_SKILL.md"
+    "tools/106_SOP_Generator_SKILL.md",
+    "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+    "tools/108_Chain_Route_Simulator_SKILL.md",
+    "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+    "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
   ],
   "documentation_load_order": [
     "docs/正式发布版全局审查报告.md",
@@ -286,6 +290,26 @@
       "id": "sop-generator",
       "file": "tools/106_SOP_Generator_SKILL.md",
       "layer": "knowledge_synthesis"
+    },
+    {
+      "id": "protocol-field-completeness-checker",
+      "file": "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+      "layer": "governance_tool"
+    },
+    {
+      "id": "chain-route-simulator",
+      "file": "tools/108_Chain_Route_Simulator_SKILL.md",
+      "layer": "governance_tool"
+    },
+    {
+      "id": "high-risk-action-guard-checker",
+      "file": "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+      "layer": "security_tool"
+    },
+    {
+      "id": "authorization-bypass-path-reviewer",
+      "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+      "layer": "security_tool"
     }
   ],
   "governance_docs": [

@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档与协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int1
+version: formal-2026-03-31-int2
 author: OpenAI
 role: MasterLoader
 status: active
@@ -160,6 +160,12 @@ MANIFEST
 ### 验证工具
 - `tools/95_Test_Matrix_Builder_SKILL.md`
 - `tools/96_Regression_Checklist_SKILL.md`
+- `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
+- `tools/108_Chain_Route_Simulator_SKILL.md`
+
+### 安全 / 门禁工具
+- `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
+- `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
 
 ### 沉淀工具
 - `tools/106_SOP_Generator_SKILL.md`
@@ -249,6 +255,10 @@ experience_check → reopen
 - 接口联调 / 抓包 / contract 漂移 → `tools/82_Network_Trace_Reviewer_SKILL.md` + `tools/79_API_Contract_Diff_SKILL.md`
 - 页面 / 管理台体验争议 → `tools/85_UI_Surface_Audit_SKILL.md`
 - 验证设计 / 回归收口 → `tools/95_Test_Matrix_Builder_SKILL.md` + `tools/96_Regression_Checklist_SKILL.md`
+- 协议字段完整性 / closeout 前质量闸门 → `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
+- 新 issue dry-run 路由预演 / 自动链路检查 → `tools/108_Chain_Route_Simulator_SKILL.md`
+- 高风险动作门禁审查 → `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
+- 越权 / 绕过路径审查 → `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
 - 版本组合 / `version_min` / 升级争议 → `tools/101_Compatibility_Matrix_SKILL.md`
 - SOP / runbook / 代理与用户流程沉淀 → `tools/106_SOP_Generator_SKILL.md`
 
@@ -280,10 +290,14 @@ experience_check → reopen
 1. 已形成完整 `HGS-BATCH-HEADER` 与 `ISSUE-LEDGER` → 进入派单
 2. `owner` 唯一、`max_change_boundary` 清晰 → 进入对应 P8
 3. issue 涉及规则、身份、账务、版本、上下文、配额、冻结、contract、验证或 SOP 收口时，必须先调用对应工具再进入执行或复审
-4. 已产生 `P8-EXEC-REPORT` → 送回 P9 复审
-5. 复审通过但无真实体验证据 → 自动进入体验验证
-6. 体验通过且无新增结构性风险 → 进入 Knowledge / Docs 沉淀与 Closeout
-7. 体验失败或复审发现漂移 → reopen 并重新派单
+4. issue 涉及协议字段缺失、evidence 悬空、closeout 断链时，必须先调用 `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
+5. issue 涉及自动分流不清、owner 不稳、怀疑漏工具 / 漏验证 / 错派时，必须先调用 `tools/108_Chain_Route_Simulator_SKILL.md`
+6. issue 涉及删除、冻结、解绑、扣点、授权、回滚等高风险动作时，必须先调用 `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
+7. issue 涉及对象级授权、project scope、前端显隐代替服务端校验、疑似越权绕过时，必须先调用 `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
+8. 已产生 `P8-EXEC-REPORT` → 送回 P9 复审
+9. 复审通过但无真实体验证据 → 自动进入体验验证
+10. 体验通过且无新增结构性风险 → 进入 Knowledge / Docs 沉淀与 Closeout
+11. 体验失败或复审发现漂移 → reopen 并重新派单
 
 ## 内部解法穷尽链（强制）
 
