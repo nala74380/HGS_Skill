@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int6
+version: formal-2026-03-31-int7
 author: OpenAI
 role: MasterLoader
 status: active
@@ -28,12 +28,6 @@ entrypoint: true
 7. `docs/工具调用关系总表.md`
 8. `docs/HGS_自动化联动动作总表（正式版）.md`
 
-说明：
-
-- `docs/正式发布版全局审查报告.md` 与 `docs/发布说明与加载方式.md` 属于基线与操作文档，应在装配阶段被视为背景约束
-- `protocols/61_Automation_Orchestration_Protocol.md` 定义自动化动作的输入输出骨架
-- 治理文档不是“执行角色”，但对角色调用顺序、工具优先级、动作闸门具有约束力
-
 ---
 
 ## 装配目标
@@ -55,8 +49,6 @@ QA / SRE / 体验证据收口
   ↓
 P9 复审
   ↓
-P10 终审（仅必要时）
-  ↓
 Knowledge / Docs 沉淀
   ↓
 收口 / 再开环
@@ -64,14 +56,12 @@ Knowledge / Docs 沉淀
 
 本版新增的核心能力：
 
-- 自动化动作驱动入口标准化
-- 自动化动作驱动 owner 自救 / 平级协商 / 重派单
-- 自动化动作驱动工具闸门与字段落点检查
-- 自动化动作驱动执行报告、验证包、体验复演、自动 reopen 与 docs sink
+- 自动化动作驱动入口标准化、内部协商、执行、验证、体验、回流、收口
+- **自动化评分驱动派单、review、reopen 与 done 决策**
 
 ---
 
-## 自动化动作装配清单（第一批 + 第二批 + 第三批 active）
+## 自动化动作装配清单（全 active）
 
 当前正式激活的动作包括：
 
@@ -99,138 +89,112 @@ Knowledge / Docs 沉淀
 17. `auto_reopen_on_drift`
 18. `auto_docs_sink`
 
+### 第四批（评分驱动）
+19. `compute_owner_confidence`
+20. `compute_tool_coverage_score`
+21. `compute_evidence_completeness_score`
+22. `compute_route_stability_score`
+23. `compute_closeout_readiness_score`
+24. `compute_reopen_risk_score`
+
 ---
 
 ## 自动化动作执行顺序（当前 active）
 
-### 入口标准化序列
+### 入口标准化与评分路由序列
 ```text
 create_issue_stub
 → infer_owner_candidates
+→ compute_owner_confidence
 → infer_required_tools
-→ route_dry_run（当 owner_confidence 低 / mixed issue / route 不稳）
+→ compute_route_stability_score
+→ route_dry_run（当 owner_confidence < 70 或 route_stability < 65）
 → provisional_boundary_build（当边界暂不精确）
 ```
 
 ### 内部协商与重派单序列
 ```text
 owner_self_resolve_attempt
-→ peer_role_consult（当当前 owner 自救不足）
-→ split_subissues（当 mixed issue / 多 owner 交叉依赖）
-→ fallback_to_p8_enhanced（当失败次数过多 / owner 不稳 / 路由碎裂）
-→ p9_reframe_and_redispatch（当需要重构 issue / 改派 / 重排工具顺序）
+→ peer_role_consult
+→ split_subissues
+→ fallback_to_p8_enhanced
+→ p9_reframe_and_redispatch
 ```
 
-### 工具闸门序列
+### 工具闸门与 review 评分序列
 ```text
 must_run_tool_gate
-→ tool_result_landing_check
-```
-
-### 执行与验证序列
-```text
-P8 执行
 → autofill_exec_report
 → generate_validation_bundle
+→ compute_tool_coverage_score
+→ compute_evidence_completeness_score
 → tool_result_landing_check
+→ 若 tool_coverage < 85 或 evidence_completeness < 80，则不得进入 review
 ```
 
-### 体验 / 回流 / 收口序列
+### 体验 / 回流 / 收口评分序列
 ```text
 experience_replay（当真实反馈缺失）
-→ auto_reopen_on_drift（当 review / QA / experience / tools 发现漂移）
+→ compute_reopen_risk_score
+→ auto_reopen_on_drift（当 reopen_risk >= 60 或 review/QA/experience/tools 发现漂移）
 → auto_docs_sink（当复审通过且具备复用价值）
+→ compute_closeout_readiness_score
 → closeout_candidate_check
-→ 通过则 done
+→ 若 closeout_readiness >= 85 且 reopen_risk < 60，则进入 done
 ```
 
 ---
 
-## 评分与闸门阈值
+## 分数驱动决策规则（正式版）
 
-当前采用以下默认阈值：
-- `owner_confidence_min_for_direct_dispatch = 70`
-- `tool_coverage_min_before_review = 85`
-- `evidence_completeness_min_before_review = 80`
-- `closeout_readiness_min_before_done = 85`
-- `reopen_risk_high = 60`
+### 1. 派单决策
+只有同时满足：
+- `owner_confidence >= 70`
+- `route_stability_score >= 65`
 
-硬规则：
+才允许直接 dispatch。否则：
+- 先 `route_dry_run`
+- 必要时 `p9_reframe_and_redispatch`
+
+### 2. Review 决策
+只有同时满足：
+- `tool_coverage_score >= 85`
+- `evidence_completeness_score >= 80`
+- `P8-EXEC-REPORT` 已存在
+- `validation bundle` 已存在
+
+才允许进入 review。否则：
+- `tool_missing` 或 `evidence_incomplete`
+- 继续补 exec / validation / protocol landing
+
+### 3. Reopen 决策
+只要满足任一：
+- `reopen_risk_score >= 60`
+- QA / review / experience / tools 发现 drift
+
+则自动执行：
+- `auto_reopen_on_drift`
+- 必要时 `p9_reframe_and_redispatch`
+
+### 4. Done 决策
+只有同时满足：
+- `closeout_readiness_score >= 85`
+- `reopen_risk_score < 60`
+- `closeout_candidate_check = pass`
+- `auto_docs_sink` 已完成
+
+才允许进入 `done`。
+
+---
+
+## 硬规则
+
 - 未创建 `ISSUE-LEDGER stub` 不得派单
-- `owner_confidence < 70` 时必须先跑 `108`
-- 工具前置场景中 `must_run_tools` 未完成不得派单
-- 重复失败时必须升级 `fallback_to_p8_enhanced`
-- 无 `P8-EXEC-REPORT` 不得进入 review
-- 无 `validation bundle` 不得进入 review
-- 无真实体验反馈时必须执行 `experience_replay`
-- 出现 drift 时必须执行 `auto_reopen_on_drift`
-- close 前必须执行 `auto_docs_sink`
-- 工具结果未落字段不得进入 review / done
-- 未通过 `closeout_candidate_check` 不得进入 `done`
-
----
-
-## 按动作驱动路由
-
-- owner 低置信 / mixed issue / route 不稳 → `route_dry_run`
-- 边界不清但可非破坏性推进 → `provisional_boundary_build`
-- 当前 owner 应先内部自救 → `owner_self_resolve_attempt`
-- 多 owner 交叉依赖 → `peer_role_consult` → `split_subissues`
-- 重复失败 / 路由碎裂 / 需要兜底 → `fallback_to_p8_enhanced`
-- 新真相出现 / 需改派 / 需重排执行顺序 → `p9_reframe_and_redispatch`
-- 命中工具前置场景 → `must_run_tool_gate`
-- 执行完成后 → `autofill_exec_report`
-- exec report 完成后 → `generate_validation_bundle`
-- 缺真实体验反馈 → `experience_replay`
-- 复审 / QA / 体验 / 工具发现漂移 → `auto_reopen_on_drift`
-- 复审通过且具备复用价值 → `auto_docs_sink`
-- 工具已跑但字段未落点 → `tool_result_landing_check`
-- close 前 → `closeout_candidate_check`
-
----
-
-## 自动推进规则
-
-满足以下条件时，默认自动进入下一环：
-
-1. 新批次进入时，先自动执行 `create_issue_stub`
-2. stub 完成后，自动执行 `infer_owner_candidates`
-3. owner 候选形成后，自动执行 `infer_required_tools`
-4. `owner_confidence < 70` 或 route 不稳时，必须执行 `route_dry_run`
-5. 边界不清但存在安全推进路径时，必须执行 `provisional_boundary_build`
-6. owner 确认后，必须先执行 `owner_self_resolve_attempt`
-7. 多 owner 交叉依赖时，先执行 `peer_role_consult`，必要时再执行 `split_subissues`
-8. 重复失败 / route 碎裂 / owner 不稳时，必须执行 `fallback_to_p8_enhanced`
-9. 需要改派、重构 issue、重排工具顺序时，必须执行 `p9_reframe_and_redispatch`
-10. 正式派单前，必须通过 `must_run_tool_gate`
-11. 执行完成后，必须执行 `autofill_exec_report`
-12. exec report 完成后，必须执行 `generate_validation_bundle`
-13. 缺真实体验反馈时，必须执行 `experience_replay`
-14. review / QA / 体验 / 工具发现 drift 时，必须执行 `auto_reopen_on_drift`
-15. 复审通过且具备 SOP / 知识复用价值时，必须执行 `auto_docs_sink`
-16. review / done 前，必须通过 `tool_result_landing_check`
-17. closeout 前，必须通过 `closeout_candidate_check`
-18. 任一关口不通过时，自动转入 `tool_missing / evidence_incomplete / reroute_required / reopen_required`
-
----
-
-## 内部解法穷尽链（强制）
-
-默认不是“直接问用户”，而是先在编排体系内部穷尽解法。
-
-固定顺序：
-
-```text
-当前 owner 自救
-→ 必要时 peer_role_consult
-→ 必要时 split_subissues
-→ 必要时 fallback_to_p8_enhanced
-→ 调用对应 Tool Skill 压实证据与边界
-→ P9 协调、重构工单、重定边界
-→ 体验不足时先 experience_replay
-→ 复审通过后先 auto_docs_sink
-→ 仅当内部方案穷尽仍无法继续时，才升级问用户
-```
+- 未通过分数闸门不得派单
+- 未通过 tool/evidence 闸门不得 review
+- `reopen_risk >= 60` 时不得 close
+- 未完成 docs sink 不得 done
+- 未通过 closeout 候选检查不得 done
 
 ---
 
@@ -239,9 +203,8 @@ experience_replay（当真实反馈缺失）
 ```text
 [HGS 正式发布版已装配]
 入口：00_HGS_Master_Loader.md
-模式：Master Loader + Roles + Tools + Automation Actions + Governance Docs + Manifest
-加载策略：Manifest 驱动，全角色 + 全工具 + 三批自动化动作装配
-默认路线：P10(按需) → 真相Owner → P9 → P8 → 体验 / QA / SRE → P9 → Docs → Closeout
-自动化动作：create_issue_stub / infer_owner_candidates / infer_required_tools / route_dry_run / provisional_boundary_build / owner_self_resolve_attempt / peer_role_consult / split_subissues / fallback_to_p8_enhanced / p9_reframe_and_redispatch / must_run_tool_gate / autofill_exec_report / generate_validation_bundle / experience_replay / auto_reopen_on_drift / auto_docs_sink / tool_result_landing_check / closeout_candidate_check
-统一协议：HGS-BATCH-HEADER / ISSUE-LEDGER / P8-EXEC-REPORT / HGS-EXPERIENCE-CHECK / P9-REVIEW-VERDICT / P10-FINAL-DECISION / HGS-CLOSEOUT / AUTOMATION-ACTION-RECORD
+模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Governance Docs + Manifest
+加载策略：Manifest 驱动，全角色 + 全工具 + 四批自动化动作装配
+分数驱动：owner_confidence / route_stability / tool_coverage / evidence_completeness / reopen_risk / closeout_readiness
+自动决策：会根据分数自动决定是否派单、是否 review、是否 reopen、是否 close
 ```

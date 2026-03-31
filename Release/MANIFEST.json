@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int6",
+  "package_version": "formal-2026-03-31-int7",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -179,6 +179,8 @@
       "create_issue_stub",
       "infer_owner_candidates",
       "infer_required_tools",
+      "compute_owner_confidence",
+      "compute_route_stability_score",
       "route_dry_run",
       "provisional_boundary_build",
       "owner_self_resolve_attempt",
@@ -190,38 +192,69 @@
       "autofill_exec_report",
       "generate_validation_bundle",
       "experience_replay",
+      "compute_tool_coverage_score",
+      "compute_evidence_completeness_score",
+      "tool_result_landing_check",
+      "compute_reopen_risk_score",
       "auto_reopen_on_drift",
       "auto_docs_sink",
-      "tool_result_landing_check",
+      "compute_closeout_readiness_score",
       "closeout_candidate_check"
     ],
     "active_action_batches": [
       "intake_normalization",
+      "score_driven_routing",
       "self_resolution_and_internal_deliberation",
       "redispatch_and_fallback",
       "tool_gating",
       "execution_reporting",
       "validation_generation",
       "experience_replay_and_reopen",
-      "docs_sink_and_closeout"
+      "docs_sink_and_closeout",
+      "score_driven_decisioning"
     ],
     "thresholds": {
       "owner_confidence_min_for_direct_dispatch": 70,
+      "route_stability_min_for_direct_dispatch": 65,
       "tool_coverage_min_before_review": 85,
       "evidence_completeness_min_before_review": 80,
       "closeout_readiness_min_before_done": 85,
       "reopen_risk_high": 60
     },
+    "score_decision_rules": {
+      "dispatch": {
+        "require_owner_confidence_gte": 70,
+        "require_route_stability_gte": 65,
+        "otherwise": "route_dry_run_or_p9_reframe_and_redispatch"
+      },
+      "review": {
+        "require_tool_coverage_gte": 85,
+        "require_evidence_completeness_gte": 80,
+        "otherwise": "tool_missing_or_evidence_incomplete"
+      },
+      "reopen": {
+        "when_reopen_risk_gte": 60,
+        "action": "auto_reopen_on_drift"
+      },
+      "done": {
+        "require_closeout_readiness_gte": 85,
+        "require_reopen_risk_lt": 60,
+        "otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"
+      }
+    },
     "hard_gates": {
       "require_issue_stub_before_dispatch": true,
+      "require_score_gates_before_dispatch": true,
       "require_route_dry_run_when_owner_confidence_below_threshold": true,
       "require_tool_gate_before_dispatch": true,
       "require_exec_report_before_review": true,
       "require_validation_bundle_before_review": true,
       "require_experience_replay_when_real_feedback_missing": true,
+      "require_score_gates_before_review": true,
       "require_protocol_landing_before_review": true,
       "require_auto_reopen_on_drift": true,
       "require_auto_docs_sink_before_done": true,
+      "require_score_gates_before_done": true,
       "require_closeout_candidate_check_before_done": true,
       "require_fallback_to_p8_enhanced_on_repeated_failure": true
     },
@@ -245,10 +278,11 @@
       "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
       "missing_real_experience_feedback": "generate_validation_bundle_then_experience_replay_before_closeout",
-      "owner_unclear": "route_dry_run_then_p9_split_or_fallback_to_p8_pua_enhanced",
+      "owner_unclear": "compute_owner_confidence_then_route_dry_run_then_p9_split_or_fallback_to_p8_pua_enhanced",
       "multi_owner_dependency": "owner_self_resolve_then_peer_role_consult_then_split_subissues_before_user_escalation",
       "repeated_execution_failure": "fallback_to_p8_enhanced_then_p9_reframe_and_redispatch",
-      "review_or_experience_drift": "auto_reopen_on_drift_then_p9_reframe_and_redispatch"
+      "review_or_experience_drift": "compute_reopen_risk_score_then_auto_reopen_on_drift_then_p9_reframe_and_redispatch",
+      "closeout_not_ready": "compute_closeout_readiness_score_then_auto_docs_sink_or_reopen_then_recheck"
     }
   }
 }
