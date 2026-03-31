@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int10",
+  "package_version": "formal-2026-03-31-int11",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -74,6 +74,8 @@
     "docs/正式发布版全局审查报告.md",
     "docs/发布说明与加载方式.md",
     "docs/角色调用关系总表.md",
+    "docs/角色-工具矩阵总表.md",
+    "docs/角色边界验证台账.md",
     "docs/工具调用关系总表.md",
     "docs/HGS_自动化联动动作总表（正式版）.md",
     "docs/HGS_自动化联动装配后复核（评分驱动版）.md",
@@ -151,6 +153,8 @@
     {"id": "formal-review-report", "file": "docs/正式发布版全局审查报告.md", "kind": "historical_baseline"},
     {"id": "release-loading-guide", "file": "docs/发布说明与加载方式.md", "kind": "operator_guide"},
     {"id": "role-invocation-table", "file": "docs/角色调用关系总表.md", "kind": "role_governance"},
+    {"id": "role-tool-matrix", "file": "docs/角色-工具矩阵总表.md", "kind": "role_tool_governance"},
+    {"id": "role-boundary-ledger", "file": "docs/角色边界验证台账.md", "kind": "role_boundary_validation"},
     {"id": "tool-invocation-table", "file": "docs/工具调用关系总表.md", "kind": "tool_governance"},
     {"id": "automation-action-table", "file": "docs/HGS_自动化联动动作总表（正式版）.md", "kind": "automation_governance"},
     {"id": "automation-score-review", "file": "docs/HGS_自动化联动装配后复核（评分驱动版）.md", "kind": "automation_audit"},
@@ -199,57 +203,10 @@
     "action_protocol": "protocols/61_Automation_Orchestration_Protocol.md",
     "clearance_protocol": "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md",
     "active_actions": [
-      "create_issue_stub",
-      "infer_owner_candidates",
-      "infer_required_tools",
-      "compute_owner_confidence",
-      "compute_route_stability_score",
-      "route_dry_run",
-      "provisional_boundary_build",
-      "owner_self_resolve_attempt",
-      "peer_role_consult",
-      "split_subissues",
-      "fallback_to_p8_enhanced",
-      "p9_reframe_and_redispatch",
-      "generate_exec_plan",
-      "auto_reroute_on_new_truth",
-      "high_risk_guard_gate",
-      "auth_bypass_guard_gate",
-      "runtime_stability_gate",
-      "register_all_findings",
-      "dispatch_all_registered_issues",
-      "execute_by_owner",
-      "validate_and_experience_by_issue",
-      "rereview_all_open_issues",
-      "register_new_findings_if_any",
-      "continue_loop_until_open_issue_zero",
-      "must_run_tool_gate",
-      "autofill_exec_report",
-      "generate_validation_bundle",
-      "experience_replay",
-      "compute_tool_coverage_score",
-      "compute_evidence_completeness_score",
-      "tool_result_landing_check",
-      "compute_reopen_risk_score",
-      "auto_reopen_on_drift",
-      "auto_docs_sink",
-      "compute_closeout_readiness_score",
-      "closeout_candidate_check"
+      "create_issue_stub","infer_owner_candidates","infer_required_tools","compute_owner_confidence","compute_route_stability_score","route_dry_run","provisional_boundary_build","owner_self_resolve_attempt","peer_role_consult","split_subissues","fallback_to_p8_enhanced","p9_reframe_and_redispatch","generate_exec_plan","auto_reroute_on_new_truth","high_risk_guard_gate","auth_bypass_guard_gate","runtime_stability_gate","register_all_findings","dispatch_all_registered_issues","execute_by_owner","validate_and_experience_by_issue","rereview_all_open_issues","register_new_findings_if_any","continue_loop_until_open_issue_zero","must_run_tool_gate","autofill_exec_report","generate_validation_bundle","experience_replay","compute_tool_coverage_score","compute_evidence_completeness_score","tool_result_landing_check","compute_reopen_risk_score","auto_reopen_on_drift","auto_docs_sink","compute_closeout_readiness_score","closeout_candidate_check"
     ],
     "active_action_batches": [
-      "intake_normalization",
-      "score_driven_routing",
-      "self_resolution_and_internal_deliberation",
-      "redispatch_and_fallback",
-      "risk_guarding_and_runtime_gating",
-      "full_issue_clearance_actions",
-      "tool_gating",
-      "execution_reporting",
-      "validation_generation",
-      "experience_replay_and_reopen",
-      "docs_sink_and_closeout",
-      "score_driven_decisioning",
-      "full_issue_clearance_loop"
+      "intake_normalization","score_driven_routing","self_resolution_and_internal_deliberation","redispatch_and_fallback","risk_guarding_and_runtime_gating","full_issue_clearance_actions","tool_gating","execution_reporting","validation_generation","experience_replay_and_reopen","docs_sink_and_closeout","score_driven_decisioning","full_issue_clearance_loop"
     ],
     "thresholds": {
       "owner_confidence_min_for_direct_dispatch": 70,
@@ -260,25 +217,10 @@
       "reopen_risk_high": 60
     },
     "score_decision_rules": {
-      "dispatch": {
-        "require_owner_confidence_gte": 70,
-        "require_route_stability_gte": 65,
-        "otherwise": "route_dry_run_or_p9_reframe_and_redispatch"
-      },
-      "review": {
-        "require_tool_coverage_gte": 85,
-        "require_evidence_completeness_gte": 80,
-        "otherwise": "tool_missing_or_evidence_incomplete"
-      },
-      "reopen": {
-        "when_reopen_risk_gte": 60,
-        "action": "auto_reopen_on_drift"
-      },
-      "done": {
-        "require_closeout_readiness_gte": 85,
-        "require_reopen_risk_lt": 60,
-        "otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"
-      }
+      "dispatch": {"require_owner_confidence_gte": 70,"require_route_stability_gte": 65,"otherwise": "route_dry_run_or_p9_reframe_and_redispatch"},
+      "review": {"require_tool_coverage_gte": 85,"require_evidence_completeness_gte": 80,"otherwise": "tool_missing_or_evidence_incomplete"},
+      "reopen": {"when_reopen_risk_gte": 60,"action": "auto_reopen_on_drift"},
+      "done": {"require_closeout_readiness_gte": 85,"require_reopen_risk_lt": 60,"otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"}
     },
     "full_issue_clearance_policy": {
       "require_register_all_findings": true,
@@ -288,13 +230,7 @@
       "require_validation_or_experience_for_each_completed_issue": true,
       "require_rereview_new_findings_to_register_and_dispatch": true,
       "require_continue_loop_until_open_issue_zero": true,
-      "closeout_condition": {
-        "open_issue_count_equals": 0,
-        "review_pending_count_equals": 0,
-        "verification_pending_count_equals": 0,
-        "experience_pending_count_equals": 0,
-        "docs_sink_pending_count_equals": 0
-      },
+      "closeout_condition": {"open_issue_count_equals": 0,"review_pending_count_equals": 0,"verification_pending_count_equals": 0,"experience_pending_count_equals": 0,"docs_sink_pending_count_equals": 0},
       "default_behavior_on_new_findings": "register_dispatch_and_continue_loop"
     },
     "hard_gates": {
@@ -321,22 +257,9 @@
       "require_full_issue_inventory_before_done": true,
       "require_open_issue_zero_before_done": true
     },
-    "internal_escalation_chain": [
-      "current_owner_self_resolution",
-      "peer_role_consultation_or_split_dispatch",
-      "p9_coordination_and_reframing",
-      "p10_strategic_reroute",
-      "user_escalation_only_if_internal_options_exhausted"
-    ],
+    "internal_escalation_chain": ["current_owner_self_resolution","peer_role_consultation_or_split_dispatch","p9_coordination_and_reframing","p10_strategic_reroute","user_escalation_only_if_internal_options_exhausted"],
     "question_policy": "forbid_direct_user_confirmation_before_internal_exhaustion",
-    "ask_user_only_when": [
-      "irreversible_delete_or_overwrite",
-      "production_data_destructive_change",
-      "real_external_send_or_real_user_action_required",
-      "requires_user_business_tradeoff_after_internal_options_exhausted",
-      "legal_security_financial_boundary_exceeded",
-      "strategy_conflict_after_p10_review"
-    ],
+    "ask_user_only_when": ["irreversible_delete_or_overwrite","production_data_destructive_change","real_external_send_or_real_user_action_required","requires_user_business_tradeoff_after_internal_options_exhausted","legal_security_financial_boundary_exceeded","strategy_conflict_after_p10_review"],
     "soft_block_resolution": {
       "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
