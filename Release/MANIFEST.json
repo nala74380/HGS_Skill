@@ -1,31 +1,116 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-ie1",
+  "package_version": "formal-2026-03-31-int1",
   "entrypoint": "00_HGS_Master_Loader.md",
-  "activation_mode": "manifest_driven_multi_role",
+  "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
   "load_order": [
     "MANIFEST.json",
     "00_HGS_Master_Loader.md",
     "roles/10_P10_CTO_SKILL.md",
+    "roles/11_Product_Business_Rules_Owner_SKILL.md",
+    "roles/12_Auth_Identity_Owner_SKILL.md",
+    "roles/13_Billing_Entitlement_Owner_SKILL.md",
+    "roles/14_Release_Config_Owner_SKILL.md",
+    "roles/15_Security_Risk_Owner_SKILL.md",
+    "roles/16_Agent_Operations_Owner_SKILL.md",
+    "roles/17_EndUser_Support_Owner_SKILL.md",
+    "roles/18_Control_Plane_Owner_SKILL.md",
+    "roles/19_Execution_Plane_Owner_SKILL.md",
     "roles/20_P9_Principal_SKILL.md",
     "roles/30_P8_PUA_Enhanced_SKILL.md",
     "roles/31_P8_Backend_PUA_SKILL.md",
-    "roles/32_P8_Frontend_PUA_SKILL.md",
-    "roles/33_P8_PCConsole_PUA_SKILL.md",
+    "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
+    "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+    "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+    "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md",
     "roles/34_P8_LanrenJingling_PUA_SKILL.md",
     "roles/35_P8_Agent_PUA_SKILL.md",
     "roles/36_P8_EndUser_PUA_SKILL.md",
+    "roles/37_QA_Validation_Owner_SKILL.md",
+    "roles/38_SRE_Observability_Owner_SKILL.md",
+    "roles/39_Knowledge_Documentation_Owner_SKILL.md",
     "protocols/40_P8_Agent_Experience_Protocol.md",
     "protocols/41_P8_EndUser_Experience_Protocol.md",
     "protocols/50_RE_REVIEW_PROTOCOL.md",
     "protocols/60_HGS_IO_Protocol.md"
+  ],
+  "tool_load_order": [
+    "tools/70_Business_Rule_Matrix_SKILL.md",
+    "tools/71_State_Machine_Consistency_SKILL.md",
+    "tools/72_JWT_Inspector_SKILL.md",
+    "tools/73_Device_Identity_Diff_SKILL.md",
+    "tools/74_Session_Refresh_Trace_SKILL.md",
+    "tools/76_Billing_Ledger_Reconciler_SKILL.md",
+    "tools/77_Quota_Usage_Analyzer_SKILL.md",
+    "tools/78_Freeze_Reversal_Diagnoser_SKILL.md",
+    "tools/79_API_Contract_Diff_SKILL.md",
+    "tools/82_Network_Trace_Reviewer_SKILL.md",
+    "tools/85_UI_Surface_Audit_SKILL.md",
+    "tools/88_Console_Auth_Flow_Trace_SKILL.md",
+    "tools/89_Project_Context_Drift_SKILL.md",
+    "tools/90_StepUp_Resume_Checker_SKILL.md",
+    "tools/95_Test_Matrix_Builder_SKILL.md",
+    "tools/96_Regression_Checklist_SKILL.md",
+    "tools/101_Compatibility_Matrix_SKILL.md",
+    "tools/106_SOP_Generator_SKILL.md"
+  ],
+  "documentation_load_order": [
+    "docs/正式发布版全局审查报告.md",
+    "docs/发布说明与加载方式.md",
+    "docs/角色调用关系总表.md",
+    "docs/工具调用关系总表.md"
   ],
   "roles": [
     {
       "id": "p10-cto",
       "file": "roles/10_P10_CTO_SKILL.md",
       "layer": "strategy"
+    },
+    {
+      "id": "product-business-rules-owner",
+      "file": "roles/11_Product_Business_Rules_Owner_SKILL.md",
+      "layer": "truth_rules"
+    },
+    {
+      "id": "auth-identity-owner",
+      "file": "roles/12_Auth_Identity_Owner_SKILL.md",
+      "layer": "truth_rules"
+    },
+    {
+      "id": "billing-entitlement-owner",
+      "file": "roles/13_Billing_Entitlement_Owner_SKILL.md",
+      "layer": "truth_rules"
+    },
+    {
+      "id": "release-config-owner",
+      "file": "roles/14_Release_Config_Owner_SKILL.md",
+      "layer": "truth_rules"
+    },
+    {
+      "id": "security-risk-owner",
+      "file": "roles/15_Security_Risk_Owner_SKILL.md",
+      "layer": "truth_rules"
+    },
+    {
+      "id": "agent-operations-owner",
+      "file": "roles/16_Agent_Operations_Owner_SKILL.md",
+      "layer": "ops_support_owner"
+    },
+    {
+      "id": "enduser-support-owner",
+      "file": "roles/17_EndUser_Support_Owner_SKILL.md",
+      "layer": "ops_support_owner"
+    },
+    {
+      "id": "control-plane-owner",
+      "file": "roles/18_Control_Plane_Owner_SKILL.md",
+      "layer": "plane_owner"
+    },
+    {
+      "id": "execution-plane-owner",
+      "file": "roles/19_Execution_Plane_Owner_SKILL.md",
+      "layer": "plane_owner"
     },
     {
       "id": "p9-principal",
@@ -43,13 +128,23 @@
       "layer": "execution_specialist"
     },
     {
-      "id": "p8-frontend",
-      "file": "roles/32_P8_Frontend_PUA_SKILL.md",
+      "id": "p8-ui-surface",
+      "file": "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
       "layer": "execution_specialist"
     },
     {
-      "id": "p8-pc-console",
-      "file": "roles/33_P8_PCConsole_PUA_SKILL.md",
+      "id": "p8-frontend-logic",
+      "file": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-console-runtime",
+      "file": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-console-management-experience",
+      "file": "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md",
       "layer": "execution_specialist"
     },
     {
@@ -66,6 +161,21 @@
       "id": "p8-enduser",
       "file": "roles/36_P8_EndUser_PUA_SKILL.md",
       "layer": "execution_specialist"
+    },
+    {
+      "id": "qa-validation-owner",
+      "file": "roles/37_QA_Validation_Owner_SKILL.md",
+      "layer": "validation"
+    },
+    {
+      "id": "sre-observability-owner",
+      "file": "roles/38_SRE_Observability_Owner_SKILL.md",
+      "layer": "runtime_observability"
+    },
+    {
+      "id": "knowledge-documentation-owner",
+      "file": "roles/39_Knowledge_Documentation_Owner_SKILL.md",
+      "layer": "knowledge"
     }
   ],
   "protocols": [
@@ -84,6 +194,120 @@
     {
       "id": "hgs-io-protocol",
       "file": "protocols/60_HGS_IO_Protocol.md"
+    }
+  ],
+  "tools": [
+    {
+      "id": "business-rule-matrix",
+      "file": "tools/70_Business_Rule_Matrix_SKILL.md",
+      "layer": "truth_analysis"
+    },
+    {
+      "id": "state-machine-consistency",
+      "file": "tools/71_State_Machine_Consistency_SKILL.md",
+      "layer": "drift_analysis"
+    },
+    {
+      "id": "jwt-inspector",
+      "file": "tools/72_JWT_Inspector_SKILL.md",
+      "layer": "identity_analysis"
+    },
+    {
+      "id": "device-identity-diff",
+      "file": "tools/73_Device_Identity_Diff_SKILL.md",
+      "layer": "identity_analysis"
+    },
+    {
+      "id": "session-refresh-trace",
+      "file": "tools/74_Session_Refresh_Trace_SKILL.md",
+      "layer": "identity_analysis"
+    },
+    {
+      "id": "billing-ledger-reconciler",
+      "file": "tools/76_Billing_Ledger_Reconciler_SKILL.md",
+      "layer": "billing_analysis"
+    },
+    {
+      "id": "quota-usage-analyzer",
+      "file": "tools/77_Quota_Usage_Analyzer_SKILL.md",
+      "layer": "billing_analysis"
+    },
+    {
+      "id": "freeze-reversal-diagnoser",
+      "file": "tools/78_Freeze_Reversal_Diagnoser_SKILL.md",
+      "layer": "billing_analysis"
+    },
+    {
+      "id": "api-contract-diff",
+      "file": "tools/79_API_Contract_Diff_SKILL.md",
+      "layer": "contract_analysis"
+    },
+    {
+      "id": "network-trace-reviewer",
+      "file": "tools/82_Network_Trace_Reviewer_SKILL.md",
+      "layer": "trace_analysis"
+    },
+    {
+      "id": "ui-surface-audit",
+      "file": "tools/85_UI_Surface_Audit_SKILL.md",
+      "layer": "ux_analysis"
+    },
+    {
+      "id": "console-auth-flow-trace",
+      "file": "tools/88_Console_Auth_Flow_Trace_SKILL.md",
+      "layer": "console_identity_analysis"
+    },
+    {
+      "id": "project-context-drift",
+      "file": "tools/89_Project_Context_Drift_SKILL.md",
+      "layer": "context_analysis"
+    },
+    {
+      "id": "stepup-resume-checker",
+      "file": "tools/90_StepUp_Resume_Checker_SKILL.md",
+      "layer": "context_analysis"
+    },
+    {
+      "id": "test-matrix-builder",
+      "file": "tools/95_Test_Matrix_Builder_SKILL.md",
+      "layer": "validation"
+    },
+    {
+      "id": "regression-checklist",
+      "file": "tools/96_Regression_Checklist_SKILL.md",
+      "layer": "validation"
+    },
+    {
+      "id": "compatibility-matrix",
+      "file": "tools/101_Compatibility_Matrix_SKILL.md",
+      "layer": "release_analysis"
+    },
+    {
+      "id": "sop-generator",
+      "file": "tools/106_SOP_Generator_SKILL.md",
+      "layer": "knowledge_synthesis"
+    }
+  ],
+  "governance_docs": [
+    {
+      "id": "formal-review-report",
+      "file": "docs/正式发布版全局审查报告.md",
+      "kind": "historical_baseline"
+    },
+    {
+      "id": "release-loading-guide",
+      "file": "docs/发布说明与加载方式.md",
+      "kind": "operator_guide"
+    },
+    {
+      "id": "role-invocation-table",
+      "file": "docs/角色调用关系总表.md",
+      "kind": "role_governance"
+    },
+    {
+      "id": "tool-invocation-table",
+      "file": "docs/工具调用关系总表.md",
+      "kind": "tool_governance"
     }
   ],
   "risk_gates": [
