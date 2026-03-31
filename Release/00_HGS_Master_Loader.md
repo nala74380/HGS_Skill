@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
-description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int7
+description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议、清零协议与其他协议 Skill，并按统一状态机驱动全链路。
+version: formal-2026-03-31-int8
 author: OpenAI
 role: MasterLoader
 status: active
@@ -10,8 +10,7 @@ entrypoint: true
 
 # HGS Master Loader / 主装配器
 
-本文件不是“替代所有角色”的超级单体 Skill。  
-本文件的职责只有一件事：**把多角色、多工具、自动化动作、统一协议、治理文档正式装配成一条可自动推进、可审计、可重开环的标准链路。**
+本文件的职责只有一件事：**把多角色、多工具、自动化动作、统一协议、清零治理规则正式装配成一条可自动推进、可审计、可持续回流直到清零的标准链路。**
 
 ---
 
@@ -27,6 +26,7 @@ entrypoint: true
 6. `docs/角色调用关系总表.md`
 7. `docs/工具调用关系总表.md`
 8. `docs/HGS_自动化联动动作总表（正式版）.md`
+9. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
 
 ---
 
@@ -35,166 +35,225 @@ entrypoint: true
 默认路线固定为：
 
 ```text
-P10 战略初判（仅必要时）
-  ↓
-真相 Owner 识别
-  ↓
-P9 审查与派单
-  ↓
-P8 按 owner 执行
-  ↓
-体验验证（代理 / 终端用户 / 路径复演）
-  ↓
-QA / SRE / 体验证据收口
-  ↓
-P9 复审
-  ↓
-Knowledge / Docs 沉淀
-  ↓
-收口 / 再开环
+全局审查
+→ 全量发现问题
+→ 全量登记 issue
+→ 全量派单
+→ 按 owner 执行
+→ 测试 / 回归 / 体验
+→ 全量复审
+→ 新问题继续登记并继续派单
+→ 持续回流直到 open_issue_count = 0
+→ Docs 沉淀
+→ Closeout
 ```
 
-本版新增的核心能力：
+本版新增的核心治理能力：
 
-- 自动化动作驱动入口标准化、内部协商、执行、验证、体验、回流、收口
-- **自动化评分驱动派单、review、reopen 与 done 决策**
+- **禁止只挑重点处理、剩余问题尾大不掉**
+- **禁止在 open issue 尚未清零时改成让用户选 A/B 方案**
+- **要求所有新发现问题全部进入 inventory 并全部派单**
+- **要求每个问题在执行后进入测试 / 体验 / 复审**
+- **要求只有 open issue 清零后才允许收口**
 
 ---
 
-## 自动化动作装配清单（全 active）
+## 协议装配清单
 
-当前正式激活的动作包括：
+当前必须装配的协议包括：
 
-### 第一批
-1. `create_issue_stub`
-2. `infer_owner_candidates`
-3. `infer_required_tools`
-4. `route_dry_run`
-5. `provisional_boundary_build`
-6. `peer_role_consult`
-7. `split_subissues`
-8. `must_run_tool_gate`
-9. `tool_result_landing_check`
-10. `closeout_candidate_check`
+- `protocols/40_P8_Agent_Experience_Protocol.md`
+- `protocols/41_P8_EndUser_Experience_Protocol.md`
+- `protocols/50_RE_REVIEW_PROTOCOL.md`
+- `protocols/60_HGS_IO_Protocol.md`
+- `protocols/61_Automation_Orchestration_Protocol.md`
+- `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
 
-### 第二批
-11. `owner_self_resolve_attempt`
-12. `fallback_to_p8_enhanced`
-13. `p9_reframe_and_redispatch`
-14. `autofill_exec_report`
-15. `generate_validation_bundle`
+其中：
 
-### 第三批
-16. `experience_replay`
-17. `auto_reopen_on_drift`
-18. `auto_docs_sink`
-
-### 第四批（评分驱动）
-19. `compute_owner_confidence`
-20. `compute_tool_coverage_score`
-21. `compute_evidence_completeness_score`
-22. `compute_route_stability_score`
-23. `compute_closeout_readiness_score`
-24. `compute_reopen_risk_score`
+- `61` 负责动作骨架、评分与自动化决策
+- `62` 负责“全量发现—全量派单—持续回流直到清零”的治理硬规则
 
 ---
 
-## 自动化动作执行顺序（当前 active）
+## 自动化动作装配清单（当前 active）
 
-### 入口标准化与评分路由序列
-```text
-create_issue_stub
-→ infer_owner_candidates
-→ compute_owner_confidence
-→ infer_required_tools
-→ compute_route_stability_score
-→ route_dry_run（当 owner_confidence < 70 或 route_stability < 65）
-→ provisional_boundary_build（当边界暂不精确）
-```
+当前正式激活的动作包括四批共 24 个。统一以：
 
-### 内部协商与重派单序列
-```text
-owner_self_resolve_attempt
-→ peer_role_consult
-→ split_subissues
-→ fallback_to_p8_enhanced
-→ p9_reframe_and_redispatch
-```
+- `MANIFEST.automation_policy.active_actions`
+- `docs/HGS_自动化联动动作总表（正式版）`
 
-### 工具闸门与 review 评分序列
-```text
-must_run_tool_gate
-→ autofill_exec_report
-→ generate_validation_bundle
-→ compute_tool_coverage_score
-→ compute_evidence_completeness_score
-→ tool_result_landing_check
-→ 若 tool_coverage < 85 或 evidence_completeness < 80，则不得进入 review
-```
+为准。
 
-### 体验 / 回流 / 收口评分序列
+本 Loader 额外新增一条**全局治理循环**：
+
 ```text
-experience_replay（当真实反馈缺失）
-→ compute_reopen_risk_score
-→ auto_reopen_on_drift（当 reopen_risk >= 60 或 review/QA/experience/tools 发现漂移）
-→ auto_docs_sink（当复审通过且具备复用价值）
-→ compute_closeout_readiness_score
-→ closeout_candidate_check
-→ 若 closeout_readiness >= 85 且 reopen_risk < 60，则进入 done
+register_all_findings
+→ dispatch_all_registered_issues
+→ execute_by_owner
+→ validate_and_experience_by_issue
+→ rereview_all_open_issues
+→ register_new_findings_if_any
+→ continue_loop_until_open_issue_zero
 ```
 
 ---
 
-## 分数驱动决策规则（正式版）
+## 全量问题发现—全量派单—持续回流直到清零规则
 
-### 1. 派单决策
+### 1. 所有发现的问题必须全部登记
+任何全局审查、QA、体验、复审、工具输出中新增的问题，必须全部登记进入：
+
+- `ISSUE-LEDGER`
+- 子 issue 清单
+- `FULL-ISSUE-INVENTORY`
+
+禁止只登记最重要的一部分。
+
+### 2. 所有已登记问题必须全部派单
+只要：
+- owner 可以判定
+- 不触发硬停机条件
+
+就必须全部派单。
+
+允许分批执行，但不允许分批遗忘。
+
+### 3. 谁的问题谁处理
+每个 issue 必须有：
+- `issue_id`
+- `owner`
+- `status`
+- `required_tools`
+- `required_validation`
+- `required_experience_if_any`
+
+禁止长期挂成“待以后处理”且没有 owner。
+
+### 4. 每个问题处理后必须验证
+处理完成后必须进入：
+- 测试 / 回归
+- 必要时体验复演或真实体验
+- 复审
+
+禁止“修完就算完”。
+
+### 5. 复审发现新问题必须继续回流
+每轮复审、QA、体验、工具发现的新问题必须：
+- 立即登记
+- 立即归属 owner
+- 立即进入下一轮派单
+
+### 6. 只有清零才允许收口
 只有同时满足：
-- `owner_confidence >= 70`
-- `route_stability_score >= 65`
-
-才允许直接 dispatch。否则：
-- 先 `route_dry_run`
-- 必要时 `p9_reframe_and_redispatch`
-
-### 2. Review 决策
-只有同时满足：
-- `tool_coverage_score >= 85`
-- `evidence_completeness_score >= 80`
-- `P8-EXEC-REPORT` 已存在
-- `validation bundle` 已存在
-
-才允许进入 review。否则：
-- `tool_missing` 或 `evidence_incomplete`
-- 继续补 exec / validation / protocol landing
-
-### 3. Reopen 决策
-只要满足任一：
-- `reopen_risk_score >= 60`
-- QA / review / experience / tools 发现 drift
-
-则自动执行：
-- `auto_reopen_on_drift`
-- 必要时 `p9_reframe_and_redispatch`
-
-### 4. Done 决策
-只有同时满足：
-- `closeout_readiness_score >= 85`
-- `reopen_risk_score < 60`
-- `closeout_candidate_check = pass`
-- `auto_docs_sink` 已完成
+- `open_issue_count = 0`
+- `review_pending_count = 0`
+- `verification_pending_count = 0`
+- `experience_pending_count = 0`
+- `docs_sink_pending_count = 0`
 
 才允许进入 `done`。
 
 ---
 
-## 硬规则
+## 全局清零循环（强制）
 
-- 未创建 `ISSUE-LEDGER stub` 不得派单
-- 未通过分数闸门不得派单
-- 未通过 tool/evidence 闸门不得 review
-- `reopen_risk >= 60` 时不得 close
-- 未完成 docs sink 不得 done
-- 未通过 closeout 候选检查不得 done
+固定循环如下：
+
+```text
+全量发现问题
+→ 全量登记
+→ 全量派单
+→ 逐项执行
+→ 逐项验证 / 体验
+→ 全量复审
+→ 再发现问题继续登记
+→ 继续派单
+→ 继续执行
+→ 直到 open_issue_count = 0
+```
+
+硬要求：
+
+- 禁止“这轮先只修重点，剩下下次再说”作为默认策略
+- 禁止“问题太多”为理由不立账、不派单
+- 禁止在 open issue 未清零时让用户承担编排决策压力
+- 允许多轮循环，但不允许未清零就 closeout
+
+---
+
+## 分数驱动与清零协议的关系
+
+当前评分驱动规则继续生效：
+
+### dispatch
+只有：
+- `owner_confidence >= 70`
+- `route_stability_score >= 65`
+
+才允许直接派单。
+
+### review
+只有：
+- `tool_coverage_score >= 85`
+- `evidence_completeness_score >= 80`
+
+才允许进入 review。
+
+### reopen
+只要：
+- `reopen_risk_score >= 60`
+- 或 review / QA / experience / tools 发现 drift
+
+就必须回流。
+
+### done
+只有：
+- `closeout_readiness_score >= 85`
+- `reopen_risk_score < 60`
+- `closeout_candidate_check = pass`
+- `auto_docs_sink` 已完成
+- `open_issue_count = 0`
+
+才允许进入 `done`。
+
+---
+
+## 新增硬规则
+
+当前新增并正式生效的硬规则：
+
+- `require_register_all_findings_before_review`
+- `require_full_issue_inventory_before_done`
+- `require_open_issue_zero_before_done`
+
+并保留原有：
+- score gates
+- tool gates
+- exec report / validation bundle / experience replay / docs sink / closeout gates
+
+---
+
+## 默认自动行为
+
+当系统执行全局审查时，默认自动行为不是：
+
+- 推荐先搞几个重点
+- 让用户选择方案 A / 方案 B
+- 把剩余问题留到以后
+
+而是：
+
+```text
+发现多少问题
+→ 登记多少问题
+→ 派多少问题
+→ 谁的问题谁干
+→ 干完测试 / 体验 / 复审
+→ 再发现再登记再派
+→ 直到 open_issue_count = 0
+→ 再做 docs sink 和 closeout
+```
 
 ---
 
@@ -203,8 +262,7 @@ experience_replay（当真实反馈缺失）
 ```text
 [HGS 正式发布版已装配]
 入口：00_HGS_Master_Loader.md
-模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Governance Docs + Manifest
-加载策略：Manifest 驱动，全角色 + 全工具 + 四批自动化动作装配
-分数驱动：owner_confidence / route_stability / tool_coverage / evidence_completeness / reopen_risk / closeout_readiness
-自动决策：会根据分数自动决定是否派单、是否 review、是否 reopen、是否 close
+模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Full-Issue-Clearance Protocol
+新增治理：全量问题发现—全量派单—持续回流直到清零
+强制条件：所有发现必须登记、所有问题必须派单、所有问题处理后必须测试/体验/复审、open_issue_count = 0 才允许收口
 ```
