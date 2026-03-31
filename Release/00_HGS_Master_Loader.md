@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议、清零协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int8
+version: formal-2026-03-31-int9
 author: OpenAI
 role: MasterLoader
 status: active
@@ -26,7 +26,15 @@ entrypoint: true
 6. `docs/角色调用关系总表.md`
 7. `docs/工具调用关系总表.md`
 8. `docs/HGS_自动化联动动作总表（正式版）.md`
-9. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
+9. `docs/HGS_自动化联动装配后复核（评分驱动版）.md`
+10. `docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md`
+11. `docs/HGS_全局检查与清理评分报告.md`
+12. `docs/HGS_全局扣分点问题清单与派单台账.md`
+13. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
+
+说明：
+- 第 9~12 项属于当前治理与执行底册，不得遗漏
+- `docs/HGS_全局扣分点问题清单与派单台账.md` 是本轮清零执行的当前 issue inventory / dispatch ledger 基线
 
 ---
 
@@ -55,6 +63,7 @@ entrypoint: true
 - **要求所有新发现问题全部进入 inventory 并全部派单**
 - **要求每个问题在执行后进入测试 / 体验 / 复审**
 - **要求只有 open issue 清零后才允许收口**
+- **要求本轮扣分点全部登记并全部进入派单台账**
 
 ---
 
@@ -96,6 +105,12 @@ register_all_findings
 → register_new_findings_if_any
 → continue_loop_until_open_issue_zero
 ```
+
+并且当前轮次必须参考：
+
+- `docs/HGS_全局扣分点问题清单与派单台账.md`
+
+作为当前 open issue 的执行基线。
 
 ---
 
@@ -153,32 +168,6 @@ register_all_findings
 - `docs_sink_pending_count = 0`
 
 才允许进入 `done`。
-
----
-
-## 全局清零循环（强制）
-
-固定循环如下：
-
-```text
-全量发现问题
-→ 全量登记
-→ 全量派单
-→ 逐项执行
-→ 逐项验证 / 体验
-→ 全量复审
-→ 再发现问题继续登记
-→ 继续派单
-→ 继续执行
-→ 直到 open_issue_count = 0
-```
-
-硬要求：
-
-- 禁止“这轮先只修重点，剩下下次再说”作为默认策略
-- 禁止“问题太多”为理由不立账、不派单
-- 禁止在 open issue 未清零时让用户承担编排决策压力
-- 允许多轮循环，但不允许未清零就 closeout
 
 ---
 
@@ -255,6 +244,15 @@ register_all_findings
 → 再做 docs sink 和 closeout
 ```
 
+本轮补充要求：
+
+```text
+本轮全局审查识别到的所有扣分点
+→ 必须全部登记到派单台账
+→ 必须全部纳入清零循环
+→ 不允许任何一项继续悬空
+```
+
 ---
 
 ## 激活确认
@@ -264,5 +262,6 @@ register_all_findings
 入口：00_HGS_Master_Loader.md
 模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Full-Issue-Clearance Protocol
 新增治理：全量问题发现—全量派单—持续回流直到清零
+当前执行底册：HGS_全局扣分点问题清单与派单台账.md
 强制条件：所有发现必须登记、所有问题必须派单、所有问题处理后必须测试/体验/复审、open_issue_count = 0 才允许收口
 ```

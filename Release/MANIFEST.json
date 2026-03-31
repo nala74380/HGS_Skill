@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int8",
+  "package_version": "formal-2026-03-31-int9",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -70,7 +70,10 @@
     "docs/角色调用关系总表.md",
     "docs/工具调用关系总表.md",
     "docs/HGS_自动化联动动作总表（正式版）.md",
-    "docs/HGS_自动化联动装配后复核（评分驱动版）.md"
+    "docs/HGS_自动化联动装配后复核（评分驱动版）.md",
+    "docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md",
+    "docs/HGS_全局检查与清理评分报告.md",
+    "docs/HGS_全局扣分点问题清单与派单台账.md"
   ],
   "roles": [
     {"id": "p10-cto", "file": "roles/10_P10_CTO_SKILL.md", "layer": "strategy"},
@@ -138,7 +141,10 @@
     {"id": "role-invocation-table", "file": "docs/角色调用关系总表.md", "kind": "role_governance"},
     {"id": "tool-invocation-table", "file": "docs/工具调用关系总表.md", "kind": "tool_governance"},
     {"id": "automation-action-table", "file": "docs/HGS_自动化联动动作总表（正式版）.md", "kind": "automation_governance"},
-    {"id": "automation-score-review", "file": "docs/HGS_自动化联动装配后复核（评分驱动版）.md", "kind": "automation_audit"}
+    {"id": "automation-score-review", "file": "docs/HGS_自动化联动装配后复核（评分驱动版）.md", "kind": "automation_audit"},
+    {"id": "clearance-review", "file": "docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md", "kind": "clearance_audit"},
+    {"id": "global-score-report", "file": "docs/HGS_全局检查与清理评分报告.md", "kind": "global_audit"},
+    {"id": "deduction-ledger", "file": "docs/HGS_全局扣分点问题清单与派单台账.md", "kind": "issue_dispatch_ledger"}
   ],
   "risk_gates": [
     "irreversible_delete_or_overwrite",
