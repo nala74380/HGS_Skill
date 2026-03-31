@@ -1,7 +1,7 @@
 ---
 name: automation-orchestration-protocol
 description: HGS 自动编排协议。定义自动化联动动作的统一记录结构、状态字段、评分字段与最小输入输出骨架，供 Loader 与自动化动作共同使用。
-version: formal-2026-03-31-p1
+version: formal-2026-03-31-p2
 author: OpenAI
 role: Protocol
 status: active
@@ -79,7 +79,7 @@ AUTOMATION-SCORES:
 
 ---
 
-## 5. 第一批 active 动作的最小输入输出
+## 5. 当前 active 动作的最小输入输出
 
 ### 5.1 `create_issue_stub`
 
@@ -156,7 +156,22 @@ PROVISIONAL-BOUNDARY-BUILD:
     - assumption_log
 ```
 
-### 5.6 `peer_role_consult`
+### 5.6 `owner_self_resolve_attempt`
+
+```yaml
+OWNER-SELF-RESOLVE-ATTEMPT:
+  inputs:
+    - primary_owner
+    - must_run_tool_outputs
+    - provisional_or_final_boundary
+  outputs:
+    - attempted_actions
+    - blocked_points
+    - remaining_uncertainties
+    - self_resolve_result
+```
+
+### 5.7 `peer_role_consult`
 
 ```yaml
 PEER-ROLE-CONSULT:
@@ -172,7 +187,7 @@ PEER-ROLE-CONSULT:
     - new_owner_boundary_if_any
 ```
 
-### 5.7 `split_subissues`
+### 5.8 `split_subissues`
 
 ```yaml
 SPLIT-SUBISSUES:
@@ -187,7 +202,36 @@ SPLIT-SUBISSUES:
     - merge_back_rule
 ```
 
-### 5.8 `must_run_tool_gate`
+### 5.9 `fallback_to_p8_enhanced`
+
+```yaml
+FALLBACK-TO-P8-ENHANCED:
+  inputs:
+    - issue_ledger
+    - failure_history
+    - tool_outputs
+  outputs:
+    - fallback_reason
+    - enhanced_takeover_scope
+```
+
+### 5.10 `p9_reframe_and_redispatch`
+
+```yaml
+P9-REFRAME-AND-REDISPATCH:
+  inputs:
+    - issue_ledger
+    - subissue_list
+    - tool_outputs
+    - fallback_reason
+  outputs:
+    - redispatch_plan
+    - new_owner
+    - new_tool_order
+    - acceptance_boundary
+```
+
+### 5.11 `must_run_tool_gate`
 
 ```yaml
 MUST-RUN-TOOL-GATE:
@@ -199,7 +243,33 @@ MUST-RUN-TOOL-GATE:
     - missing_tools
 ```
 
-### 5.9 `tool_result_landing_check`
+### 5.12 `autofill_exec_report`
+
+```yaml
+AUTOFILL-EXEC-REPORT:
+  inputs:
+    - exec_plan
+    - executed_changes
+    - tool_outputs
+  outputs:
+    - exec_report
+```
+
+### 5.13 `generate_validation_bundle`
+
+```yaml
+GENERATE-VALIDATION-BUNDLE:
+  inputs:
+    - exec_report
+    - changed_scope
+    - risk_notes
+  outputs:
+    - qa_validation_plan
+    - qa_verification_result_draft
+    - validation_bundle
+```
+
+### 5.14 `tool_result_landing_check`
 
 ```yaml
 TOOL-RESULT-LANDING-CHECK:
@@ -212,7 +282,7 @@ TOOL-RESULT-LANDING-CHECK:
     - orphan_results
 ```
 
-### 5.10 `closeout_candidate_check`
+### 5.15 `closeout_candidate_check`
 
 ```yaml
 CLOSEOUT-CANDIDATE-CHECK:
@@ -239,10 +309,16 @@ AUTOMATION-HARD-GATES:
     fail_state: "reroute_required"
   - name: "require_tool_gate_before_dispatch"
     fail_state: "tool_missing"
+  - name: "require_exec_report_before_review"
+    fail_state: "evidence_incomplete"
+  - name: "require_validation_bundle_before_review"
+    fail_state: "evidence_incomplete"
   - name: "require_protocol_landing_before_review"
     fail_state: "evidence_incomplete"
   - name: "require_closeout_candidate_check_before_done"
     fail_state: "reopen_required"
+  - name: "require_fallback_to_p8_enhanced_on_repeated_failure"
+    fail_state: "reroute_required"
 ```
 
 ---

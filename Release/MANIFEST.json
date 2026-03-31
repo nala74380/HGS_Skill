@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int4",
+  "package_version": "formal-2026-03-31-int5",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -181,16 +181,24 @@
       "infer_required_tools",
       "route_dry_run",
       "provisional_boundary_build",
+      "owner_self_resolve_attempt",
       "peer_role_consult",
       "split_subissues",
+      "fallback_to_p8_enhanced",
+      "p9_reframe_and_redispatch",
       "must_run_tool_gate",
+      "autofill_exec_report",
+      "generate_validation_bundle",
       "tool_result_landing_check",
       "closeout_candidate_check"
     ],
     "active_action_batches": [
       "intake_normalization",
-      "internal_deliberation",
+      "self_resolution_and_internal_deliberation",
+      "redispatch_and_fallback",
       "tool_gating",
+      "execution_reporting",
+      "validation_generation",
       "closeout_gating"
     ],
     "thresholds": {
@@ -204,8 +212,11 @@
       "require_issue_stub_before_dispatch": true,
       "require_route_dry_run_when_owner_confidence_below_threshold": true,
       "require_tool_gate_before_dispatch": true,
+      "require_exec_report_before_review": true,
+      "require_validation_bundle_before_review": true,
       "require_protocol_landing_before_review": true,
-      "require_closeout_candidate_check_before_done": true
+      "require_closeout_candidate_check_before_done": true,
+      "require_fallback_to_p8_enhanced_on_repeated_failure": true
     },
     "internal_escalation_chain": [
       "current_owner_self_resolution",
@@ -228,7 +239,8 @@
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
       "missing_real_experience_feedback": "run_path_replay_mark_confidence_low_and_continue_to_engineering_closeout",
       "owner_unclear": "route_dry_run_then_p9_split_or_fallback_to_p8_pua_enhanced",
-      "multi_owner_dependency": "peer_role_consult_then_split_subissues_before_user_escalation"
+      "multi_owner_dependency": "owner_self_resolve_then_peer_role_consult_then_split_subissues_before_user_escalation",
+      "repeated_execution_failure": "fallback_to_p8_enhanced_then_p9_reframe_and_redispatch"
     }
   }
 }
