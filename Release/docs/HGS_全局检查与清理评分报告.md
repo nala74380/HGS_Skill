@@ -1,8 +1,8 @@
 # HGS 全局检查与清理评分报告
 
-> 版本：formal-2026-03-31-audit3  
-> 范围：基于 `Release/MANIFEST.json`、`Release/00_HGS_Master_Loader.md`、当前 roles / tools / docs / protocols 结构做运行面接入后的装配复核。  
-> 说明：本报告评估的是**装配后设计质量、静态联动完整度、运行面补强程度与治理同频度**，不是生产环境真实压测报告。
+> 版本：formal-2026-03-31-audit4  
+> 范围：基于 `Release/MANIFEST.json`、`Release/00_HGS_Master_Loader.md`、`Release/protocols/61_Automation_Orchestration_Protocol.md`、当前 roles / tools / docs / protocols 结构做评分驱动版装配后复核。  
+> 说明：本报告评估的是**装配后设计质量、静态联动完整度、自动化闭环程度、评分驱动决策成熟度与治理同频度**，不是生产环境真实压测报告。
 
 ---
 
@@ -10,96 +10,95 @@
 
 | 维度 | 评分 | 结论 |
 |---|---:|---|
-| 内部闭环优先型 | **9.7 / 10** | 依然稳定成立，且已被 Manifest + Loader + 治理文档共同约束 |
-| 自动化联动执行 | **9.1 / 10** | 结构上已具备 dry-run、协议完整性检查与运行面专属工具，自动治理能力继续增强 |
-| 角色 / 责任 / 能力 / 技能 / 边界 | **9.2 / 10** | 主体结构已成型，关键旧角色已降权，边界冲突显著减少 |
-| 工具体系 | **9.5 / 10** | 业务、身份、账务、运行、体验、验证、治理、安全七层已成体系 |
-| 整体清洁度 | **9.3 / 10** | 主链更干净，legacy 文件已降权，装配链与治理文档基本同频 |
-| 综合评分 | **9.4 / 10** | 已达到“正式装配可用 + 治理可复核 + 运行面开始成体系”的质量线 |
+| 内部闭环优先型 | **9.8 / 10** | 依然稳定成立，且 now 已被动作、闸门、分数三层共同约束 |
+| 自动化联动执行 | **9.7 / 10** | 已覆盖入口、协商、执行、验证、体验、回流、收口，并开始由分数驱动 |
+| 角色 / 责任 / 能力 / 技能 / 边界 | **9.3 / 10** | 主体结构稳定，边界更清晰，自动化编排不再依赖口头裁定 |
+| 工具体系 | **9.5 / 10** | 业务、身份、账务、运行、体验、验证、治理、安全七层稳定 |
+| 整体清洁度 | **9.4 / 10** | 主链更干净，legacy 文件继续降噪，核心治理文档需同步升版 |
+| 综合评分 | **9.5 / 10** | 已达到“正式装配可用 + 自动化闭环可复核 + 评分驱动可决策”的质量线 |
 
 ---
 
-# 二、运行面版装配后复核结论
+# 二、评分驱动版装配后复核结论
 
 ## 1. 是否依然保持内部闭环优先型
 
 ### 结论
-**是，且运行面接入后没有破坏原有闭环优先逻辑。**
+**是，且比前几轮更稳。**
 
 ### 已落实点
 - `automation_policy.default_behavior = internal_resolution_first`
 - `question_policy = forbid_direct_user_confirmation_before_internal_exhaustion`
-- Loader 仍坚持：先角色协商、再工具压实、再 P9 / P10，最后才升级问用户
-- 运行面工具 `91 / 92 / 98` 进入装配链后，是增强内部归因能力，不是新增停机点
+- Loader 现在已经不是只靠角色协同，而是增加了动作链与分数闸门
+- 低置信 owner、低稳定路线、低证据完整度、高 reopen 风险，都会先在内部回流而不是直接问用户
 
 ### 评分
-**9.7 / 10**
+**9.8 / 10**
 
 ---
 
 ## 2. 自动化联动执行检查测试效果如何
 
 ### 结论
-**已从“静态规则 + 治理工具”升级到“静态规则 + 治理工具 + 运行面专属工具”的阶段。**
+**已从“动作驱动自动化”升级到“动作 + 分数驱动自动化”的阶段。**
 
 ### 已提升点
-- `91_Worker_Identity_Stability` 已正式进入 active 装配链
-- `92_Heartbeat_Gap_Analyzer` 已正式进入 active 装配链
-- `98_Trace_Correlation` 已正式进入 active 装配链
-- Loader 已把这 3 个工具写入“必须先跑工具”的规则中
-- Execution Plane / SRE 已开始拥有专属工具，不再完全借用身份/抓包/兼容工具
+- 四批自动化动作已接入 active chain
+- `dispatch / review / reopen / done` 已有正式评分规则
+- `MANIFEST / Loader / Protocol` 三者已经具备同一套评分阈值与决策逻辑
+- 现在不仅会做动作，还会根据分数决定能不能进入下一阶段
 
 ### 仍未满分的原因
-- 还没有真实 runtime harness / batch replay harness
-- 运行面仍缺批量事故回放、审计一致性、批量高风险动作检查器
+- 评分动作仍是编排动作，不是独立评分引擎 Tool Skill
+- 尚未形成真实 runtime 统计学意义上的评分校准闭环
 
 ### 评分
-**9.1 / 10**
+**9.7 / 10**
 
 ---
 
 ## 3. 角色 / 责任 / 能力 / 技能 / 边界 有没有落实到位
 
 ### 结论
-**总体已落实到位，且运行面角色与工具开始真正对齐。**
+**总体已落实到位。**
 
 ### 已落实点
-- 真相 Owner、P9、P8、QA、SRE、Docs 的分层结构已稳定
-- Frontend / Console 已完成关键拆分
-- 旧 `32_P8_Frontend_PUA`、`33_P8_PCConsole_PUA` 已降权为 legacy stub
-- `Execution Plane Owner`、`SRE / Observability Owner` 现在已有对应运行面工具支撑
+- 真相 Owner、P9、P8、QA、SRE、Docs 分层稳定
+- 自动化编排开始承担“什么时候该派、什么时候该回流、什么时候该关”的决策压力
+- 旧 `32_P8_Frontend_PUA`、`33_P8_PCConsole_PUA` 继续留在 legacy stub，不污染 active chain
 
 ### 剩余注意点
 - 角色层已足够完整，不宜再无节制细分
-- 后续应继续把更多精力放在“运行面工具深化”和“审计一致性补强”上
+- 后续更值得加强的是评分动作的真实性校准，而不是继续加角色
 
 ### 评分
-**9.2 / 10**
+**9.3 / 10**
 
 ---
 
 ## 4. 工具上有没有什么问题，对工具本身还需要配置些什么
 
 ### 结论
-**运行面薄弱项已明显缓解，但“批量安全 + 审计一致性 + 更强回放”仍是下一批重点。**
+**工具层已稳定，但评分动作还不是独立 Tool Skill，未来可以继续提升。**
 
-### 本轮已补强
-- `91_Worker_Identity_Stability`
-- `92_Heartbeat_Gap_Analyzer`
-- `98_Trace_Correlation`
+### 本轮已补强的不是普通工具，而是自动化动作能力
+- 四批动作 active
+- 评分驱动 dispatch/review/reopen/done
+- 自动 docs sink 与 closeout readiness 检查
 
 ### 当前仍偏薄的方向
-1. **批量高风险动作**
-   - 当前已有单动作门禁检查，但缺批量动作专属安全审查
-2. **审计一致性**
-   - 当前缺少“动作发生了，但审计是否完整一致”的专属检查器
-3. **更强事故回放 / 批次回放**
-   - 当前已有 trace 关联，但还缺更强的批量事故重建能力
+1. **评分引擎工具化**
+   - 目前评分动作还主要通过协议/编排表达，而非独立 Tool Skill
+2. **批量高风险动作**
+   - 仍缺批量安全审查器
+3. **审计一致性**
+   - 仍缺动作与审计一致性专属检查器
 
-### 下一批更值得补的工具
+### 下一批更值得补的能力
 - `111_Bulk_Action_Safety_Reviewer_SKILL.md`
 - `112_Audit_Log_Consistency_Checker_SKILL.md`
 - `113_Runtime_Incident_Replayer_SKILL.md`
+- 必要时后续再补“评分校准类 Tool Skill”
 
 ### 评分
 **9.5 / 10**
@@ -109,221 +108,104 @@
 ## 5. 需要清理 / 降权的是否已处理
 
 ### 结论
-**核心冲突面已处理，当前仓库已更干净。**
+**核心冲突面已处理，当前仓库已明显更干净。**
 
 ### 已处理
 - `Release/roles/32_P8_Frontend_PUA_SKILL.md` → `legacy stub`
 - `Release/roles/33_P8_PCConsole_PUA_SKILL.md` → `legacy stub`
-- `README.md` 已对齐正式运行模型
-- `Release/docs/发布说明与加载方式.md` 已对齐最新装配结构
-- `107~110` 已正式接入 `MANIFEST` 与 `Master Loader`
-- `91 / 92 / 98` 已正式接入 `MANIFEST` 与 `Master Loader`
+- `107~110` 已进入 active chain
+- `91 / 92 / 98` 已进入 active chain
+- 四批自动化动作已进入 active chain
+- 评分驱动规则已进入 `MANIFEST / Loader / Protocol`
 
 ### 保留策略
-- legacy 文件不建议删除，建议继续保留历史追溯价值
-- active 与 legacy 的区分应继续以 Manifest 为唯一准绳
+- legacy 文件不建议删除，继续保留历史追溯价值
+- active 与 legacy 的区分继续以 Manifest 为唯一准绳
 
 ### 评分
-**9.3 / 10**
+**9.4 / 10**
 
 ---
 
-# 三、哪些场景必须先跑工具
+# 三、当前评分驱动规则是否已落实
 
-以下场景不得只靠口头判断，必须先跑工具：
+## 1. dispatch
+### 当前规则
+- `owner_confidence >= 70`
+- `route_stability_score >= 65`
 
-1. **规则冲突**
-   - 必跑：`70_Business_Rule_Matrix` 或 `71_State_Machine_Consistency`
-2. **身份 / token / 刷新链争议**
-   - 必跑：`72_JWT_Inspector` / `74_Session_Refresh_Trace` / `88_Console_Auth_Flow_Trace` / `90_StepUp_Resume_Checker` 之一
-3. **名额 / 配额 / 点数 / 冻结争议**
-   - 必跑：`76_Billing_Ledger_Reconciler` / `77_Quota_Usage_Analyzer` / `78_Freeze_Reversal_Diagnoser` 之一
-4. **接口联调 / 抓包争议**
-   - 必跑：`79_API_Contract_Diff` 或 `82_Network_Trace_Reviewer`
-5. **版本兼容 / 升级门槛争议**
-   - 必跑：`101_Compatibility_Matrix`
-6. **Worker 主体漂移 / 重装迁移 / 重复注册**
-   - 必跑：`91_Worker_Identity_Stability`
-7. **在线/离线争议 / 心跳缺口 / 恢复抖动**
-   - 必跑：`92_Heartbeat_Gap_Analyzer`
-8. **跨系统 trace / request / worker 链路断裂**
-   - 必跑：`98_Trace_Correlation`
-9. **宣称已验证 / 要 close issue**
-   - 必跑：`95_Test_Matrix_Builder` 或 `96_Regression_Checklist`
-10. **要沉淀为 SOP**
-   - 必跑：`106_SOP_Generator`
-11. **协议字段缺失 / evidence 悬空 / closeout 断链**
-   - 必跑：`107_Protocol_Field_Completeness_Checker`
-12. **自动分流不清 / 怀疑错派 / 漏工具 / 漏验证**
-   - 必跑：`108_Chain_Route_Simulator`
-13. **高风险动作门禁争议**
-   - 必跑：`109_High_Risk_Action_Guard_Checker`
-14. **越权 / 绕过路径争议**
-   - 必跑：`110_Authorization_Bypass_Path_Reviewer`
+### 结论
+**已落实。**
 
 ---
 
-# 四、哪些角色默认优先用哪些工具
+## 2. review
+### 当前规则
+- `tool_coverage_score >= 85`
+- `evidence_completeness_score >= 80`
+- 且 exec report / validation bundle 已存在
 
-## Product / Business Rules Owner
-- `70_Business_Rule_Matrix`
-- `71_State_Machine_Consistency`
-
-## Auth / Identity Owner
-- `72_JWT_Inspector`
-- `73_Device_Identity_Diff`
-- `74_Session_Refresh_Trace`
-- `88_Console_Auth_Flow_Trace`
-- `90_StepUp_Resume_Checker`
-- `91_Worker_Identity_Stability`（涉及 Worker 身份时）
-- `110_Authorization_Bypass_Path_Reviewer`（涉及 scope / object / project 绕过时）
-
-## Billing / Entitlement Owner
-- `76_Billing_Ledger_Reconciler`
-- `77_Quota_Usage_Analyzer`
-- `78_Freeze_Reversal_Diagnoser`
-- `109_High_Risk_Action_Guard_Checker`（涉及扣点、冻结、授权动作门禁时）
-
-## Release / Config Owner
-- `101_Compatibility_Matrix`
-- `109_High_Risk_Action_Guard_Checker`（涉及回滚、强制升级等高风险动作）
-
-## Security / Risk Owner
-- `109_High_Risk_Action_Guard_Checker`
-- `110_Authorization_Bypass_Path_Reviewer`
-
-## Control Plane Owner
-- `89_Project_Context_Drift`
-- `71_State_Machine_Consistency`
-- `110_Authorization_Bypass_Path_Reviewer`
-
-## Execution Plane Owner
-- `91_Worker_Identity_Stability`
-- `92_Heartbeat_Gap_Analyzer`
-- `98_Trace_Correlation`
-- 视场景借用 `73 / 82 / 101 / 108`
-
-## P9 Principal
-- `71_State_Machine_Consistency`
-- `79_API_Contract_Diff`
-- `82_Network_Trace_Reviewer`
-- `95_Test_Matrix_Builder`
-- `96_Regression_Checklist`
-- `107_Protocol_Field_Completeness_Checker`
-- `108_Chain_Route_Simulator`
-- 运行面复杂链路复核时借用 `91 / 92 / 98`
-
-## Frontend Logic Engineer
-- `79_API_Contract_Diff`
-- `82_Network_Trace_Reviewer`
-- `74_Session_Refresh_Trace`
-- `89_Project_Context_Drift`
-- `90_StepUp_Resume_Checker`
-- `110_Authorization_Bypass_Path_Reviewer`
-
-## Console Runtime Engineer
-- `88_Console_Auth_Flow_Trace`
-- `74_Session_Refresh_Trace`
-- `89_Project_Context_Drift`
-- `90_StepUp_Resume_Checker`
-- `82_Network_Trace_Reviewer`
-- `98_Trace_Correlation`
-- `110_Authorization_Bypass_Path_Reviewer`
-
-## UI Surface / Console Mgmt UX
-- `85_UI_Surface_Audit`
-- `109_High_Risk_Action_Guard_Checker`
-
-## P8 LanrenJingling / Worker
-- `91_Worker_Identity_Stability`
-- `92_Heartbeat_Gap_Analyzer`
-- `98_Trace_Correlation`
-- 视场景借用 `73 / 82 / 101`
-
-## QA
-- `95_Test_Matrix_Builder`
-- `96_Regression_Checklist`
-- `107_Protocol_Field_Completeness_Checker`
-- 运行面问题回归时借用 `91 / 92`
-
-## SRE / Observability Owner
-- `98_Trace_Correlation`
-- `92_Heartbeat_Gap_Analyzer`
-- 视场景借用 `82 / 101 / 73 / 108`
-
-## Docs / Agent Ops / EndUser Support
-- `106_SOP_Generator`
-- `107_Protocol_Field_Completeness_Checker`
-- 运行面 SOP 沉淀时可借用 `91 / 92 / 98`
-- 其他场景视情况借用 `77 / 78 / 85 / 96 / 109`
+### 结论
+**已落实。**
 
 ---
 
-# 五、哪些输出必须落到哪些协议字段
+## 3. reopen
+### 当前规则
+- `reopen_risk_score >= 60`
+- 自动执行 `auto_reopen_on_drift`
 
-## 真相类工具输出
-应落到：
-- `ISSUE-LEDGER.evidence`
-- 对应 Owner verdict 的 evidence / findings 区
-
-### 对应关系
-- 规则类工具 → `BUSINESS-RULE-DECISION`
-- 身份类工具 → `IDENTITY-DECISION`
-- 账务类工具 → `BILLING-VERDICT`
-- 版本兼容类工具 → `RELEASE-CONFIG-VERDICT`
-- 安全类工具 → `SECURITY-RISK-VERDICT`
-- 控制/执行平面工具 → `CONTROL-PLANE-VERDICT` / `EXECUTION-PLANE-VERDICT`
-- 运行观测类工具 → `SRE-OBSERVABILITY-VERDICT`
-
-## 执行类工具输出
-应落到：
-- `P8-EXEC-REPORT`
-- 必要时同步 `ISSUE-LEDGER`
-
-## 验证 / 治理类工具输出
-应落到：
-- `QA-VALIDATION-PLAN`
-- `QA-VERIFICATION-RESULT`
-- `P9-REVIEW-VERDICT`
-- 必要时同步 `HGS-CLOSEOUT`
-
-## 沉淀类工具输出
-应落到：
-- `DOCS-KNOWLEDGE-UPDATE.normalized_content`
-- 或 SOP 附件文档
+### 结论
+**已落实。**
 
 ---
 
-# 六、最终建议
+## 4. done
+### 当前规则
+- `closeout_readiness_score >= 85`
+- `reopen_risk_score < 60`
+- `closeout_candidate_check = pass`
+- `auto_docs_sink` 已完成
 
-## 当前最值得继续做的事
-1. 补 `111_Bulk_Action_Safety_Reviewer_SKILL.md`
-2. 补 `112_Audit_Log_Consistency_Checker_SKILL.md`
-3. 视需要补 `113_Runtime_Incident_Replayer_SKILL.md`
+### 结论
+**已落实。**
+
+---
+
+# 四、当前剩余的主要问题
+
+当前剩余问题已经不再是“没有评分驱动”，而主要是：
+
+1. `HGS_自动化联动动作总表（正式版）` 需要升版到 active / score-driven 口径
+2. 当前评分报告本身需要升版到 `audit4`
+3. 尚未形成真正独立的评分引擎 Tool Skill
+4. 尚未形成“全量问题发现后自动派单直到 open issue 清零”的单独治理动作
+
+---
+
+# 五、最终建议
+
+## 当前最值得立即执行的动作
+1. 升级《HGS_自动化联动动作总表（正式版）》
+2. 固化《自动化联动装配后复核（评分驱动版）》
+3. 将评分驱动版口径同步到全局评分报告
 
 ## 当前不建议继续做的事
-- 不建议继续无节制细分角色
-- 不建议再让 legacy 文件重新进入 active chain
-
-## 当前所处阶段
-当前 HGS 已进入：
-
-**正式装配可用 + 治理文档同频 + 运行面工具开始成体系**
+- 不建议再继续堆普通角色细分
+- 不建议把尚未 active 的治理动作误写成已生效
 
 ---
 
-# 七、结论
+# 六、结论
 
 当前 HGS 正式发布版已经具备：
 
 - 内部闭环优先
-- 角色 / 工具 / 文档协同装配
-- 规则型自动推进
-- 干预点明确的治理工具链
-- 安全门禁与越权绕过前置审查
-- 更清楚的 closeout 与协议字段完整性检查
-- 运行面主体稳定性、心跳缺口与 trace 关联的专属工具链
+- 角色 / 工具 / 协议 / 文档协同装配
+- 多批自动化动作 active
+- 体验复演、自动 reopen、自动 docs sink
+- 根据分数自动决定是否派单、是否 review、是否 reopen、是否 close
 
-本轮运行面版装配后复核的核心结论是：
+本轮评分驱动版装配后复核的核心结论是：
 
-**HGS 已不只是“治理与安全工具同频”，而是“运行面工具也正式进入 active chain，并开始与治理文档同频”。**
+**HGS 已不只是“会自动联动”，而是“自动联动开始具备明确的评分驱动决策能力”；当前主要收尾工作是让治理文档完全同步到这一事实。**
