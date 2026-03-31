@@ -34,15 +34,18 @@
 13. `RE_REVIEW_PROTOCOL.md`
 14. `00_全局严审与清理报告.md`
 
-## 删除原则
+## 加载口令
 
-原附件中的以下类型已全部删除，不进入本包：
+读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
 
-- 重复总入口
-- 兼容层 / 跳转层
-- 废弃分析稿 / 合并说明稿
-- 同名多版本并存文件
-- 只描述“怎么替换旧包”的过渡材料
+1. 先读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+2. 再读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
+3. 按 `MANIFEST.json` 的 `load_order` 继续加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
+4. 执行模式固定为 `full_loop`
+5. 我后续上传的文件默认进入这条链路：
+   `P10/P9审查 → P9派单 → P8执行 → 用户/代理体验 → P9复审 → P10终审/收口`
+6. 除非触发高风险停机条件，否则不要再让我手动点名角色或确认下一步
+7. 本轮以 `MANIFEST.json + Master Loader + Roles + Protocols` 为唯一有效装配源，禁止混用其他旧入口或旧版本 Skill
 
 ## 使用结论
 
