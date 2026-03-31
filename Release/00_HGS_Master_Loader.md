@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议、清零协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int9
+version: formal-2026-03-31-int10
 author: OpenAI
 role: MasterLoader
 status: active
@@ -32,10 +32,6 @@ entrypoint: true
 12. `docs/HGS_全局扣分点问题清单与派单台账.md`
 13. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
 
-说明：
-- 第 9~12 项属于当前治理与执行底册，不得遗漏
-- `docs/HGS_全局扣分点问题清单与派单台账.md` 是本轮清零执行的当前 issue inventory / dispatch ledger 基线
-
 ---
 
 ## 装配目标
@@ -56,45 +52,137 @@ entrypoint: true
 → Closeout
 ```
 
-本版新增的核心治理能力：
+本版新增并已正式接入的核心能力：
 
-- **禁止只挑重点处理、剩余问题尾大不掉**
-- **禁止在 open issue 尚未清零时改成让用户选 A/B 方案**
-- **要求所有新发现问题全部进入 inventory 并全部派单**
-- **要求每个问题在执行后进入测试 / 体验 / 复审**
-- **要求只有 open issue 清零后才允许收口**
-- **要求本轮扣分点全部登记并全部进入派单台账**
+- **评分驱动 dispatch / review / reopen / done**
+- **清零循环的协议化与工具化**
+- **高风险 / 越权 / 运行面门禁动作已进入 active chain**
+- **本轮扣分点全部进入派单台账并纳入清零循环**
 
 ---
 
-## 协议装配清单
+## 工具装配清单（新增重点）
 
-当前必须装配的协议包括：
-
-- `protocols/40_P8_Agent_Experience_Protocol.md`
-- `protocols/41_P8_EndUser_Experience_Protocol.md`
-- `protocols/50_RE_REVIEW_PROTOCOL.md`
-- `protocols/60_HGS_IO_Protocol.md`
-- `protocols/61_Automation_Orchestration_Protocol.md`
-- `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
-
-其中：
-
-- `61` 负责动作骨架、评分与自动化决策
-- `62` 负责“全量发现—全量派单—持续回流直到清零”的治理硬规则
+### 新增安全 / 治理 / 运行工具
+- `tools/111_Bulk_Action_Safety_Reviewer_SKILL.md`
+- `tools/112_Audit_Log_Consistency_Checker_SKILL.md`
+- `tools/113_Runtime_Incident_Replayer_SKILL.md`
+- `tools/114_Score_Decision_Engine_SKILL.md`
+- `tools/115_Full_Issue_Clearance_Controller_SKILL.md`
+- `tools/116_Document_State_Consistency_Sentinel_SKILL.md`
 
 ---
 
 ## 自动化动作装配清单（当前 active）
 
-当前正式激活的动作包括四批共 24 个。统一以：
+当前正式激活的动作包括：
 
-- `MANIFEST.automation_policy.active_actions`
-- `docs/HGS_自动化联动动作总表（正式版）`
+### 核心编排
+- `create_issue_stub`
+- `infer_owner_candidates`
+- `infer_required_tools`
+- `compute_owner_confidence`
+- `compute_route_stability_score`
+- `route_dry_run`
+- `provisional_boundary_build`
+- `owner_self_resolve_attempt`
+- `peer_role_consult`
+- `split_subissues`
+- `fallback_to_p8_enhanced`
+- `p9_reframe_and_redispatch`
 
-为准。
+### 新接入 active 的执行 / 改派 / 门禁动作
+- `generate_exec_plan`
+- `auto_reroute_on_new_truth`
+- `high_risk_guard_gate`
+- `auth_bypass_guard_gate`
+- `runtime_stability_gate`
 
-本 Loader 额外新增一条**全局治理循环**：
+### 清零循环动作
+- `register_all_findings`
+- `dispatch_all_registered_issues`
+- `execute_by_owner`
+- `validate_and_experience_by_issue`
+- `rereview_all_open_issues`
+- `register_new_findings_if_any`
+- `continue_loop_until_open_issue_zero`
+
+### 既有验证 / 收口动作
+- `must_run_tool_gate`
+- `autofill_exec_report`
+- `generate_validation_bundle`
+- `experience_replay`
+- `compute_tool_coverage_score`
+- `compute_evidence_completeness_score`
+- `tool_result_landing_check`
+- `compute_reopen_risk_score`
+- `auto_reopen_on_drift`
+- `auto_docs_sink`
+- `compute_closeout_readiness_score`
+- `closeout_candidate_check`
+
+---
+
+## 自动化动作执行顺序（当前 active）
+
+### 入口与路由
+```text
+create_issue_stub
+→ infer_owner_candidates
+→ compute_owner_confidence
+→ infer_required_tools
+→ compute_route_stability_score
+→ route_dry_run
+→ provisional_boundary_build
+```
+
+### 自救、协商与重派
+```text
+owner_self_resolve_attempt
+→ peer_role_consult
+→ split_subissues
+→ fallback_to_p8_enhanced
+→ p9_reframe_and_redispatch
+→ auto_reroute_on_new_truth
+```
+
+### 门禁与执行
+```text
+high_risk_guard_gate
+→ auth_bypass_guard_gate
+→ runtime_stability_gate
+→ must_run_tool_gate
+→ generate_exec_plan
+→ execute_by_owner
+→ autofill_exec_report
+```
+
+### 验证与体验
+```text
+generate_validation_bundle
+→ validate_and_experience_by_issue
+→ experience_replay
+→ compute_tool_coverage_score
+→ compute_evidence_completeness_score
+→ tool_result_landing_check
+```
+
+### 回流与清零
+```text
+compute_reopen_risk_score
+→ auto_reopen_on_drift
+→ register_new_findings_if_any
+→ continue_loop_until_open_issue_zero
+→ auto_docs_sink
+→ compute_closeout_readiness_score
+→ closeout_candidate_check
+```
+
+---
+
+## 清零循环（强制）
+
+固定循环如下：
 
 ```text
 register_all_findings
@@ -106,74 +194,15 @@ register_all_findings
 → continue_loop_until_open_issue_zero
 ```
 
-并且当前轮次必须参考：
-
-- `docs/HGS_全局扣分点问题清单与派单台账.md`
-
-作为当前 open issue 的执行基线。
-
----
-
-## 全量问题发现—全量派单—持续回流直到清零规则
-
-### 1. 所有发现的问题必须全部登记
-任何全局审查、QA、体验、复审、工具输出中新增的问题，必须全部登记进入：
-
-- `ISSUE-LEDGER`
-- 子 issue 清单
-- `FULL-ISSUE-INVENTORY`
-
-禁止只登记最重要的一部分。
-
-### 2. 所有已登记问题必须全部派单
-只要：
-- owner 可以判定
-- 不触发硬停机条件
-
-就必须全部派单。
-
-允许分批执行，但不允许分批遗忘。
-
-### 3. 谁的问题谁处理
-每个 issue 必须有：
-- `issue_id`
-- `owner`
-- `status`
-- `required_tools`
-- `required_validation`
-- `required_experience_if_any`
-
-禁止长期挂成“待以后处理”且没有 owner。
-
-### 4. 每个问题处理后必须验证
-处理完成后必须进入：
-- 测试 / 回归
-- 必要时体验复演或真实体验
-- 复审
-
-禁止“修完就算完”。
-
-### 5. 复审发现新问题必须继续回流
-每轮复审、QA、体验、工具发现的新问题必须：
-- 立即登记
-- 立即归属 owner
-- 立即进入下一轮派单
-
-### 6. 只有清零才允许收口
-只有同时满足：
-- `open_issue_count = 0`
-- `review_pending_count = 0`
-- `verification_pending_count = 0`
-- `experience_pending_count = 0`
-- `docs_sink_pending_count = 0`
-
-才允许进入 `done`。
+硬要求：
+- 禁止“这轮先只修重点，剩下下次再说”作为默认策略
+- 禁止“问题太多”为理由不立账、不派单
+- 禁止在 open issue 未清零时让用户承担编排决策压力
+- 允许多轮循环，但不允许未清零就 closeout
 
 ---
 
-## 分数驱动与清零协议的关系
-
-当前评分驱动规则继续生效：
+## 分数驱动与 done 条件
 
 ### dispatch
 只有：
@@ -189,13 +218,6 @@ register_all_findings
 
 才允许进入 review。
 
-### reopen
-只要：
-- `reopen_risk_score >= 60`
-- 或 review / QA / experience / tools 发现 drift
-
-就必须回流。
-
 ### done
 只有：
 - `closeout_readiness_score >= 85`
@@ -208,50 +230,12 @@ register_all_findings
 
 ---
 
-## 新增硬规则
+## 当前执行底册
 
-当前新增并正式生效的硬规则：
+当前轮次必须参考：
+- `docs/HGS_全局扣分点问题清单与派单台账.md`
 
-- `require_register_all_findings_before_review`
-- `require_full_issue_inventory_before_done`
-- `require_open_issue_zero_before_done`
-
-并保留原有：
-- score gates
-- tool gates
-- exec report / validation bundle / experience replay / docs sink / closeout gates
-
----
-
-## 默认自动行为
-
-当系统执行全局审查时，默认自动行为不是：
-
-- 推荐先搞几个重点
-- 让用户选择方案 A / 方案 B
-- 把剩余问题留到以后
-
-而是：
-
-```text
-发现多少问题
-→ 登记多少问题
-→ 派多少问题
-→ 谁的问题谁干
-→ 干完测试 / 体验 / 复审
-→ 再发现再登记再派
-→ 直到 open_issue_count = 0
-→ 再做 docs sink 和 closeout
-```
-
-本轮补充要求：
-
-```text
-本轮全局审查识别到的所有扣分点
-→ 必须全部登记到派单台账
-→ 必须全部纳入清零循环
-→ 不允许任何一项继续悬空
-```
+作为 open issue 的基线，并按 wave 顺序推进，但**所有 wave 都必须执行，不允许跳过**。
 
 ---
 
@@ -261,7 +245,6 @@ register_all_findings
 [HGS 正式发布版已装配]
 入口：00_HGS_Master_Loader.md
 模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Full-Issue-Clearance Protocol
-新增治理：全量问题发现—全量派单—持续回流直到清零
 当前执行底册：HGS_全局扣分点问题清单与派单台账.md
 强制条件：所有发现必须登记、所有问题必须派单、所有问题处理后必须测试/体验/复审、open_issue_count = 0 才允许收口
 ```

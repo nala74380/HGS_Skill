@@ -1,7 +1,7 @@
 ---
 name: automation-orchestration-protocol
 description: HGS 自动编排协议。定义自动化联动动作的统一记录结构、状态字段、评分字段与最小输入输出骨架，供 Loader 与自动化动作共同使用。
-version: formal-2026-03-31-p4
+version: formal-2026-03-31-p5
 author: OpenAI
 role: Protocol
 status: active
@@ -161,84 +161,168 @@ P9-REFRAME-AND-REDISPATCH:
   outputs: [redispatch_plan, new_owner, new_tool_order, acceptance_boundary]
 ```
 
-### 5.13 `must_run_tool_gate`
+### 5.13 `generate_exec_plan`
+```yaml
+GENERATE-EXEC-PLAN:
+  inputs: [owner, tool_outputs, boundary, acceptance_boundary]
+  outputs: [exec_plan, risk_notes, required_evidence, regression_scope]
+```
+
+### 5.14 `auto_reroute_on_new_truth`
+```yaml
+AUTO-REROUTE-ON-NEW-TRUTH:
+  inputs: [new_truth_signal, current_owner, tool_outputs]
+  outputs: [new_owner, reroute_reason, next_dispatch_path]
+```
+
+### 5.15 `high_risk_guard_gate`
+```yaml
+HIGH-RISK-GUARD-GATE:
+  inputs: [action_name, action_scope, current_guards]
+  outputs: [guard_result, missing_guards, required_actions]
+```
+
+### 5.16 `auth_bypass_guard_gate`
+```yaml
+AUTH-BYPASS-GUARD-GATE:
+  inputs: [protected_resource, actor_profile, suspected_bypass_vectors]
+  outputs: [bypass_review_result, missing_checks, risky_vectors]
+```
+
+### 5.17 `runtime_stability_gate`
+```yaml
+RUNTIME-STABILITY-GATE:
+  inputs: [runtime_issue_profile, runtime_identifiers, runtime_events]
+  outputs: [runtime_gate_result, required_runtime_tools, runtime_findings]
+```
+
+### 5.18 `register_all_findings`
+```yaml
+REGISTER-ALL-FINDINGS:
+  inputs: [new_findings, issue_inventory, source_cycle]
+  outputs: [registered_issue_ids, updated_issue_inventory]
+```
+
+### 5.19 `dispatch_all_registered_issues`
+```yaml
+DISPATCH-ALL-REGISTERED-ISSUES:
+  inputs: [issue_inventory, owner_assignment_map, score_snapshot]
+  outputs: [dispatch_result_map, undispatchable_items, dispatch_wave_plan]
+```
+
+### 5.20 `execute_by_owner`
+```yaml
+EXECUTE-BY-OWNER:
+  inputs: [dispatch_result_map, exec_plans]
+  outputs: [execution_result_map, execution_blockers]
+```
+
+### 5.21 `validate_and_experience_by_issue`
+```yaml
+VALIDATE-AND-EXPERIENCE-BY-ISSUE:
+  inputs: [execution_result_map, validation_bundle_map, experience_requirements]
+  outputs: [validation_result_map, experience_result_map]
+```
+
+### 5.22 `rereview_all_open_issues`
+```yaml
+REREVIEW-ALL-OPEN-ISSUES:
+  inputs: [issue_inventory, validation_result_map, experience_result_map]
+  outputs: [rereview_verdict_map, newly_found_findings]
+```
+
+### 5.23 `register_new_findings_if_any`
+```yaml
+REGISTER-NEW-FINDINGS-IF-ANY:
+  inputs: [rereview_verdict_map, issue_inventory]
+  outputs: [new_issue_registrations, updated_issue_inventory]
+```
+
+### 5.24 `continue_loop_until_open_issue_zero`
+```yaml
+CONTINUE-LOOP-UNTIL-OPEN-ISSUE-ZERO:
+  inputs: [full_issue_inventory, clearance_gate]
+  outputs: [loop_decision, next_required_action, remaining_open_issue_count]
+```
+
+### 5.25 `must_run_tool_gate`
 ```yaml
 MUST-RUN-TOOL-GATE:
   inputs: [must_run_tools, executed_tools]
   outputs: [tool_gate_result, missing_tools]
 ```
 
-### 5.14 `autofill_exec_report`
+### 5.26 `autofill_exec_report`
 ```yaml
 AUTOFILL-EXEC-REPORT:
   inputs: [exec_plan, executed_changes, tool_outputs]
   outputs: [exec_report]
 ```
 
-### 5.15 `generate_validation_bundle`
+### 5.27 `generate_validation_bundle`
 ```yaml
 GENERATE-VALIDATION-BUNDLE:
   inputs: [exec_report, changed_scope, risk_notes]
   outputs: [qa_validation_plan, qa_verification_result_draft, validation_bundle]
 ```
 
-### 5.16 `experience_replay`
+### 5.28 `experience_replay`
 ```yaml
 EXPERIENCE-REPLAY:
   inputs: [exec_plan, validation_bundle, expected_user_path]
   outputs: [experience_check, confidence_level, experience_risks]
 ```
 
-### 5.17 `compute_tool_coverage_score`
+### 5.29 `compute_tool_coverage_score`
 ```yaml
 COMPUTE-TOOL-COVERAGE-SCORE:
   inputs: [must_run_tools, executed_tools]
   outputs: [tool_coverage_score, tool_coverage_reason]
 ```
 
-### 5.18 `compute_evidence_completeness_score`
+### 5.30 `compute_evidence_completeness_score`
 ```yaml
 COMPUTE-EVIDENCE-COMPLETENESS-SCORE:
   inputs: [exec_report, validation_bundle, protocol_payloads, tool_outputs]
   outputs: [evidence_completeness_score, evidence_completeness_reason]
 ```
 
-### 5.19 `tool_result_landing_check`
+### 5.31 `tool_result_landing_check`
 ```yaml
 TOOL-RESULT-LANDING-CHECK:
   inputs: [tool_outputs, current_protocol_payloads]
   outputs: [landing_result, missing_fields, orphan_results]
 ```
 
-### 5.20 `compute_reopen_risk_score`
+### 5.32 `compute_reopen_risk_score`
 ```yaml
 COMPUTE-REOPEN-RISK-SCORE:
   inputs: [review_findings, validation_failures, experience_failures, tool_warnings]
   outputs: [reopen_risk_score, reopen_risk_reason]
 ```
 
-### 5.21 `auto_reopen_on_drift`
+### 5.33 `auto_reopen_on_drift`
 ```yaml
 AUTO-REOPEN-ON-DRIFT:
   inputs: [review_findings, validation_failures, tool_warnings, experience_failures, reopen_risk_score]
   outputs: [reopen_reason, reopen_target_scope]
 ```
 
-### 5.22 `auto_docs_sink`
+### 5.34 `auto_docs_sink`
 ```yaml
 AUTO-DOCS-SINK:
   inputs: [p9_review_verdict, validation_results, experience_check]
   outputs: [docs_knowledge_update, sop_draft, hgs_closeout]
 ```
 
-### 5.23 `compute_closeout_readiness_score`
+### 5.35 `compute_closeout_readiness_score`
 ```yaml
 COMPUTE-CLOSEOUT-READINESS-SCORE:
   inputs: [exec_report, validation_bundle, experience_check, docs_sink_result, protocol_landing_result]
   outputs: [closeout_readiness_score, closeout_readiness_reason]
 ```
 
-### 5.24 `closeout_candidate_check`
+### 5.36 `closeout_candidate_check`
 ```yaml
 CLOSEOUT-CANDIDATE-CHECK:
   inputs: [exec_report, validation_bundle, experience_check, protocol_landing_result, closeout_readiness_score, reopen_risk_score]
@@ -282,6 +366,14 @@ AUTOMATION-HARD-GATES:
     fail_state: "reroute_required"
   - name: "require_tool_gate_before_dispatch"
     fail_state: "tool_missing"
+  - name: "require_high_risk_guard_before_sensitive_execution"
+    fail_state: "blocked"
+  - name: "require_auth_bypass_guard_when_auth_scope_or_object_risk_present"
+    fail_state: "blocked"
+  - name: "require_runtime_stability_gate_when_runtime_identity_heartbeat_or_trace_risk_present"
+    fail_state: "blocked"
+  - name: "require_exec_plan_before_execution"
+    fail_state: "evidence_incomplete"
   - name: "require_exec_report_before_review"
     fail_state: "evidence_incomplete"
   - name: "require_validation_bundle_before_review"
@@ -292,6 +384,8 @@ AUTOMATION-HARD-GATES:
     fail_state: "evidence_incomplete"
   - name: "require_protocol_landing_before_review"
     fail_state: "evidence_incomplete"
+  - name: "require_auto_reroute_on_new_truth"
+    fail_state: "reroute_required"
   - name: "require_auto_reopen_on_drift"
     fail_state: "reopen_required"
   - name: "require_auto_docs_sink_before_done"
@@ -310,4 +404,4 @@ AUTOMATION-HARD-GATES:
 
 本协议的使命只有一个：
 
-**让 HGS 的自动化联动不仅“有动作”，还“能按分数自动决定是否派单、是否 reopen、是否 close”。**
+**让 HGS 的自动化联动不仅“有动作”，还“能按分数自动决定是否派单、是否 reopen、是否 close”，并把关键门禁与清零动作提升为正式 active 动作集。**

@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int9",
+  "package_version": "formal-2026-03-31-int10",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -62,7 +62,13 @@
     "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
     "tools/108_Chain_Route_Simulator_SKILL.md",
     "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
-    "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
+    "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+    "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md",
+    "tools/112_Audit_Log_Consistency_Checker_SKILL.md",
+    "tools/113_Runtime_Incident_Replayer_SKILL.md",
+    "tools/114_Score_Decision_Engine_SKILL.md",
+    "tools/115_Full_Issue_Clearance_Controller_SKILL.md",
+    "tools/116_Document_State_Consistency_Sentinel_SKILL.md"
   ],
   "documentation_load_order": [
     "docs/正式发布版全局审查报告.md",
@@ -133,7 +139,13 @@
     {"id": "protocol-field-completeness-checker", "file": "tools/107_Protocol_Field_Completeness_Checker_SKILL.md", "layer": "governance_tool"},
     {"id": "chain-route-simulator", "file": "tools/108_Chain_Route_Simulator_SKILL.md", "layer": "governance_tool"},
     {"id": "high-risk-action-guard-checker", "file": "tools/109_High_Risk_Action_Guard_Checker_SKILL.md", "layer": "security_tool"},
-    {"id": "authorization-bypass-path-reviewer", "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md", "layer": "security_tool"}
+    {"id": "authorization-bypass-path-reviewer", "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md", "layer": "security_tool"},
+    {"id": "bulk-action-safety-reviewer", "file": "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md", "layer": "security_tool"},
+    {"id": "audit-log-consistency-checker", "file": "tools/112_Audit_Log_Consistency_Checker_SKILL.md", "layer": "governance_tool"},
+    {"id": "runtime-incident-replayer", "file": "tools/113_Runtime_Incident_Replayer_SKILL.md", "layer": "runtime_tool"},
+    {"id": "score-decision-engine", "file": "tools/114_Score_Decision_Engine_SKILL.md", "layer": "governance_tool"},
+    {"id": "full-issue-clearance-controller", "file": "tools/115_Full_Issue_Clearance_Controller_SKILL.md", "layer": "governance_tool"},
+    {"id": "document-state-consistency-sentinel", "file": "tools/116_Document_State_Consistency_Sentinel_SKILL.md", "layer": "knowledge_synthesis"}
   ],
   "governance_docs": [
     {"id": "formal-review-report", "file": "docs/正式发布版全局审查报告.md", "kind": "historical_baseline"},
@@ -199,6 +211,18 @@
       "split_subissues",
       "fallback_to_p8_enhanced",
       "p9_reframe_and_redispatch",
+      "generate_exec_plan",
+      "auto_reroute_on_new_truth",
+      "high_risk_guard_gate",
+      "auth_bypass_guard_gate",
+      "runtime_stability_gate",
+      "register_all_findings",
+      "dispatch_all_registered_issues",
+      "execute_by_owner",
+      "validate_and_experience_by_issue",
+      "rereview_all_open_issues",
+      "register_new_findings_if_any",
+      "continue_loop_until_open_issue_zero",
       "must_run_tool_gate",
       "autofill_exec_report",
       "generate_validation_bundle",
@@ -217,6 +241,8 @@
       "score_driven_routing",
       "self_resolution_and_internal_deliberation",
       "redispatch_and_fallback",
+      "risk_guarding_and_runtime_gating",
+      "full_issue_clearance_actions",
       "tool_gating",
       "execution_reporting",
       "validation_generation",
@@ -276,11 +302,16 @@
       "require_score_gates_before_dispatch": true,
       "require_route_dry_run_when_owner_confidence_below_threshold": true,
       "require_tool_gate_before_dispatch": true,
+      "require_high_risk_guard_before_sensitive_execution": true,
+      "require_auth_bypass_guard_when_auth_scope_or_object_risk_present": true,
+      "require_runtime_stability_gate_when_runtime_identity_heartbeat_or_trace_risk_present": true,
+      "require_exec_plan_before_execution": true,
       "require_exec_report_before_review": true,
       "require_validation_bundle_before_review": true,
       "require_experience_replay_when_real_feedback_missing": true,
       "require_score_gates_before_review": true,
       "require_protocol_landing_before_review": true,
+      "require_auto_reroute_on_new_truth": true,
       "require_auto_reopen_on_drift": true,
       "require_auto_docs_sink_before_done": true,
       "require_score_gates_before_done": true,
@@ -315,7 +346,8 @@
       "repeated_execution_failure": "fallback_to_p8_enhanced_then_p9_reframe_and_redispatch",
       "review_or_experience_drift": "compute_reopen_risk_score_then_auto_reopen_on_drift_then_p9_reframe_and_redispatch",
       "closeout_not_ready": "compute_closeout_readiness_score_then_auto_docs_sink_or_reopen_then_recheck",
-      "global_review_finds_many_issues": "register_all_findings_then_full_dispatch_then_continue_clearance_loop"
+      "global_review_finds_many_issues": "register_all_findings_then_full_dispatch_then_continue_clearance_loop",
+      "document_state_is_stale_or_misaligned": "run_document_state_consistency_sentinel_then_sync_docs_and_ledgers"
     }
   }
 }
