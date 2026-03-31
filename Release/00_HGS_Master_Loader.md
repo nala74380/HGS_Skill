@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill 与协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31
+version: formal-2026-03-31-ie1
 author: OpenAI
 role: MasterLoader
 status: active
@@ -172,19 +172,57 @@ experience_check → reopen
 5. 体验通过且无新增结构性风险 → 进入收口
 6. 体验失败或复审发现漂移 → reopen 并重新派单
 
+## 内部解法穷尽链（强制）
+
+默认不是“直接问用户”，而是先在编排体系内部穷尽解法。
+
+固定顺序：
+
+```text
+当前 owner 自救
+→ 必要时与相邻角色协商 / 拆单
+→ P9 协调、重构工单、重定边界
+→ P10 做路线重裁 / 优先级重排
+→ 仅当内部方案穷尽仍无法继续时，才升级问用户
+```
+
+执行要求：
+
+- 禁止因为“还有一点不确定”就直接问用户
+- 禁止跳过 P9 / P10 直接把中间决策压力抛给用户
+- 只要还有内部可测试、可拆解、可回退、可局部验证的路径，就必须继续内部推进
+- 问用户前，必须先形成 `INTERNAL-DELIBERATION`，列明已经尝试过的内部方案与失败原因
+
+## 软阻塞转内部协商规则（强制）
+
+以下情况不得直接停机问用户，必须先走内部协商：
+
+1. `source_of_truth` 部分不清晰
+   → 先以本批次输入为主真相源，记录 `ASSUMPTION-LOG`，再由 P9 约束边界
+
+2. `max_change_boundary` 暂不够精确
+   → 先生成 provisional boundary，只允许非破坏性动作，继续推进到验证前
+
+3. owner 不唯一或跨 owner 依赖
+   → 先由 P9 拆单、排序、串并联编排；仍不清晰时兜底路由 `p8-pua-enhanced`
+
+4. 体验证据暂缺
+   → 先执行 path replay，标记 `confidence=low`，允许进入工程收口，不得立刻回头问用户
+
+5. 当前 owner 连续失败
+   → 先升级到 `p8-pua-enhanced`；必要时再由 P9 / P10 重裁，不得先问用户
+
 ---
 
 ## 停机条件
 
-命中任一条件，必须停下并明确标记：
+只有命中以下硬条件，且内部解法穷尽后，才允许升级问用户：
 
 - 需要真实外发给用户 / 代理 / 客户执行
 - 涉及不可逆删除、覆盖、批量清理、生产数据破坏性操作
-- 需要用户明确业务取舍
-- `source_of_truth` 不清晰
-- `max_change_boundary` 无法覆盖真实修复范围
-- 暴露路线级 / 战略级冲突，需要 P10 重裁
-- 缺少真实体验反馈，无法诚实宣称已闭环
+- 需要用户做业务取舍，且 P9 / P10 已确认内部不存在可接受默认路径
+- 涉及法律 / 安全 / 金融边界，已超出当前批次授权范围
+- 暴露路线级 / 战略级冲突，且 P10 重裁后仍需你拍板
 
 ---
 
@@ -224,6 +262,6 @@ experience_check → reopen
 模式：Master Loader + Roles + Manifest
 加载策略：Manifest 驱动，全角色装配
 默认路线：P10 → P9 → P8 → 体验 → P9 → P10(按需) → Closeout
-默认策略：自动推进；命中停机条件时显式停下
+默认策略：内部解法优先；先角色协商、再上级裁决、最后才升级问用户
 统一协议：HGS-BATCH-HEADER / ISSUE-LEDGER / P8-EXEC-REPORT / HGS-EXPERIENCE-CHECK / P9-REVIEW-VERDICT / P10-FINAL-DECISION / HGS-CLOSEOUT
 ```

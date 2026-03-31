@@ -1,7 +1,7 @@
 ---
 name: hgs-io-protocol
 description: HGS 正式发布版统一 I/O 协议。定义批次、问题台账、执行回包、体验验证、复审裁决与收口数据结构。
-version: formal-2026-03-31
+version: formal-2026-03-31-ie1
 author: OpenAI
 role: Protocol
 status: active
@@ -23,7 +23,8 @@ status: active
 5. 未进入 `ISSUE-LEDGER` 的问题，不得直接执行
 6. 未产生 `P8-EXEC-REPORT` 的 issue，不得进入 P9 复审
 7. 未产生体验证据，不得把 `review_result=pass` 伪装成用户体验闭环
-8. 所有状态流转必须落在主装配器定义的状态机之内
+8. 在升级问用户之前，必须先完成内部协商与上级裁决记录
+9. 所有状态流转必须落在主装配器定义的状态机之内
 
 ---
 
@@ -90,6 +91,42 @@ ISSUE-LEDGER:
 
 ---
 
+## 2.5 INTERNAL-DELIBERATION
+
+```yaml
+INTERNAL-DELIBERATION:
+  issue_id: "ISSUE-001"
+  current_owner: "p8-backend"
+  attempted_internal_options:
+    - option: "<已尝试的内部解法>"
+      owner: "<谁尝试>"
+      result: "failed | partial | blocked"
+      why_not_enough: "<为什么还不够>"
+  peer_consultation:
+    - consulted_role: "p9-principal | p8-pua-enhanced | p10-cto | other-owner"
+      advice: "<给出的解法或裁决>"
+      outcome: "adopted | rejected | insufficient"
+  exhausted: false
+  next_internal_step: "<下一步内部动作>"
+```
+
+约束：
+
+- 只要 `exhausted=false`，不得升级问用户
+- 任何用户升级请求前，必须先有至少一份 `INTERNAL-DELIBERATION`
+
+## 2.6 ASSUMPTION-LOG
+
+```yaml
+ASSUMPTION-LOG:
+  issue_id: "ISSUE-001"
+  assumptions:
+    - assumption: "<当前采用的假设>"
+      reason: "<为什么当前可暂采纳>"
+      impact_if_wrong: "<若假设错误会影响什么>"
+      mitigation: "<如何控制风险>"
+```
+
 ## 3. P8-EXEC-REPORT
 
 ```yaml
@@ -125,6 +162,7 @@ P8-EXEC-REPORT:
 HGS-EXPERIENCE-CHECK:
   issue_id: "ISSUE-001"
   actor: "agent | enduser | admin | operator"
+  evidence_type: "real_feedback | path_replay"
   journey: "<触发路径/操作旅程>"
   before: "<修复前摩擦>"
   after: "<修复后表现>"
@@ -193,6 +231,7 @@ P10-FINAL-DECISION:
 ```yaml
 HGS-CLOSEOUT:
   batch_id: "BATCH-20260331-001"
+  closure_type: "full_closed | engineering_closed_experience_pending | reopened | escalated"
   closed_issue_ids:
     - "ISSUE-001"
   reopened_issue_ids:
@@ -238,3 +277,24 @@ experience_check → reopen
 - 禁止绕过 `ISSUE-LEDGER` 直接派 P8
 - 禁止在复审阶段偷偷扩大改动边界
 - 禁止 `review_result=pass` 但 `next_action=reopen` 这类互相打架的字段组合
+
+
+## 8. USER-ESCALATION-REQUEST
+
+```yaml
+USER-ESCALATION-REQUEST:
+  issue_id: "ISSUE-001"
+  why_internal_resolution_failed: "<为什么内部链路已穷尽>"
+  options_considered:
+    - "<已考虑方案1>"
+    - "<已考虑方案2>"
+  p9_position: "<P9 结论>"
+  p10_position: "<P10 结论，如已介入>"
+  exact_decision_needed_from_user: "<到底要用户决定什么>"
+  safe_default_if_no_answer: "<若用户暂未回复，最安全默认动作是什么>"
+```
+
+约束：
+
+- 没有 `USER-ESCALATION-REQUEST`，不得把普通不确定性包装成“需要用户拍板”
+- `exact_decision_needed_from_user` 必须精确，禁止问泛化问题

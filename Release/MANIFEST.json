@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31",
+  "package_version": "formal-2026-03-31-ie1",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role",
   "default_route_mode": "full_loop",
@@ -89,11 +89,10 @@
   "risk_gates": [
     "irreversible_delete_or_overwrite",
     "production_data_destructive_change",
-    "requires_user_business_tradeoff",
-    "source_of_truth_unclear",
-    "boundary_exceeded",
-    "strategy_conflict",
-    "missing_real_experience_feedback"
+    "real_external_send_or_real_user_action_required",
+    "requires_user_business_tradeoff_after_internal_options_exhausted",
+    "legal_security_financial_boundary_exceeded",
+    "strategy_conflict_after_p10_review"
   ],
   "status_machine": {
     "normal": [
@@ -110,7 +109,34 @@
       "blocked",
       "rework",
       "escalate_to_p10",
-      "reopen"
+      "reopen",
+      "awaiting_external"
     ]
+  },
+  "automation_policy": {
+    "default_behavior": "internal_resolution_first",
+    "internal_escalation_chain": [
+      "current_owner_self_resolution",
+      "peer_role_consultation_or_split_dispatch",
+      "p9_coordination_and_reframing",
+      "p10_strategic_reroute",
+      "user_escalation_only_if_internal_options_exhausted"
+    ],
+    "question_policy": "forbid_direct_user_confirmation_before_internal_exhaustion",
+    "ask_user_only_when": [
+      "irreversible_delete_or_overwrite",
+      "production_data_destructive_change",
+      "real_external_send_or_real_user_action_required",
+      "requires_user_business_tradeoff_after_internal_options_exhausted",
+      "legal_security_financial_boundary_exceeded",
+      "strategy_conflict_after_p10_review"
+    ],
+    "soft_block_resolution": {
+      "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
+      "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
+      "missing_real_experience_feedback": "run_path_replay_mark_confidence_low_and_continue_to_engineering_closeout",
+      "owner_unclear": "p9_split_or_fallback_to_p8_pua_enhanced",
+      "multi_owner_dependency": "p9_coordinate_parallel_or_sequential_subissues_before_user_escalation"
+    }
   }
 }
