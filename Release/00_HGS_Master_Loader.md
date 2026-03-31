@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档与协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int2
+version: formal-2026-03-31-int3
 author: OpenAI
 role: MasterLoader
 status: active
@@ -154,6 +154,11 @@ MANIFEST
 - `tools/79_API_Contract_Diff_SKILL.md`
 - `tools/82_Network_Trace_Reviewer_SKILL.md`
 
+### 运行面工具
+- `tools/91_Worker_Identity_Stability_SKILL.md`
+- `tools/92_Heartbeat_Gap_Analyzer_SKILL.md`
+- `tools/98_Trace_Correlation_SKILL.md`
+
 ### 体验 / 表面审查工具
 - `tools/85_UI_Surface_Audit_SKILL.md`
 
@@ -253,6 +258,9 @@ experience_check → reopen
 - 名额 / 配额争议 → `tools/77_Quota_Usage_Analyzer_SKILL.md`
 - 冻结 / 冲正 / 扣了但没成 → `tools/78_Freeze_Reversal_Diagnoser_SKILL.md`，必要时 `tools/76_Billing_Ledger_Reconciler_SKILL.md`
 - 接口联调 / 抓包 / contract 漂移 → `tools/82_Network_Trace_Reviewer_SKILL.md` + `tools/79_API_Contract_Diff_SKILL.md`
+- Worker 身份稳定性 / 重装迁移主体漂移 → `tools/91_Worker_Identity_Stability_SKILL.md`
+- 在线/离线状态争议 / 心跳缺口 / 恢复模式分析 → `tools/92_Heartbeat_Gap_Analyzer_SKILL.md`
+- 多系统 request_id / trace_id / worker_id 链路重建 → `tools/98_Trace_Correlation_SKILL.md`
 - 页面 / 管理台体验争议 → `tools/85_UI_Surface_Audit_SKILL.md`
 - 验证设计 / 回归收口 → `tools/95_Test_Matrix_Builder_SKILL.md` + `tools/96_Regression_Checklist_SKILL.md`
 - 协议字段完整性 / closeout 前质量闸门 → `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
@@ -294,10 +302,13 @@ experience_check → reopen
 5. issue 涉及自动分流不清、owner 不稳、怀疑漏工具 / 漏验证 / 错派时，必须先调用 `tools/108_Chain_Route_Simulator_SKILL.md`
 6. issue 涉及删除、冻结、解绑、扣点、授权、回滚等高风险动作时，必须先调用 `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
 7. issue 涉及对象级授权、project scope、前端显隐代替服务端校验、疑似越权绕过时，必须先调用 `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
-8. 已产生 `P8-EXEC-REPORT` → 送回 P9 复审
-9. 复审通过但无真实体验证据 → 自动进入体验验证
-10. 体验通过且无新增结构性风险 → 进入 Knowledge / Docs 沉淀与 Closeout
-11. 体验失败或复审发现漂移 → reopen 并重新派单
+8. issue 涉及 Worker 主体漂移、重复注册、重装迁移身份不稳时，必须先调用 `tools/91_Worker_Identity_Stability_SKILL.md`
+9. issue 涉及在线/离线争议、心跳缺口、恢复抖动或运行态告警降噪时，必须先调用 `tools/92_Heartbeat_Gap_Analyzer_SKILL.md`
+10. issue 涉及跨前端、后端、Worker、Console 的链路断点、trace 线索割裂或事故时间线重建时，必须先调用 `tools/98_Trace_Correlation_SKILL.md`
+11. 已产生 `P8-EXEC-REPORT` → 送回 P9 复审
+12. 复审通过但无真实体验证据 → 自动进入体验验证
+13. 体验通过且无新增结构性风险 → 进入 Knowledge / Docs 沉淀与 Closeout
+14. 体验失败或复审发现漂移 → reopen 并重新派单
 
 ## 内部解法穷尽链（强制）
 
