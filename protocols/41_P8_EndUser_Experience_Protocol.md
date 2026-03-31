@@ -1,13 +1,18 @@
 ---
 name: p8-enduser-review
 description: 终端用户体验审查协议。收集一线挫败感与高频摩擦，转成产品与工程改进证据。
-version: clean-2026-03-31
+version: formal-2026-03-31
 author: OpenAI
 role: ExperienceReview
 status: active
 ---
-
 # 终端用户体验审查协议
+
+## 发布版装配位置
+
+- 运行层级：`protocols/41_P8_EndUser_Experience_Protocol.md`
+- 由 `00_HGS_Master_Loader.md` 统一装配
+- 本文件负责体验 / 再审协议，不单独承担角色执行
 
 终端用户是系统的最终消费者。
 他们不懂技术，他们只知道"能不能用"。

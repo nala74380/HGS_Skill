@@ -1,13 +1,18 @@
 ---
 name: re-review
 description: 再审协议。用于体验验证之后的 P9 / P10 双重收口，确认根因是否消除、模式是否需要固化。
-version: clean-2026-03-31
+version: formal-2026-03-31
 author: OpenAI
 role: ReReview
 status: active
 ---
-
 # 再审协议（RE-REVIEW）
+
+## 发布版装配位置
+
+- 运行层级：`protocols/50_RE_REVIEW_PROTOCOL.md`
+- 由 `00_HGS_Master_Loader.md` 统一装配
+- 本文件负责体验 / 再审协议，不单独承担角色执行
 
 再审不是问"好了吗？"
 再审是：
@@ -301,7 +306,7 @@ P10建议：____
 
 ---
 
-## 与纯净联动版的差异
+## 与正式发布版的差异
 
 ```
 旧再审（只是确认）：

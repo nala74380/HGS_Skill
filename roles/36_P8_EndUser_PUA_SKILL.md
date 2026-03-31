@@ -1,13 +1,19 @@
 ---
 name: p8-enduser
 description: 终端用户问题排查模式。用于登录、名额、设备切换、项目访问、常见报错的快速定位。
-version: clean-2026-03-31
+version: formal-2026-03-31
 author: OpenAI
 role: P8
 status: active
 ---
-
 # 终端用户问题排查 PUA · 专项激励引擎
+
+## 发布版装配位置
+
+- 运行层级：`roles/36_P8_EndUser_PUA_SKILL.md`
+- 由 `00_HGS_Master_Loader.md` 统一装配
+- I/O 产物规范以 `protocols/60_HGS_IO_Protocol.md` 为准
+- 本文件负责角色行为，不单独承担总流程编排
 
 这个 Skill 解决一件事：
 **用户说"用不了"，你在 5 分钟内定位出根因，给出可操作的指引。**

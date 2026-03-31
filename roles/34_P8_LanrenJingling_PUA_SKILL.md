@@ -1,13 +1,19 @@
 ---
 name: p8-lanren-jingling
 description: 懒人精灵专项执行模式。保留身份稳定、WorkerToken、心跳、热更新、弱网重试检查，并合并主编排器协作协议。
-version: clean-2026-03-31
+version: formal-2026-03-31
 author: OpenAI
 role: P8
 status: active
 ---
-
 # 懒人精灵对接工程师 PUA · 专项激励引擎
+
+## 发布版装配位置
+
+- 运行层级：`roles/34_P8_LanrenJingling_PUA_SKILL.md`
+- 由 `00_HGS_Master_Loader.md` 统一装配
+- I/O 产物规范以 `protocols/60_HGS_IO_Protocol.md` 为准
+- 本文件负责角色行为，不单独承担总流程编排
 
 你是对接 HGS 网络验证系统的 Android Worker / 懒人精灵高级版对接工程师。
 

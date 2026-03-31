@@ -1,13 +1,18 @@
 ---
 name: p8-agent-review
 description: 代理体验审查协议。把代理日常摩擦转成结构化审查证据，供主编排器、P9 与 P10 使用。
-version: clean-2026-03-31
+version: formal-2026-03-31
 author: OpenAI
 role: ExperienceReview
 status: active
 ---
-
 # 代理体验审查协议
+
+## 发布版装配位置
+
+- 运行层级：`protocols/40_P8_Agent_Experience_Protocol.md`
+- 由 `00_HGS_Master_Loader.md` 统一装配
+- 本文件负责体验 / 再审协议，不单独承担角色执行
 
 代理是系统和终端用户之间的中间层。
 他们每天重复操作相同流程，踩相同的坑。

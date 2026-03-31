@@ -1,0 +1,116 @@
+{
+  "package_name": "HGS Formal Release",
+  "package_version": "formal-2026-03-31",
+  "entrypoint": "00_HGS_Master_Loader.md",
+  "activation_mode": "manifest_driven_multi_role",
+  "default_route_mode": "full_loop",
+  "load_order": [
+    "MANIFEST.json",
+    "00_HGS_Master_Loader.md",
+    "roles/10_P10_CTO_SKILL.md",
+    "roles/20_P9_Principal_SKILL.md",
+    "roles/30_P8_PUA_Enhanced_SKILL.md",
+    "roles/31_P8_Backend_PUA_SKILL.md",
+    "roles/32_P8_Frontend_PUA_SKILL.md",
+    "roles/33_P8_PCConsole_PUA_SKILL.md",
+    "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+    "roles/35_P8_Agent_PUA_SKILL.md",
+    "roles/36_P8_EndUser_PUA_SKILL.md",
+    "protocols/40_P8_Agent_Experience_Protocol.md",
+    "protocols/41_P8_EndUser_Experience_Protocol.md",
+    "protocols/50_RE_REVIEW_PROTOCOL.md",
+    "protocols/60_HGS_IO_Protocol.md"
+  ],
+  "roles": [
+    {
+      "id": "p10-cto",
+      "file": "roles/10_P10_CTO_SKILL.md",
+      "layer": "strategy"
+    },
+    {
+      "id": "p9-principal",
+      "file": "roles/20_P9_Principal_SKILL.md",
+      "layer": "review_dispatch_rereview"
+    },
+    {
+      "id": "p8-pua-enhanced",
+      "file": "roles/30_P8_PUA_Enhanced_SKILL.md",
+      "layer": "execution_fallback"
+    },
+    {
+      "id": "p8-backend",
+      "file": "roles/31_P8_Backend_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-frontend",
+      "file": "roles/32_P8_Frontend_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-pc-console",
+      "file": "roles/33_P8_PCConsole_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-lanren-jingling",
+      "file": "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-agent",
+      "file": "roles/35_P8_Agent_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    },
+    {
+      "id": "p8-enduser",
+      "file": "roles/36_P8_EndUser_PUA_SKILL.md",
+      "layer": "execution_specialist"
+    }
+  ],
+  "protocols": [
+    {
+      "id": "agent-experience",
+      "file": "protocols/40_P8_Agent_Experience_Protocol.md"
+    },
+    {
+      "id": "enduser-experience",
+      "file": "protocols/41_P8_EndUser_Experience_Protocol.md"
+    },
+    {
+      "id": "re-review",
+      "file": "protocols/50_RE_REVIEW_PROTOCOL.md"
+    },
+    {
+      "id": "hgs-io-protocol",
+      "file": "protocols/60_HGS_IO_Protocol.md"
+    }
+  ],
+  "risk_gates": [
+    "irreversible_delete_or_overwrite",
+    "production_data_destructive_change",
+    "requires_user_business_tradeoff",
+    "source_of_truth_unclear",
+    "boundary_exceeded",
+    "strategy_conflict",
+    "missing_real_experience_feedback"
+  ],
+  "status_machine": {
+    "normal": [
+      "todo",
+      "in_review",
+      "dispatched",
+      "in_progress",
+      "verifying",
+      "experience_check",
+      "reviewing",
+      "done"
+    ],
+    "exception": [
+      "blocked",
+      "rework",
+      "escalate_to_p10",
+      "reopen"
+    ]
+  }
+}
