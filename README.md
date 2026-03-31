@@ -34,7 +34,7 @@ HGS_Skill/
 只以 `Release/` 为正式运行源：
 
 ```text
-读取 `Release/MANIFEST.json`，并按其中的 `load_order / tool_load_order / documentation_load_order` 装配整个 HGS 正式发布版。
+读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`，并按其中的 `load_order / tool_load_order / documentation_load_order` 装配整个 HGS 正式发布版。
 本轮只承认 `Release/` 下且已登记在 `MANIFEST.json` 中的文件为有效 Skill 源。
 执行模式：`full_loop`。
 我后续上传的文件默认进入：
@@ -51,8 +51,8 @@ HGS_Skill/
 ```text
 读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
 
-1. 先读取 `Release/MANIFEST.json`
-2. 再读取 `Release/00_HGS_Master_Loader.md`
+1. 先读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+2. 再读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
 3. 按 `MANIFEST.json` 的 `load_order`、`tool_load_order`、`documentation_load_order` 继续加载全部已登记的 `roles/`、`tools/`、`protocols/`、`docs/`
 4. 执行模式固定为 `full_loop`
 5. 我后续上传的文件默认进入这条链路：
@@ -60,8 +60,8 @@ HGS_Skill/
 6. 除非触发 `risk_gates` 或高风险停机条件，否则不要再让我手动点名角色或确认下一步
 
 仓库基线：
-- `Release/MANIFEST.json`
-- `Release/00_HGS_Master_Loader.md`
+- `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+- `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
 ```
 
 ---
@@ -73,8 +73,8 @@ HGS_Skill/
 ```text
 基于当前已加载的 HGS 正式发布版，将装配源升级到仓库 `main` 的最新 Release 基线：
 
-1. 重新读取 `Release/MANIFEST.json`
-2. 重新读取 `Release/00_HGS_Master_Loader.md`
+1. 重新读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+2. 重新读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
 3. 按最新 `MANIFEST.json` 重新装配新增或更新的 `roles/`、`tools/`、`protocols/`、`docs/`
 4. 以最新 `package_version` 为唯一有效版本，覆盖旧装配口径
 5. 保留当前 issue inventory / clearance context，但治理规则、动作集、工具集、文档集一律以最新 Release 为准
@@ -82,8 +82,8 @@ HGS_Skill/
 7. 除非命中高风险停机条件，否则继续内部闭环推进，不要退回旧入口、旧角色集或旧工具集
 
 仓库基线：
-- `Release/MANIFEST.json`
-- `Release/00_HGS_Master_Loader.md`
+- `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+- `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
 ```
 
 ---
@@ -155,5 +155,9 @@ HGS_Skill/
 这个仓库当前的唯一正式基线，就是：
 
 ```text
-Release/MANIFEST.json + Release/00_HGS_Master_Loader.md + 已登记的 roles/tools/protocols/docs
+https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json
++
+https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md
++
+已登记的 roles/tools/protocols/docs
 ```
