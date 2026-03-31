@@ -1,8 +1,8 @@
 # HGS 自动化联动动作总表（正式版）
 
-> 版本：formal-2026-03-31-r2  
-> 定位：HGS 正式发布版的自动化联动治理文档。用于把“内部闭环优先、工具前置、角色协同、收口再审、评分驱动决策”从原则层升级为**动作层 + 闸门层 + 评分层**。  
-> 说明：本文件不是运行入口，不替代 `MANIFEST.json` / `00_HGS_Master_Loader.md`；本文件定义的是**当前 active 自动化动作、分数阈值、决策规则与编排边界**。
+> 版本：formal-2026-03-31-r3  
+> 定位：HGS 正式发布版的自动化联动治理文档。用于把“内部闭环优先、工具前置、角色协同、收口再审、评分驱动决策、持续回流直到清零”从原则层升级为**动作层 + 闸门层 + 评分层 + 清零治理层**。  
+> 说明：本文件不是运行入口，不替代 `MANIFEST.json` / `00_HGS_Master_Loader.md`；本文件定义的是**当前 active 自动化动作、分数阈值、决策规则、清零规则与编排边界**。
 
 ---
 
@@ -14,12 +14,14 @@
 - 第二批动作：**已接入 active chain**
 - 第三批动作：**已接入 active chain**
 - 第四批评分动作：**已接入 active chain**
+- 清零治理协议：**已接入 active chain**
 
-当前 active 动作总数：**24 个**。
+当前 active 动作总数：**24 个**。  
+当前新增硬治理协议：**`62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`**。
 
 一句话：
 
-**HGS 现在已经从“有动作建议”升级成“动作 + 闸门 + 分数共同驱动编排”。**
+**HGS 现在已经从“有动作建议”升级成“动作 + 闸门 + 分数 + 清零协议共同驱动编排”。**
 
 ---
 
@@ -54,10 +56,25 @@
 - reopen 前看 `reopen_risk_score`
 - done 前看 `closeout_readiness_score` 与 `reopen_risk_score`
 
-## 4. 结果必须落点
+## 4. 清零优先于提前收口
+每次全局审查、QA、体验、复审的新发现都必须：
+
+```text
+全部登记
+→ 全部归属 owner
+→ 全部派单
+→ 全部进入测试 / 体验 / 复审
+→ 再发现再继续回流
+→ 直到 open_issue_count = 0
+→ 才允许收口
+```
+
+## 5. 结果必须落点
 任何动作都不能只停留在口头描述，必须至少落入：
 - `ISSUE-LEDGER`
-- 对应 Owner verdict
+- `FULL-ISSUE-INVENTORY`
+- `CLEARANCE-CYCLE-REPORT`
+- `CLEARANCE-GATE`
 - `P8-EXEC-REPORT`
 - `QA-VALIDATION-PLAN`
 - `QA-VERIFICATION-RESULT`
@@ -108,6 +125,12 @@
 - `compute_tool_coverage_score`
 - `compute_evidence_completeness_score`
 
+## 7. 清零治理层
+- `62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`（协议驱动）
+- `FULL-ISSUE-INVENTORY`
+- `CLEARANCE-CYCLE-REPORT`
+- `CLEARANCE-GATE`
+
 ---
 
 # 四、当前 active 动作清单（按执行顺序）
@@ -137,6 +160,18 @@ create_issue_stub
 → auto_docs_sink
 → compute_closeout_readiness_score
 → closeout_candidate_check
+```
+
+全局审查场景下，还必须叠加：
+
+```text
+register_all_findings
+→ dispatch_all_registered_issues
+→ execute_by_owner
+→ validate_and_experience_by_issue
+→ rereview_all_open_issues
+→ register_new_findings_if_any
+→ continue_loop_until_open_issue_zero
 ```
 
 ---
@@ -194,12 +229,51 @@ create_issue_stub
 - `reopen_risk_score < 60`
 - `closeout_candidate_check = pass`
 - `auto_docs_sink` 已完成
+- `open_issue_count = 0`
 
 才允许进入 `done`。
 
 ---
 
-# 七、正式硬闸门
+# 七、清零治理规则（当前正式规则）
+
+## 1. 所有发现必须登记
+任何审查、复审、测试、体验、工具输出新发现的问题，必须全部登记进：
+- `ISSUE-LEDGER`
+- 子 issue 清单
+- `FULL-ISSUE-INVENTORY`
+
+## 2. 所有已登记问题必须派单
+只要 owner 可判定且不触发硬停机条件，就必须全部派单。允许分波次执行，但不允许分波次遗忘。
+
+## 3. 谁的问题谁处理
+每个问题必须有：
+- `issue_id`
+- `owner`
+- `status`
+- `required_tools`
+- `required_validation`
+- `required_experience_if_any`
+
+## 4. 处理后必须测试 / 体验 / 复审
+禁止“修完就算完”。
+
+## 5. 再发现问题必须继续回流
+新问题必须立即登记、立即归属、立即派单。
+
+## 6. 只有清零才允许收口
+只有同时满足：
+- `open_issue_count = 0`
+- `review_pending_count = 0`
+- `verification_pending_count = 0`
+- `experience_pending_count = 0`
+- `docs_sink_pending_count = 0`
+
+才允许 `done`。
+
+---
+
+# 八、正式硬闸门
 
 当前已正式生效的关键硬闸门：
 
@@ -214,10 +288,13 @@ create_issue_stub
 9. 未完成 `auto_docs_sink` 不得 done
 10. 未通过 `closeout_candidate_check` 不得 done
 11. 重复失败时必须 `fallback_to_p8_enhanced`
+12. review 前必须完成所有发现问题登记
+13. done 前必须存在 `FULL-ISSUE-INVENTORY`
+14. `open_issue_count > 0` 时不得 done
 
 ---
 
-# 八、当前未进入 active chain 但已定义的动作
+# 九、当前未进入 active chain 但已定义的动作
 
 以下动作已在治理文档中定义，但当前仍未进入 `MANIFEST.active_actions`：
 
@@ -233,19 +310,20 @@ create_issue_stub
 
 ---
 
-# 九、当前最重要的治理结论
+# 十、当前最重要的治理结论
 
 1. HGS 自动化联动已从“建议动作”升级为“正式 active 动作集”。
 2. 评分动作已成为编排决策的正式依据，而非辅助参考。 
 3. 关键入口、review、reopen、done 已形成分数驱动闸门。 
-4. 当前剩余问题主要不在动作缺失，而在于：
+4. 清零协议已正式进入装配链，`open_issue_count = 0` 已成为 closeout 的必要条件。 
+5. 当前剩余问题主要不在主规则缺失，而在于：
    - 个别治理文档仍需继续同频
    - 部分已定义动作尚未进入 active chain
 
 ---
 
-# 十、结论
+# 十一、结论
 
 本总表当前阶段的使命只有一个：
 
-**明确告诉整个 HGS：哪些动作已经正式生效、哪些分数会影响派单/复审/重开/收口、哪些规则已经不再只是建议。**
+**明确告诉整个 HGS：哪些动作已经正式生效、哪些分数会影响派单/复审/重开/收口、以及“未清零不得收口”已经是正式硬规则。**
