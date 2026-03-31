@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
-description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档与协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int3
+description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议与其他协议 Skill，并按统一状态机驱动全链路。
+version: formal-2026-03-31-int4
 author: OpenAI
 role: MasterLoader
 status: active
@@ -11,7 +11,7 @@ entrypoint: true
 # HGS Master Loader / 主装配器
 
 本文件不是“替代所有角色”的超级单体 Skill。  
-本文件的职责只有一件事：**把多角色、多工具、单协议、双治理文档正式装配成一条可自动推进、可审计、可重开环的标准链路。**
+本文件的职责只有一件事：**把多角色、多工具、自动化动作、统一协议、治理文档正式装配成一条可自动推进、可审计、可重开环的标准链路。**
 
 ---
 
@@ -26,13 +26,13 @@ entrypoint: true
 5. `protocols/` 下全部协议文件
 6. `docs/角色调用关系总表.md`
 7. `docs/工具调用关系总表.md`
+8. `docs/HGS_自动化联动动作总表（正式版）.md`
 
 说明：
 
 - `docs/正式发布版全局审查报告.md` 与 `docs/发布说明与加载方式.md` 属于基线与操作文档，应在装配阶段被视为背景约束
-- 治理文档不是“执行角色”，但对角色调用顺序、工具优先级、越界边界具有约束力
-- 禁止只读主装配器、不读角色文件就宣称“全角色已生效”
-- 禁止读角色不读工具，却宣称“工具链已接入”
+- `protocols/61_Automation_Orchestration_Protocol.md` 定义自动化动作的输入输出骨架
+- 治理文档不是“执行角色”，但对角色调用顺序、工具优先级、动作闸门具有约束力
 
 ---
 
@@ -62,14 +62,12 @@ Knowledge / Docs 沉淀
 收口 / 再开环
 ```
 
-本版的核心原则：
+本版新增的核心能力：
 
-- 操作层面：由一个入口启动
-- 运行层面：由多个角色协同
-- 工具层面：由一套已登记工具链提供结构化分析
-- 协议层面：只有一套 I/O 产物定义
-- 治理层面：角色与工具调用次序以治理文档为准
-- 审计层面：任何环节都可按 `batch_id / issue_id` 回溯
+- 自动化动作驱动入口标准化
+- 自动化动作驱动 owner 置信与 route dry-run
+- 自动化动作驱动工具闸门与字段落点检查
+- 自动化动作驱动 closeout 候选检查
 
 ---
 
@@ -83,6 +81,7 @@ MANIFEST
 → P8 Enhanced（兜底约束先就位）
 → P8 专项执行层
 → Tool Skills
+→ Automation Orchestration Protocol
 → Experience Protocols
 → Re-Review Protocol
 → I/O Protocol
@@ -90,11 +89,9 @@ MANIFEST
 ```
 
 说明：
-
-- `P8_PUA_Enhanced` 提前装配，不是为了先执行，而是为了让“升级接管规则”从一开始就生效
-- `tools/` 在执行前装配，是为了保证“先结构化分析、再拍板、再执行”的顺序
-- `protocols/60_HGS_IO_Protocol.md` 虽然位于协议层，但对所有角色都具有约束力
-- 治理文档最后装配，不是因为它们不重要，而是因为它们用于校准前面所有角色与工具的调用秩序
+- `P8_PUA_Enhanced` 提前装配，是为了让升级接管规则从一开始生效
+- `tools/` 在执行前装配，是为了保证先结构化分析、再拍板、再执行
+- `protocols/61_Automation_Orchestration_Protocol.md` 在协议层中前置，是为了让自动化动作记录与字段落点先有统一骨架
 
 ---
 
@@ -179,6 +176,9 @@ MANIFEST
 
 ## 协议与治理文档装配清单
 
+### 自动编排协议层
+- `protocols/61_Automation_Orchestration_Protocol.md`
+
 ### 体验 / 再审协议层
 - `protocols/40_P8_Agent_Experience_Protocol.md`
 - `protocols/41_P8_EndUser_Experience_Protocol.md`
@@ -190,6 +190,7 @@ MANIFEST
 - `docs/发布说明与加载方式.md`
 - `docs/角色调用关系总表.md`
 - `docs/工具调用关系总表.md`
+- `docs/HGS_自动化联动动作总表（正式版）.md`
 
 ---
 
@@ -199,36 +200,112 @@ MANIFEST
 
 ```text
 todo
-→ in_review
+→ intake_normalized
+→ tool_gating
+→ owner_confirmed
 → dispatched
 → in_progress
+→ evidence_assembled
 → verifying
 → experience_check
 → reviewing
+→ docs_sink
 → done
 ```
 
 允许的异常分支：
 
 ```text
-in_progress → blocked
-reviewing → rework
-reviewing → escalate_to_p10
-experience_check → reopen
+blocked
+rework
+escalate_to_p10
+reopen
+awaiting_external
+owner_unclear
+tool_missing
+evidence_incomplete
+reroute_required
+reopen_required
 ```
 
-禁止使用：
-- 口头完成
-- 看起来好了
-- 先这样
-- 后面再补验证
+---
+
+## 自动化动作装配清单（第一批 active）
+
+当前正式激活的第一批动作为：
+
+1. `create_issue_stub`
+2. `infer_owner_candidates`
+3. `infer_required_tools`
+4. `route_dry_run`
+5. `provisional_boundary_build`
+6. `peer_role_consult`
+7. `split_subissues`
+8. `must_run_tool_gate`
+9. `tool_result_landing_check`
+10. `closeout_candidate_check`
+
+这些动作的详细输入输出以：
+- `docs/HGS_自动化联动动作总表（正式版）.md`
+- `protocols/61_Automation_Orchestration_Protocol.md`
+
+为准。
+
+---
+
+## 自动化动作执行顺序（第一批）
+
+### 入口标准化序列
+```text
+create_issue_stub
+→ infer_owner_candidates
+→ infer_required_tools
+→ route_dry_run（当 owner_confidence 低 / mixed issue / route 不稳）
+→ provisional_boundary_build（当边界暂不精确）
+```
+
+### 内部协商序列
+```text
+peer_role_consult（当当前 owner 自救不足）
+→ split_subissues（当 mixed issue / 多 owner 交叉依赖）
+```
+
+### 工具闸门序列
+```text
+must_run_tool_gate
+→ tool_result_landing_check
+```
+
+### 收口闸门序列
+```text
+closeout_candidate_check
+→ 通过则 reviewing / docs_sink
+→ 不通过则 reopen_required / reroute_required
+```
+
+---
+
+## 评分与闸门阈值
+
+当前采用以下默认阈值：
+- `owner_confidence_min_for_direct_dispatch = 70`
+- `tool_coverage_min_before_review = 85`
+- `evidence_completeness_min_before_review = 80`
+- `closeout_readiness_min_before_done = 85`
+- `reopen_risk_high = 60`
+
+硬规则：
+- 未创建 `ISSUE-LEDGER stub` 不得派单
+- `owner_confidence < 70` 时必须先跑 `108`
+- 工具前置场景中 `must_run_tools` 未完成不得派单
+- 工具结果未落字段不得进入 review / done
+- 未通过 `closeout_candidate_check` 不得进入 `done`
 
 ---
 
 ## 路由矩阵
 
 ### 按真相归属路由
-
 - 业务规则、状态语义、自助边界、平台/代理/用户权责 → `roles/11_Product_Business_Rules_Owner_SKILL.md`
 - token、session、设备身份、project scope、recent-auth、step-up 真相 → `roles/12_Auth_Identity_Owner_SKILL.md`
 - 点数、冻结、冲正、配额、授权权益 → `roles/13_Billing_Entitlement_Owner_SKILL.md`
@@ -239,55 +316,13 @@ experience_check → reopen
 - 后台真相、管理归属、控制平面 / 执行平面分层 → `roles/18_Control_Plane_Owner_SKILL.md`
 - 运行时门禁、心跳、任务状态、热更新执行链 → `roles/19_Execution_Plane_Owner_SKILL.md`
 
-### 按执行归属路由
-
-- 接口、数据库、事务、幂等、审计、性能 → `roles/31_P8_Backend_PUA_SKILL.md`
-- 页面表面、信息层级、状态反馈、文案、响应式 → `roles/32A_P8_UI_Surface_Engineer_SKILL.md`
-- 状态管理、路由上下文、请求顺序、权限表达、竞态 → `roles/32B_P8_Frontend_Logic_Engineer_SKILL.md`
-- ConsoleToken、project context、step-up 恢复、登出清理、管理动作运行逻辑 → `roles/33A_P8_Console_Runtime_Engineer_SKILL.md`
-- Console 管理台信息层级、可发现性、高风险动作反馈、限制态设计 → `roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md`
-- installation_id、WorkerToken、心跳、弱网、`.lrj` 热更新 → `roles/34_P8_LanrenJingling_PUA_SKILL.md`
-- 代理逐单执行、一线排查、投诉闭环 → `roles/35_P8_Agent_PUA_SKILL.md`
-- 终端用户逐单排查、自助恢复、快速闭环 → `roles/36_P8_EndUser_PUA_SKILL.md`
-
-### 按工具优先级路由
-
-- 规则不清 / 口径冲突 → `tools/70_Business_Rule_Matrix_SKILL.md`，必要时 `tools/71_State_Machine_Consistency_SKILL.md`
-- token / scope / 会话刷新链 → `tools/72_JWT_Inspector_SKILL.md` + `tools/74_Session_Refresh_Trace_SKILL.md`
-- Console 认证 / 提权 / project context → `tools/88_Console_Auth_Flow_Trace_SKILL.md` + `tools/89_Project_Context_Drift_SKILL.md` + `tools/90_StepUp_Resume_Checker_SKILL.md`
-- 名额 / 配额争议 → `tools/77_Quota_Usage_Analyzer_SKILL.md`
-- 冻结 / 冲正 / 扣了但没成 → `tools/78_Freeze_Reversal_Diagnoser_SKILL.md`，必要时 `tools/76_Billing_Ledger_Reconciler_SKILL.md`
-- 接口联调 / 抓包 / contract 漂移 → `tools/82_Network_Trace_Reviewer_SKILL.md` + `tools/79_API_Contract_Diff_SKILL.md`
-- Worker 身份稳定性 / 重装迁移主体漂移 → `tools/91_Worker_Identity_Stability_SKILL.md`
-- 在线/离线状态争议 / 心跳缺口 / 恢复模式分析 → `tools/92_Heartbeat_Gap_Analyzer_SKILL.md`
-- 多系统 request_id / trace_id / worker_id 链路重建 → `tools/98_Trace_Correlation_SKILL.md`
-- 页面 / 管理台体验争议 → `tools/85_UI_Surface_Audit_SKILL.md`
-- 验证设计 / 回归收口 → `tools/95_Test_Matrix_Builder_SKILL.md` + `tools/96_Regression_Checklist_SKILL.md`
-- 协议字段完整性 / closeout 前质量闸门 → `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
-- 新 issue dry-run 路由预演 / 自动链路检查 → `tools/108_Chain_Route_Simulator_SKILL.md`
-- 高风险动作门禁审查 → `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
-- 越权 / 绕过路径审查 → `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
-- 版本组合 / `version_min` / 升级争议 → `tools/101_Compatibility_Matrix_SKILL.md`
-- SOP / runbook / 代理与用户流程沉淀 → `tools/106_SOP_Generator_SKILL.md`
-
-### 升级规则
-
-满足任一条件，自动升级到 `roles/30_P8_PUA_Enhanced_SKILL.md`：
-- `failure_count >= 2`
-- 边界清晰但无法继续推进
-- 需要更高强度假设追踪
-- 无法给出可信验证级别
-- 多 owner 反复来回但缺少收敛
-
----
-
-## 工具调用契约
-
-- 先识别真相 Owner / 执行 Owner，再选对应工具，不得先跑工具、后反推 owner
-- 工具结果不得悬空，必须进入 `ISSUE-LEDGER`、角色 verdict、`P8-EXEC-REPORT`、`QA-VALIDATION-PLAN`、`QA-VERIFICATION-RESULT` 或 `DOCS-KNOWLEDGE-UPDATE`
-- 工具只负责“看清楚”，不负责拍板真相、不负责宣布已闭环
-- 发现多 owner 冲突、contract 漂移、状态漂移时，必须回到 P9 拆单或复审，不得直接各修各的
-- 角色调用与工具优先级，以 `docs/角色调用关系总表.md` 和 `docs/工具调用关系总表.md` 为准
+### 按动作驱动路由
+- owner 低置信 / mixed issue / route 不稳 → `route_dry_run`
+- 边界不清但可非破坏性推进 → `provisional_boundary_build`
+- 多 owner 交叉依赖 → `peer_role_consult` → `split_subissues`
+- 命中工具前置场景 → `must_run_tool_gate`
+- 工具已跑但字段未落点 → `tool_result_landing_check`
+- 复审前/close 前 → `closeout_candidate_check`
 
 ---
 
@@ -295,20 +330,18 @@ experience_check → reopen
 
 满足以下条件时，默认自动进入下一环：
 
-1. 已形成完整 `HGS-BATCH-HEADER` 与 `ISSUE-LEDGER` → 进入派单
-2. `owner` 唯一、`max_change_boundary` 清晰 → 进入对应 P8
-3. issue 涉及规则、身份、账务、版本、上下文、配额、冻结、contract、验证或 SOP 收口时，必须先调用对应工具再进入执行或复审
-4. issue 涉及协议字段缺失、evidence 悬空、closeout 断链时，必须先调用 `tools/107_Protocol_Field_Completeness_Checker_SKILL.md`
-5. issue 涉及自动分流不清、owner 不稳、怀疑漏工具 / 漏验证 / 错派时，必须先调用 `tools/108_Chain_Route_Simulator_SKILL.md`
-6. issue 涉及删除、冻结、解绑、扣点、授权、回滚等高风险动作时，必须先调用 `tools/109_High_Risk_Action_Guard_Checker_SKILL.md`
-7. issue 涉及对象级授权、project scope、前端显隐代替服务端校验、疑似越权绕过时，必须先调用 `tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md`
-8. issue 涉及 Worker 主体漂移、重复注册、重装迁移身份不稳时，必须先调用 `tools/91_Worker_Identity_Stability_SKILL.md`
-9. issue 涉及在线/离线争议、心跳缺口、恢复抖动或运行态告警降噪时，必须先调用 `tools/92_Heartbeat_Gap_Analyzer_SKILL.md`
-10. issue 涉及跨前端、后端、Worker、Console 的链路断点、trace 线索割裂或事故时间线重建时，必须先调用 `tools/98_Trace_Correlation_SKILL.md`
-11. 已产生 `P8-EXEC-REPORT` → 送回 P9 复审
-12. 复审通过但无真实体验证据 → 自动进入体验验证
-13. 体验通过且无新增结构性风险 → 进入 Knowledge / Docs 沉淀与 Closeout
-14. 体验失败或复审发现漂移 → reopen 并重新派单
+1. 新批次进入时，先自动执行 `create_issue_stub`
+2. stub 完成后，自动执行 `infer_owner_candidates`
+3. owner 候选形成后，自动执行 `infer_required_tools`
+4. `owner_confidence < 70` 或 route 不稳时，必须执行 `route_dry_run`
+5. 边界不清但存在安全推进路径时，必须执行 `provisional_boundary_build`
+6. 多 owner 交叉依赖时，先执行 `peer_role_consult`，必要时再执行 `split_subissues`
+7. 正式派单前，必须通过 `must_run_tool_gate`
+8. review / done 前，必须通过 `tool_result_landing_check`
+9. closeout 前，必须通过 `closeout_candidate_check`
+10. 任一关口不通过时，自动转入 `tool_missing / evidence_incomplete / reroute_required / reopen_required`
+
+---
 
 ## 内部解法穷尽链（强制）
 
@@ -318,45 +351,19 @@ experience_check → reopen
 
 ```text
 当前 owner 自救
-→ 必要时与相邻角色协商 / 拆单
+→ 必要时 peer_role_consult
+→ 必要时 split_subissues
 → 调用对应 Tool Skill 压实证据与边界
 → P9 协调、重构工单、重定边界
 → P10 做路线重裁 / 优先级重排
 → 仅当内部方案穷尽仍无法继续时，才升级问用户
 ```
 
-执行要求：
-
-- 禁止因为“还有一点不确定”就直接问用户
-- 禁止跳过 P9 / P10 直接把中间决策压力抛给用户
-- 只要还有内部可测试、可拆解、可回退、可局部验证的路径，就必须继续内部推进
-- 问用户前，必须先形成 `INTERNAL-DELIBERATION`，列明已经尝试过的内部方案与失败原因
-
-## 软阻塞转内部协商规则（强制）
-
-以下情况不得直接停机问用户，必须先走内部协商：
-
-1. `source_of_truth` 部分不清晰
-   → 先以本批次输入为主真相源，记录 `ASSUMPTION-LOG`，再由 P9 约束边界
-
-2. `max_change_boundary` 暂不够精确
-   → 先生成 provisional boundary，只允许非破坏性动作，继续推进到验证前
-
-3. owner 不唯一或跨 owner 依赖
-   → 先由 P9 拆单、排序、串并联编排；仍不清晰时兜底路由 `p8-pua-enhanced`
-
-4. 体验证据暂缺
-   → 先执行 path replay，标记 `confidence=low`，允许进入工程收口，不得立刻回头问用户
-
-5. 当前 owner 连续失败
-   → 先升级到 `p8-pua-enhanced`；必要时再由 P9 / P10 重裁，不得先问用户
-
 ---
 
 ## 停机条件
 
 只有命中以下硬条件，且内部解法穷尽后，才允许升级问用户：
-
 - 需要真实外发给用户 / 代理 / 客户执行
 - 涉及不可逆删除、覆盖、批量清理、生产数据破坏性操作
 - 需要用户做业务取舍，且 P9 / P10 已确认内部不存在可接受默认路径
@@ -365,45 +372,14 @@ experience_check → reopen
 
 ---
 
-## 单批次运行契约
-
-当用户丢入一个或多个文件时：
-
-- 这些文件自动构成本批次 `input_scope`
-- 本轮会话内，它们默认是首要 `source_of_truth`
-- 任何 issue 必须先进入 `ISSUE-LEDGER` 再派给 P8
-- 任何完成声明都必须落成 `P8-EXEC-REPORT`
-- 任何关闭声明都必须最终落成 `HGS-CLOSEOUT`
-- 凡属治理文档已明确要求必须先调用工具的场景，不得跳过工具直接给结论
-
-禁止一边引用本批次文件，一边偷偷改用旧上下文当真相来源。
-
----
-
-## 主装配器禁止事项
-
-- 禁止并行装配多个总入口
-- 禁止角色文件绕过 `MANIFEST.json` 私自加入运行集
-- 禁止工具文件未登记在 manifest 就被当作正式运行工具
-- 禁止治理文档与角色文件、工具文件定义互相冲突
-- 禁止 P9 只审不派
-- 禁止 P8 无工单裸执行
-- 禁止跳过体验环节直接宣称闭环
-- 禁止无复审进入 `done`
-- 禁止把“顺手多改”包装成主动性
-- 禁止对没有证据的闭环做强行宣告
-
----
-
 ## 激活确认
 
 ```text
 [HGS 正式发布版已装配]
 入口：00_HGS_Master_Loader.md
-模式：Master Loader + Roles + Tools + Governance Docs + Manifest
-加载策略：Manifest 驱动，全角色 + 全工具装配
+模式：Master Loader + Roles + Tools + Automation Actions + Governance Docs + Manifest
+加载策略：Manifest 驱动，全角色 + 全工具 + 第一批自动化动作装配
 默认路线：P10(按需) → 真相Owner → P9 → P8 → 体验 / QA / SRE → P9 → P10(按需) → Docs → Closeout
-默认策略：内部解法优先；先角色协商、再工具压实、再上级裁决、最后才升级问用户
-统一协议：HGS-BATCH-HEADER / ISSUE-LEDGER / P8-EXEC-REPORT / HGS-EXPERIENCE-CHECK / P9-REVIEW-VERDICT / P10-FINAL-DECISION / HGS-CLOSEOUT
-治理约束：角色调用顺序以《角色调用关系总表》为准；工具调用顺序以《工具调用关系总表》为准
+自动化动作：create_issue_stub / infer_owner_candidates / infer_required_tools / route_dry_run / provisional_boundary_build / peer_role_consult / split_subissues / must_run_tool_gate / tool_result_landing_check / closeout_candidate_check
+统一协议：HGS-BATCH-HEADER / ISSUE-LEDGER / P8-EXEC-REPORT / HGS-EXPERIENCE-CHECK / P9-REVIEW-VERDICT / P10-FINAL-DECISION / HGS-CLOSEOUT / AUTOMATION-ACTION-RECORD
 ```

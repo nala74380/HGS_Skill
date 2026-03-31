@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int3",
+  "package_version": "formal-2026-03-31-int4",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -33,7 +33,8 @@
     "protocols/40_P8_Agent_Experience_Protocol.md",
     "protocols/41_P8_EndUser_Experience_Protocol.md",
     "protocols/50_RE_REVIEW_PROTOCOL.md",
-    "protocols/60_HGS_IO_Protocol.md"
+    "protocols/60_HGS_IO_Protocol.md",
+    "protocols/61_Automation_Orchestration_Protocol.md"
   ],
   "tool_load_order": [
     "tools/70_Business_Rule_Matrix_SKILL.md",
@@ -66,7 +67,8 @@
     "docs/正式发布版全局审查报告.md",
     "docs/发布说明与加载方式.md",
     "docs/角色调用关系总表.md",
-    "docs/工具调用关系总表.md"
+    "docs/工具调用关系总表.md",
+    "docs/HGS_自动化联动动作总表（正式版）.md"
   ],
   "roles": [
     {"id": "p10-cto", "file": "roles/10_P10_CTO_SKILL.md", "layer": "strategy"},
@@ -97,7 +99,8 @@
     {"id": "agent-experience", "file": "protocols/40_P8_Agent_Experience_Protocol.md"},
     {"id": "enduser-experience", "file": "protocols/41_P8_EndUser_Experience_Protocol.md"},
     {"id": "re-review", "file": "protocols/50_RE_REVIEW_PROTOCOL.md"},
-    {"id": "hgs-io-protocol", "file": "protocols/60_HGS_IO_Protocol.md"}
+    {"id": "hgs-io-protocol", "file": "protocols/60_HGS_IO_Protocol.md"},
+    {"id": "automation-orchestration", "file": "protocols/61_Automation_Orchestration_Protocol.md"}
   ],
   "tools": [
     {"id": "business-rule-matrix", "file": "tools/70_Business_Rule_Matrix_SKILL.md", "layer": "truth_analysis"},
@@ -130,7 +133,8 @@
     {"id": "formal-review-report", "file": "docs/正式发布版全局审查报告.md", "kind": "historical_baseline"},
     {"id": "release-loading-guide", "file": "docs/发布说明与加载方式.md", "kind": "operator_guide"},
     {"id": "role-invocation-table", "file": "docs/角色调用关系总表.md", "kind": "role_governance"},
-    {"id": "tool-invocation-table", "file": "docs/工具调用关系总表.md", "kind": "tool_governance"}
+    {"id": "tool-invocation-table", "file": "docs/工具调用关系总表.md", "kind": "tool_governance"},
+    {"id": "automation-action-table", "file": "docs/HGS_自动化联动动作总表（正式版）.md", "kind": "automation_governance"}
   ],
   "risk_gates": [
     "irreversible_delete_or_overwrite",
@@ -141,11 +145,68 @@
     "strategy_conflict_after_p10_review"
   ],
   "status_machine": {
-    "normal": ["todo","in_review","dispatched","in_progress","verifying","experience_check","reviewing","done"],
-    "exception": ["blocked","rework","escalate_to_p10","reopen","awaiting_external"]
+    "normal": [
+      "todo",
+      "intake_normalized",
+      "tool_gating",
+      "owner_confirmed",
+      "dispatched",
+      "in_progress",
+      "evidence_assembled",
+      "verifying",
+      "experience_check",
+      "reviewing",
+      "docs_sink",
+      "done"
+    ],
+    "exception": [
+      "blocked",
+      "rework",
+      "escalate_to_p10",
+      "reopen",
+      "awaiting_external",
+      "owner_unclear",
+      "tool_missing",
+      "evidence_incomplete",
+      "reroute_required",
+      "reopen_required"
+    ]
   },
   "automation_policy": {
     "default_behavior": "internal_resolution_first",
+    "action_protocol": "protocols/61_Automation_Orchestration_Protocol.md",
+    "active_actions": [
+      "create_issue_stub",
+      "infer_owner_candidates",
+      "infer_required_tools",
+      "route_dry_run",
+      "provisional_boundary_build",
+      "peer_role_consult",
+      "split_subissues",
+      "must_run_tool_gate",
+      "tool_result_landing_check",
+      "closeout_candidate_check"
+    ],
+    "active_action_batches": [
+      "intake_normalization",
+      "internal_deliberation",
+      "tool_gating",
+      "closeout_gating"
+    ],
+    "thresholds": {
+      "owner_confidence_min_for_direct_dispatch": 70,
+      "tool_coverage_min_before_review": 85,
+      "evidence_completeness_min_before_review": 80,
+      "closeout_readiness_min_before_done": 85,
+      "reopen_risk_high": 60
+    },
+    "hard_gates": {
+      "require_issue_stub_before_dispatch": true,
+      "require_route_dry_run_when_owner_confidence_below_threshold": true,
+      "require_tool_gate_before_dispatch": true,
+      "require_protocol_landing_before_review": true,
+      "require_closeout_candidate_check_before_done": true
+    },
     "internal_escalation_chain": [
       "current_owner_self_resolution",
       "peer_role_consultation_or_split_dispatch",
@@ -166,8 +227,8 @@
       "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
       "missing_real_experience_feedback": "run_path_replay_mark_confidence_low_and_continue_to_engineering_closeout",
-      "owner_unclear": "p9_split_or_fallback_to_p8_pua_enhanced",
-      "multi_owner_dependency": "p9_coordinate_parallel_or_sequential_subissues_before_user_escalation"
+      "owner_unclear": "route_dry_run_then_p9_split_or_fallback_to_p8_pua_enhanced",
+      "multi_owner_dependency": "peer_role_consult_then_split_subissues_before_user_escalation"
     }
   }
 }
