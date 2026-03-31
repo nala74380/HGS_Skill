@@ -44,6 +44,50 @@ HGS_Skill/
 
 ---
 
+## 快速加载口令
+
+把下面整段直接发给对话即可：
+
+```text
+读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
+
+1. 先读取 `Release/MANIFEST.json`
+2. 再读取 `Release/00_HGS_Master_Loader.md`
+3. 按 `MANIFEST.json` 的 `load_order`、`tool_load_order`、`documentation_load_order` 继续加载全部已登记的 `roles/`、`tools/`、`protocols/`、`docs/`
+4. 执行模式固定为 `full_loop`
+5. 我后续上传的文件默认进入这条链路：
+   `真相Owner识别 → P9审查派单 → P8执行 → 用户/代理体验 + QA/SRE验证 → P9复审 → P10终审/按需收口 → Docs沉淀 → Closeout`
+6. 除非触发 `risk_gates` 或高风险停机条件，否则不要再让我手动点名角色或确认下一步
+
+仓库基线：
+- `Release/MANIFEST.json`
+- `Release/00_HGS_Master_Loader.md`
+```
+
+---
+
+## 快速更新升级口令
+
+当仓库继续升级后，把下面整段直接发给对话即可：
+
+```text
+基于当前已加载的 HGS 正式发布版，将装配源升级到仓库 `main` 的最新 Release 基线：
+
+1. 重新读取 `Release/MANIFEST.json`
+2. 重新读取 `Release/00_HGS_Master_Loader.md`
+3. 按最新 `MANIFEST.json` 重新装配新增或更新的 `roles/`、`tools/`、`protocols/`、`docs/`
+4. 以最新 `package_version` 为唯一有效版本，覆盖旧装配口径
+5. 保留当前 issue inventory / clearance context，但治理规则、动作集、工具集、文档集一律以最新 Release 为准
+6. 执行模式继续固定为 `full_loop`
+7. 除非命中高风险停机条件，否则继续内部闭环推进，不要退回旧入口、旧角色集或旧工具集
+
+仓库基线：
+- `Release/MANIFEST.json`
+- `Release/00_HGS_Master_Loader.md`
+```
+
+---
+
 ## 当前正式装配范围
 
 ### 1. Roles
@@ -62,18 +106,24 @@ HGS_Skill/
 
 ## 当前治理约束
 
-装配时默认承认以下两份治理文档：
+装配时默认承认以下治理文档：
 
 - `Release/docs/角色调用关系总表.md`
+- `Release/docs/角色-工具矩阵总表.md`
+- `Release/docs/角色边界验证台账.md`
 - `Release/docs/工具调用关系总表.md`
+- `Release/docs/HGS_自动化联动动作总表（正式版）.md`
+- `Release/docs/HGS_全局检查与清理评分报告.md`
 
-这两份文档用于约束：
+这些文档用于约束：
 
 - 谁先看
 - 谁能拍板
+- 谁不能越界
 - 哪些场景必须先跑工具
 - 哪些工具不能替代真相 Owner
 - 哪些输出必须落到协议字段
+- 哪些问题未清零不得收口
 
 ---
 
@@ -100,6 +150,7 @@ HGS_Skill/
 - 不要再混用旧入口文件
 - 不要把未登记在 Manifest 的文件当 active chain 加载
 - 不要跳过 tools / docs 直接宣称“正式发布链已完整生效”
+- 升级仓库后，优先使用 README 中的“快速更新升级口令”重载最新 Release 基线
 
 这个仓库当前的唯一正式基线，就是：
 
