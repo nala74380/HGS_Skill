@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int5",
+  "package_version": "formal-2026-03-31-int6",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -189,6 +189,9 @@
       "must_run_tool_gate",
       "autofill_exec_report",
       "generate_validation_bundle",
+      "experience_replay",
+      "auto_reopen_on_drift",
+      "auto_docs_sink",
       "tool_result_landing_check",
       "closeout_candidate_check"
     ],
@@ -199,7 +202,8 @@
       "tool_gating",
       "execution_reporting",
       "validation_generation",
-      "closeout_gating"
+      "experience_replay_and_reopen",
+      "docs_sink_and_closeout"
     ],
     "thresholds": {
       "owner_confidence_min_for_direct_dispatch": 70,
@@ -214,7 +218,10 @@
       "require_tool_gate_before_dispatch": true,
       "require_exec_report_before_review": true,
       "require_validation_bundle_before_review": true,
+      "require_experience_replay_when_real_feedback_missing": true,
       "require_protocol_landing_before_review": true,
+      "require_auto_reopen_on_drift": true,
+      "require_auto_docs_sink_before_done": true,
       "require_closeout_candidate_check_before_done": true,
       "require_fallback_to_p8_enhanced_on_repeated_failure": true
     },
@@ -237,10 +244,11 @@
     "soft_block_resolution": {
       "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
-      "missing_real_experience_feedback": "run_path_replay_mark_confidence_low_and_continue_to_engineering_closeout",
+      "missing_real_experience_feedback": "generate_validation_bundle_then_experience_replay_before_closeout",
       "owner_unclear": "route_dry_run_then_p9_split_or_fallback_to_p8_pua_enhanced",
       "multi_owner_dependency": "owner_self_resolve_then_peer_role_consult_then_split_subissues_before_user_escalation",
-      "repeated_execution_failure": "fallback_to_p8_enhanced_then_p9_reframe_and_redispatch"
+      "repeated_execution_failure": "fallback_to_p8_enhanced_then_p9_reframe_and_redispatch",
+      "review_or_experience_drift": "auto_reopen_on_drift_then_p9_reframe_and_redispatch"
     }
   }
 }

@@ -1,7 +1,7 @@
 ---
 name: automation-orchestration-protocol
 description: HGS 自动编排协议。定义自动化联动动作的统一记录结构、状态字段、评分字段与最小输入输出骨架，供 Loader 与自动化动作共同使用。
-version: formal-2026-03-31-p2
+version: formal-2026-03-31-p3
 author: OpenAI
 role: Protocol
 status: active
@@ -82,219 +82,129 @@ AUTOMATION-SCORES:
 ## 5. 当前 active 动作的最小输入输出
 
 ### 5.1 `create_issue_stub`
-
 ```yaml
 CREATE-ISSUE-STUB:
-  inputs:
-    - batch_id
-    - input_scope
-    - source_of_truth
-    - raw_problem_statement
-  outputs:
-    - issue_id
-    - issue_stub
-    - initial_risk_flags
-    - source_of_truth_scope
+  inputs: [batch_id, input_scope, source_of_truth, raw_problem_statement]
+  outputs: [issue_id, issue_stub, initial_risk_flags, source_of_truth_scope]
 ```
 
 ### 5.2 `infer_owner_candidates`
-
 ```yaml
 INFER-OWNER-CANDIDATES:
-  inputs:
-    - issue_stub
-    - problem_type
-    - risk_flags
-  outputs:
-    - primary_owner_candidate
-    - secondary_owner_candidates
-    - owner_confidence
-    - owner_reasoning
+  inputs: [issue_stub, problem_type, risk_flags]
+  outputs: [primary_owner_candidate, secondary_owner_candidates, owner_confidence, owner_reasoning]
 ```
 
 ### 5.3 `infer_required_tools`
-
 ```yaml
 INFER-REQUIRED-TOOLS:
-  inputs:
-    - primary_owner_candidate
-    - problem_type
-    - risk_flags
-  outputs:
-    - must_run_tools
-    - optional_tools
-    - tool_reasoning
+  inputs: [primary_owner_candidate, problem_type, risk_flags]
+  outputs: [must_run_tools, optional_tools, tool_reasoning]
 ```
 
 ### 5.4 `route_dry_run`
-
 ```yaml
 ROUTE-DRY-RUN:
-  inputs:
-    - issue_stub
-    - owner_candidates
-    - must_run_tools
-  outputs:
-    - simulated_route
-    - missing_steps
-    - route_conflicts
-    - must_trigger_tools
+  inputs: [issue_stub, owner_candidates, must_run_tools]
+  outputs: [simulated_route, missing_steps, route_conflicts, must_trigger_tools]
 ```
 
 ### 5.5 `provisional_boundary_build`
-
 ```yaml
 PROVISIONAL-BOUNDARY-BUILD:
-  inputs:
-    - issue_stub
-    - route_dry_run_output
-    - risk_flags
-  outputs:
-    - provisional_boundary
-    - allowed_actions
-    - forbidden_actions
-    - assumption_log
+  inputs: [issue_stub, route_dry_run_output, risk_flags]
+  outputs: [provisional_boundary, allowed_actions, forbidden_actions, assumption_log]
 ```
 
 ### 5.6 `owner_self_resolve_attempt`
-
 ```yaml
 OWNER-SELF-RESOLVE-ATTEMPT:
-  inputs:
-    - primary_owner
-    - must_run_tool_outputs
-    - provisional_or_final_boundary
-  outputs:
-    - attempted_actions
-    - blocked_points
-    - remaining_uncertainties
-    - self_resolve_result
+  inputs: [primary_owner, must_run_tool_outputs, provisional_or_final_boundary]
+  outputs: [attempted_actions, blocked_points, remaining_uncertainties, self_resolve_result]
 ```
 
 ### 5.7 `peer_role_consult`
-
 ```yaml
 PEER-ROLE-CONSULT:
-  inputs:
-    - primary_owner
-    - secondary_owner_candidates
-    - blocked_points
-    - tool_outputs
-  outputs:
-    - consulted_roles
-    - shared_findings
-    - alignment_result
-    - new_owner_boundary_if_any
+  inputs: [primary_owner, secondary_owner_candidates, blocked_points, tool_outputs]
+  outputs: [consulted_roles, shared_findings, alignment_result, new_owner_boundary_if_any]
 ```
 
 ### 5.8 `split_subissues`
-
 ```yaml
 SPLIT-SUBISSUES:
-  inputs:
-    - issue_ledger
-    - consulted_roles
-    - tool_outputs
-  outputs:
-    - subissue_list
-    - subissue_owner_map
-    - subissue_tool_map
-    - merge_back_rule
+  inputs: [issue_ledger, consulted_roles, tool_outputs]
+  outputs: [subissue_list, subissue_owner_map, subissue_tool_map, merge_back_rule]
 ```
 
 ### 5.9 `fallback_to_p8_enhanced`
-
 ```yaml
 FALLBACK-TO-P8-ENHANCED:
-  inputs:
-    - issue_ledger
-    - failure_history
-    - tool_outputs
-  outputs:
-    - fallback_reason
-    - enhanced_takeover_scope
+  inputs: [issue_ledger, failure_history, tool_outputs]
+  outputs: [fallback_reason, enhanced_takeover_scope]
 ```
 
 ### 5.10 `p9_reframe_and_redispatch`
-
 ```yaml
 P9-REFRAME-AND-REDISPATCH:
-  inputs:
-    - issue_ledger
-    - subissue_list
-    - tool_outputs
-    - fallback_reason
-  outputs:
-    - redispatch_plan
-    - new_owner
-    - new_tool_order
-    - acceptance_boundary
+  inputs: [issue_ledger, subissue_list, tool_outputs, fallback_reason]
+  outputs: [redispatch_plan, new_owner, new_tool_order, acceptance_boundary]
 ```
 
 ### 5.11 `must_run_tool_gate`
-
 ```yaml
 MUST-RUN-TOOL-GATE:
-  inputs:
-    - must_run_tools
-    - executed_tools
-  outputs:
-    - tool_gate_result
-    - missing_tools
+  inputs: [must_run_tools, executed_tools]
+  outputs: [tool_gate_result, missing_tools]
 ```
 
 ### 5.12 `autofill_exec_report`
-
 ```yaml
 AUTOFILL-EXEC-REPORT:
-  inputs:
-    - exec_plan
-    - executed_changes
-    - tool_outputs
-  outputs:
-    - exec_report
+  inputs: [exec_plan, executed_changes, tool_outputs]
+  outputs: [exec_report]
 ```
 
 ### 5.13 `generate_validation_bundle`
-
 ```yaml
 GENERATE-VALIDATION-BUNDLE:
-  inputs:
-    - exec_report
-    - changed_scope
-    - risk_notes
-  outputs:
-    - qa_validation_plan
-    - qa_verification_result_draft
-    - validation_bundle
+  inputs: [exec_report, changed_scope, risk_notes]
+  outputs: [qa_validation_plan, qa_verification_result_draft, validation_bundle]
 ```
 
-### 5.14 `tool_result_landing_check`
+### 5.14 `experience_replay`
+```yaml
+EXPERIENCE-REPLAY:
+  inputs: [exec_plan, validation_bundle, expected_user_path]
+  outputs: [experience_check, confidence_level, experience_risks]
+```
 
+### 5.15 `auto_reopen_on_drift`
+```yaml
+AUTO-REOPEN-ON-DRIFT:
+  inputs: [review_findings, validation_failures, tool_warnings, experience_failures]
+  outputs: [reopen_reason, reopen_target_scope]
+```
+
+### 5.16 `auto_docs_sink`
+```yaml
+AUTO-DOCS-SINK:
+  inputs: [p9_review_verdict, validation_results, experience_check]
+  outputs: [docs_knowledge_update, sop_draft, hgs_closeout]
+```
+
+### 5.17 `tool_result_landing_check`
 ```yaml
 TOOL-RESULT-LANDING-CHECK:
-  inputs:
-    - tool_outputs
-    - current_protocol_payloads
-  outputs:
-    - landing_result
-    - missing_fields
-    - orphan_results
+  inputs: [tool_outputs, current_protocol_payloads]
+  outputs: [landing_result, missing_fields, orphan_results]
 ```
 
-### 5.15 `closeout_candidate_check`
-
+### 5.18 `closeout_candidate_check`
 ```yaml
 CLOSEOUT-CANDIDATE-CHECK:
-  inputs:
-    - exec_report
-    - validation_bundle
-    - experience_check
-    - protocol_landing_result
-  outputs:
-    - closeout_readiness_score
-    - reopen_risk_score
-    - closeout_candidate_result
+  inputs: [exec_report, validation_bundle, experience_check, protocol_landing_result]
+  outputs: [closeout_readiness_score, reopen_risk_score, closeout_candidate_result]
 ```
 
 ---
@@ -313,8 +223,14 @@ AUTOMATION-HARD-GATES:
     fail_state: "evidence_incomplete"
   - name: "require_validation_bundle_before_review"
     fail_state: "evidence_incomplete"
+  - name: "require_experience_replay_when_real_feedback_missing"
+    fail_state: "evidence_incomplete"
   - name: "require_protocol_landing_before_review"
     fail_state: "evidence_incomplete"
+  - name: "require_auto_reopen_on_drift"
+    fail_state: "reopen_required"
+  - name: "require_auto_docs_sink_before_done"
+    fail_state: "docs_sink"
   - name: "require_closeout_candidate_check_before_done"
     fail_state: "reopen_required"
   - name: "require_fallback_to_p8_enhanced_on_repeated_failure"

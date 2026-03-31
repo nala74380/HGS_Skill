@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int5
+version: formal-2026-03-31-int6
 author: OpenAI
 role: MasterLoader
 status: active
@@ -67,35 +67,11 @@ Knowledge / Docs 沉淀
 - 自动化动作驱动入口标准化
 - 自动化动作驱动 owner 自救 / 平级协商 / 重派单
 - 自动化动作驱动工具闸门与字段落点检查
-- 自动化动作驱动执行报告、验证包与 closeout 候选检查
+- 自动化动作驱动执行报告、验证包、体验复演、自动 reopen 与 docs sink
 
 ---
 
-## 装配顺序
-
-```text
-MANIFEST
-→ Master Loader
-→ 战略 / 真相 / Owner 层
-→ P9 审查层
-→ P8 Enhanced（兜底约束先就位）
-→ P8 专项执行层
-→ Tool Skills
-→ Automation Orchestration Protocol
-→ Experience Protocols
-→ Re-Review Protocol
-→ I/O Protocol
-→ Governance Docs
-```
-
-说明：
-- `P8_PUA_Enhanced` 提前装配，是为了让升级接管规则从一开始生效
-- `tools/` 在执行前装配，是为了保证先结构化分析、再拍板、再执行
-- `protocols/61_Automation_Orchestration_Protocol.md` 在协议层中前置，是为了让自动化动作记录与字段落点先有统一骨架
-
----
-
-## 自动化动作装配清单（第一批 + 第二批 active）
+## 自动化动作装配清单（第一批 + 第二批 + 第三批 active）
 
 当前正式激活的动作包括：
 
@@ -118,11 +94,10 @@ MANIFEST
 14. `autofill_exec_report`
 15. `generate_validation_bundle`
 
-这些动作的详细输入输出以：
-- `docs/HGS_自动化联动动作总表（正式版）.md`
-- `protocols/61_Automation_Orchestration_Protocol.md`
-
-为准。
+### 第三批
+16. `experience_replay`
+17. `auto_reopen_on_drift`
+18. `auto_docs_sink`
 
 ---
 
@@ -160,11 +135,13 @@ P8 执行
 → tool_result_landing_check
 ```
 
-### 收口闸门序列
+### 体验 / 回流 / 收口序列
 ```text
-closeout_candidate_check
-→ 通过则 reviewing / docs_sink
-→ 不通过则 reopen_required / reroute_required
+experience_replay（当真实反馈缺失）
+→ auto_reopen_on_drift（当 review / QA / experience / tools 发现漂移）
+→ auto_docs_sink（当复审通过且具备复用价值）
+→ closeout_candidate_check
+→ 通过则 done
 ```
 
 ---
@@ -185,6 +162,9 @@ closeout_candidate_check
 - 重复失败时必须升级 `fallback_to_p8_enhanced`
 - 无 `P8-EXEC-REPORT` 不得进入 review
 - 无 `validation bundle` 不得进入 review
+- 无真实体验反馈时必须执行 `experience_replay`
+- 出现 drift 时必须执行 `auto_reopen_on_drift`
+- close 前必须执行 `auto_docs_sink`
 - 工具结果未落字段不得进入 review / done
 - 未通过 `closeout_candidate_check` 不得进入 `done`
 
@@ -201,8 +181,11 @@ closeout_candidate_check
 - 命中工具前置场景 → `must_run_tool_gate`
 - 执行完成后 → `autofill_exec_report`
 - exec report 完成后 → `generate_validation_bundle`
+- 缺真实体验反馈 → `experience_replay`
+- 复审 / QA / 体验 / 工具发现漂移 → `auto_reopen_on_drift`
+- 复审通过且具备复用价值 → `auto_docs_sink`
 - 工具已跑但字段未落点 → `tool_result_landing_check`
-- 复审前/close 前 → `closeout_candidate_check`
+- close 前 → `closeout_candidate_check`
 
 ---
 
@@ -222,9 +205,12 @@ closeout_candidate_check
 10. 正式派单前，必须通过 `must_run_tool_gate`
 11. 执行完成后，必须执行 `autofill_exec_report`
 12. exec report 完成后，必须执行 `generate_validation_bundle`
-13. review / done 前，必须通过 `tool_result_landing_check`
-14. closeout 前，必须通过 `closeout_candidate_check`
-15. 任一关口不通过时，自动转入 `tool_missing / evidence_incomplete / reroute_required / reopen_required`
+13. 缺真实体验反馈时，必须执行 `experience_replay`
+14. review / QA / 体验 / 工具发现 drift 时，必须执行 `auto_reopen_on_drift`
+15. 复审通过且具备 SOP / 知识复用价值时，必须执行 `auto_docs_sink`
+16. review / done 前，必须通过 `tool_result_landing_check`
+17. closeout 前，必须通过 `closeout_candidate_check`
+18. 任一关口不通过时，自动转入 `tool_missing / evidence_incomplete / reroute_required / reopen_required`
 
 ---
 
@@ -241,6 +227,8 @@ closeout_candidate_check
 → 必要时 fallback_to_p8_enhanced
 → 调用对应 Tool Skill 压实证据与边界
 → P9 协调、重构工单、重定边界
+→ 体验不足时先 experience_replay
+→ 复审通过后先 auto_docs_sink
 → 仅当内部方案穷尽仍无法继续时，才升级问用户
 ```
 
@@ -252,8 +240,8 @@ closeout_candidate_check
 [HGS 正式发布版已装配]
 入口：00_HGS_Master_Loader.md
 模式：Master Loader + Roles + Tools + Automation Actions + Governance Docs + Manifest
-加载策略：Manifest 驱动，全角色 + 全工具 + 第一批/第二批自动化动作装配
-默认路线：P10(按需) → 真相Owner → P9 → P8 → 体验 / QA / SRE → P9 → P10(按需) → Docs → Closeout
-自动化动作：create_issue_stub / infer_owner_candidates / infer_required_tools / route_dry_run / provisional_boundary_build / owner_self_resolve_attempt / peer_role_consult / split_subissues / fallback_to_p8_enhanced / p9_reframe_and_redispatch / must_run_tool_gate / autofill_exec_report / generate_validation_bundle / tool_result_landing_check / closeout_candidate_check
+加载策略：Manifest 驱动，全角色 + 全工具 + 三批自动化动作装配
+默认路线：P10(按需) → 真相Owner → P9 → P8 → 体验 / QA / SRE → P9 → Docs → Closeout
+自动化动作：create_issue_stub / infer_owner_candidates / infer_required_tools / route_dry_run / provisional_boundary_build / owner_self_resolve_attempt / peer_role_consult / split_subissues / fallback_to_p8_enhanced / p9_reframe_and_redispatch / must_run_tool_gate / autofill_exec_report / generate_validation_bundle / experience_replay / auto_reopen_on_drift / auto_docs_sink / tool_result_landing_check / closeout_candidate_check
 统一协议：HGS-BATCH-HEADER / ISSUE-LEDGER / P8-EXEC-REPORT / HGS-EXPERIENCE-CHECK / P9-REVIEW-VERDICT / P10-FINAL-DECISION / HGS-CLOSEOUT / AUTOMATION-ACTION-RECORD
 ```
