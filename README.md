@@ -36,16 +36,46 @@
 
 ## 加载口令
 
-读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
+1. ```
+   读取并加载这个 GitHub 发布版的 HGS 全角色 Skill 组，作为本轮唯一生效装配源：
+   
+   1. 先读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+   2. 再读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
+   3. 按 `MANIFEST.json` 的 `load_order` 继续加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
+   4. 执行模式固定为 `full_loop`
+   5. 我后续上传的文件默认进入这条链路：
+      `P10/P9审查 → P9派单 → P8执行 → 用户/代理体验 → P9复审 → P10终审/收口`
+   6. 除非触发高风险停机条件，否则不要再让我手动点名角色或确认下一步
+   7. 本轮以 `MANIFEST.json + Master Loader + Roles + Protocols` 为唯一有效装配源，禁止混用其他旧入口或旧版本 Skill
+   ```
 
-1. 先读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
-2. 再读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
-3. 按 `MANIFEST.json` 的 `load_order` 继续加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
-4. 执行模式固定为 `full_loop`
-5. 我后续上传的文件默认进入这条链路：
-   `P10/P9审查 → P9派单 → P8执行 → 用户/代理体验 → P9复审 → P10终审/收口`
-6. 除非触发高风险停机条件，否则不要再让我手动点名角色或确认下一步
-7. 本轮以 `MANIFEST.json + Master Loader + Roles + Protocols` 为唯一有效装配源，禁止混用其他旧入口或旧版本 Skill
+   
+
+## 升级口令
+
+- ```
+  立即将本对话中此前已加载的旧 HGS 链路全部标记为失效，不再继续沿用其入口、状态机、停机条件、派单规则与协议格式。
+  
+  从现在开始，重新装配并加载以下 GitHub 发布版，作为本对话唯一有效的 HGS Skill 链路：
+  
+  1. 读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/MANIFEST.json`
+  2. 读取 `https://github.com/nala74380/HGS_Skill/blob/main/Release/00_HGS_Master_Loader.md`
+  3. 按 `MANIFEST.json` 的 `load_order` 加载 `Release/roles/` 与 `Release/protocols/` 下全部必需文件
+  4. 本对话后续一律以这套 `Release` 发布版为唯一有效装配源，禁止混用旧入口、旧协议、旧派单格式、旧停机条件
+  5. 若旧链路已生成中间产物，则将其视为“历史上下文”，必须按新链路重新解释；如与新协议冲突，以新协议为准
+  6. 执行模式固定为 `full_loop`
+  7. 升级原则改为：
+     `当前角色先自救 → 内部协商/上级裁决 → P9协调 → P10重裁 → 内部方案穷尽后才升级问我`
+  8. 除非命中真正的高风险硬停机条件，否则不要因为常规不确定性回头问我
+  
+  升级完成后，请先输出：
+  
+  - 当前生效版本
+  - 已加载的 roles / protocols 清单
+  - 本对话中哪些旧链路规则已被废止
+  ```
+
+  
 
 ## 使用结论
 
