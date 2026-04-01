@@ -1,0 +1,62 @@
+name: release-runtime-acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'Release/**'
+      - 'scripts/**'
+      - 'examples/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  runtime-integrity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate runtime integrity
+        run: |
+          python scripts/validate_release_runtime_integrity.py --strict
+
+  runtime-matrix:
+    runs-on: ubuntu-latest
+    needs: runtime-integrity
+    strategy:
+      fail-fast: false
+      matrix:
+        issue_input:
+          - examples/issue_input.json
+          - examples/issue_input_rule.json
+          - examples/issue_input_billing.json
+          - examples/issue_input_worker_incident.json
+          - examples/issue_input_mixed.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Assemble Release ledger
+        run: |
+          python scripts/assemble_release.py --fail-on-unregistered-release-files --strict
+      - name: Verify Release acceptance
+        run: |
+          python scripts/verify_release.py --strict
+      - name: Bootstrap full_loop dry-run
+        run: |
+          python scripts/bootstrap_full_loop_dry_run.py --issue-input ${{ matrix.issue_input }} --strict
+      - name: Render automation acceptance report
+        run: |
+          python scripts/render_automation_acceptance_report.py --strict
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-artifacts-${{ matrix.issue_input }}
+          path: |
+            .hgs/assembly_ledger.json
+            .hgs/assembly_report.json
+            .hgs/full_loop_dry_run.json
+            .hgs/automation_execution_acceptance_report.json
+            .hgs/runtime_integrity_report.json
