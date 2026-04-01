@@ -1,0 +1,23 @@
+{
+  "issue_id": "DRYRUN-worker-001",
+  "title": "Worker online state flaps during runtime incident replay",
+  "issue_type": "worker",
+  "current_question": "Runtime telemetry shows repeated online/offline flapping and the worker identity chain is not obviously stable across the incident window.",
+  "source_of_truth": [
+    "Release/tools/91_Worker_Identity_Stability_SKILL.md",
+    "Release/tools/92_Heartbeat_Gap_Analyzer_SKILL.md",
+    "Release/tools/113_Runtime_Incident_Replayer_SKILL.md"
+  ],
+  "risk_flags": ["runtime_stability", "incident"],
+  "critical_paths": [
+    "Reconstruct worker identity chain",
+    "Reconstruct heartbeat gap windows",
+    "Replay runtime incident timeline"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "The worker identity chain is classifiable as stable or drifting with evidence.",
+    "Heartbeat gap windows and recovery phases are reconstructed consistently.",
+    "Incident replay identifies breakpoints and evidence gaps without contradiction."
+  ]
+}
