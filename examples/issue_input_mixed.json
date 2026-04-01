@@ -1,0 +1,29 @@
+{
+  "issue_id": "DRYRUN-mixed-001",
+  "title": "High-risk management action resumes against wrong target after context switch",
+  "issue_type": "mixed",
+  "current_question": "After a management context switch, a high-risk action is resumed against an unintended target object and the audit trail needs verification.",
+  "source_of_truth": [
+    "Release/tools/89_Project_Context_Drift_SKILL.md",
+    "Release/tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+    "Release/tools/112_Audit_Log_Consistency_Checker_SKILL.md"
+  ],
+  "risk_flags": ["high_risk_action", "bulk_action", "audit_required"],
+  "critical_paths": [
+    "Switch management context",
+    "Resume protected action",
+    "Verify target object alignment and audit trail"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Protected action does not resume against an unintended target object.",
+    "Audit trail captures actor, object, and time consistently for the verified path."
+  ],
+  "secondary_findings": [
+    {
+      "issue_id": "DRYRUN-mixed-001-secondary-audit",
+      "title": "Audit trail field mismatch on resume path",
+      "issue_type": "security"
+    }
+  ]
+}
