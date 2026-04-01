@@ -1,0 +1,48 @@
+name: release-runtime-acceptance
+
+on:
+  pull_request:
+    paths:
+      - 'Release/**'
+      - 'scripts/**'
+      - 'examples/**'
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
+  verify-release-runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Assemble strict Release ledger
+        run: |
+          python scripts/assemble_release_strict.py --strict
+
+      - name: Verify strict Release acceptance
+        run: |
+          python scripts/verify_release_strict.py --strict
+
+      - name: Bootstrap strict full_loop dry-run
+        run: |
+          python scripts/bootstrap_full_loop_dry_run_strict.py --issue-input examples/issue_input.json --strict
+
+      - name: Render strict automation acceptance report
+        run: |
+          python scripts/render_automation_acceptance_report_strict.py --strict
+
+      - name: Upload runtime artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-runtime-artifacts
+          path: |
+            .hgs/assembly_ledger.json
+            .hgs/assembly_report.json
+            .hgs/full_loop_dry_run.json
+            .hgs/automation_execution_acceptance_report.json
