@@ -1,0 +1,35 @@
+{
+  "issue_id": "DRYRUN-example-auth-001",
+  "title": "Console step-up return path loses project context after reauth",
+  "issue_type": "console",
+  "current_question": "After recent-auth / step-up completes, the Console returns to a page that displays Project A but the management action is executed against Project B.",
+  "source_of_truth": [
+    "Release/protocols/60_HGS_IO_Protocol.md",
+    "Release/protocols/61_Automation_Orchestration_Protocol.md",
+    "Release/protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md"
+  ],
+  "risk_flags": [
+    "high_risk_action",
+    "scope_risk"
+  ],
+  "critical_paths": [
+    "Console login -> navigate to project-scoped management page -> trigger step-up -> return to original action",
+    "Switch project -> trigger management action -> verify request target matches visible context",
+    "Step-up cancel / timeout -> verify safe fallback without wrong-target execution"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "After step-up completes, the visible project/account context and request context remain aligned.",
+    "High-risk management action resumes only against the original target object.",
+    "Step-up cancel or timeout does not leave the Console in a half-authenticated or wrong-target state."
+  ],
+  "max_change_boundary": {
+    "files_max": 8,
+    "module_boundary": "Console runtime / auth restore / context resume chain",
+    "forbidden_changes": [
+      "No billing or entitlement rule changes",
+      "No product/business rule reinterpretation",
+      "No destructive data mutations"
+    ]
+  }
+}
