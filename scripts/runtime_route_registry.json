@@ -1,0 +1,48 @@
+{
+  "registry_version": "2026-04-01-r1",
+  "owner_basename_map": {
+    "rule": "11_Product_Business_Rules_Owner_SKILL.md",
+    "auth": "12_Auth_Identity_Owner_SKILL.md",
+    "billing": "13_Billing_Entitlement_Owner_SKILL.md",
+    "release": "14_Release_Config_Owner_SKILL.md",
+    "security": "15_Security_Risk_Owner_SKILL.md",
+    "agent": "16_Agent_Operations_Owner_SKILL.md",
+    "enduser": "17_EndUser_Support_Owner_SKILL.md",
+    "control_plane": "18_Control_Plane_Owner_SKILL.md",
+    "execution_plane": "19_Execution_Plane_Owner_SKILL.md",
+    "frontend": "32B_P8_Frontend_Logic_Engineer_SKILL.md",
+    "console": "33A_P8_Console_Runtime_Engineer_SKILL.md",
+    "worker": "34_P8_LanrenJingling_PUA_SKILL.md",
+    "qa": "37_QA_Validation_Owner_SKILL.md",
+    "sre": "38_SRE_Observability_Owner_SKILL.md",
+    "docs": "39_Knowledge_Documentation_Owner_SKILL.md",
+    "mixed": "20_P9_Principal_SKILL.md"
+  },
+  "tool_basename_map": {
+    "rule": ["70_Business_Rule_Matrix_SKILL.md", "71_State_Machine_Consistency_SKILL.md"],
+    "auth": ["72_JWT_Inspector_SKILL.md", "74_Session_Refresh_Trace_SKILL.md", "110_Authorization_Bypass_Path_Reviewer_SKILL.md"],
+    "billing": ["76_Billing_Ledger_Reconciler_SKILL.md", "77_Quota_Usage_Analyzer_SKILL.md", "78_Freeze_Reversal_Diagnoser_SKILL.md"],
+    "frontend": ["79_API_Contract_Diff_SKILL.md", "82_Network_Trace_Reviewer_SKILL.md", "85_UI_Surface_Audit_SKILL.md"],
+    "console": ["88_Console_Auth_Flow_Trace_SKILL.md", "89_Project_Context_Drift_SKILL.md", "90_StepUp_Resume_Checker_SKILL.md"],
+    "worker": ["91_Worker_Identity_Stability_SKILL.md", "92_Heartbeat_Gap_Analyzer_SKILL.md", "98_Trace_Correlation_SKILL.md"],
+    "release": ["101_Compatibility_Matrix_SKILL.md", "109_High_Risk_Action_Guard_Checker_SKILL.md"],
+    "qa": ["95_Test_Matrix_Builder_SKILL.md", "96_Regression_Checklist_SKILL.md"],
+    "docs": ["106_SOP_Generator_SKILL.md", "107_Protocol_Field_Completeness_Checker_SKILL.md"],
+    "mixed": ["108_Chain_Route_Simulator_SKILL.md", "114_Score_Decision_Engine_SKILL.md", "115_Full_Issue_Clearance_Controller_SKILL.md"]
+  },
+  "risk_flag_tool_map": {
+    "high_risk_action": ["109_High_Risk_Action_Guard_Checker_SKILL.md"],
+    "destructive_change": ["109_High_Risk_Action_Guard_Checker_SKILL.md", "111_Bulk_Action_Safety_Reviewer_SKILL.md"],
+    "auth_bypass": ["110_Authorization_Bypass_Path_Reviewer_SKILL.md"],
+    "scope_risk": ["110_Authorization_Bypass_Path_Reviewer_SKILL.md"],
+    "runtime_stability": ["113_Runtime_Incident_Replayer_SKILL.md", "98_Trace_Correlation_SKILL.md"],
+    "incident": ["113_Runtime_Incident_Replayer_SKILL.md", "98_Trace_Correlation_SKILL.md"],
+    "bulk_action": ["111_Bulk_Action_Safety_Reviewer_SKILL.md", "112_Audit_Log_Consistency_Checker_SKILL.md"],
+    "audit_required": ["112_Audit_Log_Consistency_Checker_SKILL.md"]
+  },
+  "always_include_tools": [
+    "114_Score_Decision_Engine_SKILL.md",
+    "115_Full_Issue_Clearance_Controller_SKILL.md",
+    "107_Protocol_Field_Completeness_Checker_SKILL.md"
+  ]
+}
