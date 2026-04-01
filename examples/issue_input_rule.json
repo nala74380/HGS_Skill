@@ -1,0 +1,19 @@
+{
+  "issue_id": "DRYRUN-rule-001",
+  "title": "Status field naming drift between docs and API response",
+  "issue_type": "rule",
+  "current_question": "The documentation and API response use different status names for the same lifecycle flow.",
+  "source_of_truth": [
+    "Release/tools/70_Business_Rule_Matrix_SKILL.md",
+    "Release/tools/71_State_Machine_Consistency_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "UI displays status value",
+    "API response matches documented semantics"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Status naming and semantics are unified across docs, UI, and API response."
+  ]
+}
