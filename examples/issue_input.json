@@ -1,0 +1,20 @@
+{
+  "issue_id": "DRYRUN-console-001",
+  "title": "Context resume drift after protected action reauth",
+  "issue_type": "console",
+  "current_question": "After a protected action reauth flow, the resumed management page may drift from the visible context.",
+  "source_of_truth": [
+    "Release/MANIFEST.json",
+    "Release/00_HGS_Master_Loader.md"
+  ],
+  "risk_flags": ["high_risk_action", "scope_risk"],
+  "critical_paths": [
+    "resume protected action after reauth",
+    "verify visible context matches request target"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Visible context and request target remain aligned after reauth.",
+    "Protected action does not resume against an unintended target."
+  ]
+}
