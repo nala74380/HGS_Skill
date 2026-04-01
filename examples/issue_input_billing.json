@@ -1,0 +1,22 @@
+{
+  "issue_id": "DRYRUN-billing-001",
+  "title": "Quota display does not match occupancy records after device switch",
+  "issue_type": "billing",
+  "current_question": "After a device switch, the quota page still shows the prior device occupancy and the available slot count looks inconsistent.",
+  "source_of_truth": [
+    "Release/tools/76_Billing_Ledger_Reconciler_SKILL.md",
+    "Release/tools/77_Quota_Usage_Analyzer_SKILL.md",
+    "Release/tools/78_Freeze_Reversal_Diagnoser_SKILL.md"
+  ],
+  "risk_flags": ["audit_required"],
+  "critical_paths": [
+    "Load quota page",
+    "Compare occupancy list with current device records",
+    "Verify available slot count matches occupancy truth"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Quota total, used, and available values match reconstructed occupancy truth.",
+    "No stale occupancy record remains in the validated scenario."
+  ]
+}
