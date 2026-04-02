@@ -1,7 +1,7 @@
 ---
 name: hgs-master-loader
 description: HGS 正式发布版主装配器。负责装配 Manifest、角色 Skill、工具 Skill、治理文档、自动编排协议、清零协议与其他协议 Skill，并按统一状态机驱动全链路。
-version: formal-2026-03-31-int11
+version: formal-2026-04-02-int12
 author: OpenAI
 role: MasterLoader
 status: active
@@ -32,11 +32,12 @@ entrypoint: true
 12. `docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md`
 13. `docs/HGS_全局检查与清理评分报告.md`
 14. `docs/HGS_全局扣分点问题清单与派单台账.md`
-15. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
+15. `docs/HGS_对话显示全审计回归样例.md`
+16. `protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md`
 
 说明：
 - 第 6~8 项属于角色治理底册，不得遗漏
-- 第 10~14 项属于当前自动化、清零、审计与台账底册，不得遗漏
+- 第 10~15 项属于当前自动化、清零、审计、显示回归与台账底册，不得遗漏
 
 ---
 
@@ -110,6 +111,7 @@ entrypoint: true
 - `114_Score_Decision_Engine_SKILL.md`
 - `115_Full_Issue_Clearance_Controller_SKILL.md`
 - `116_Document_State_Consistency_Sentinel_SKILL.md`
+- `117_Conversation_Display_Compliance_Checker_SKILL.md`
 
 ---
 
@@ -135,6 +137,43 @@ register_all_findings
 → register_new_findings_if_any
 → continue_loop_until_open_issue_zero
 ```
+
+---
+
+## 对话显示初始化（新增硬规则）
+
+正式装配完成且当前显示模式不为 `off` 时，主装配器必须在**首个对用户可见的回复之前**完成下面动作：
+
+```text
+init_conversation_display_contract
+→ 渲染 `自动化链路：已开启`
+→ 渲染 `显示：全审计`
+→ 按阶段选择预立单 / 已立单 / 复审或收口模板
+→ 若字段不足，先运行 Conversation Display Compliance Checker
+→ 使用安全占位值继续显示，不得静默丢失抬头
+```
+
+### 显示层硬约束
+
+1. **禁止继续输出旧抬头**：`全自动化链路Skill：已开启`  
+2. **默认状态头固定为**：`自动化链路：已开启`  
+3. **默认显示模式固定为**：`显示：全审计`  
+4. **全审计不是空标题**：必须同时带出阶段、票据绑定与最小审计字段  
+5. **未立单阶段允许占位符**，但必须显式标记 `ticket_id=provisional` 等安全占位值  
+6. **缺关键字段时不得伪装成完整全审计**，必须显示“审计信息不完整”并继续内部补齐  
+
+### 对话显示初始化后的最小必显字段
+
+- `ticket_id`
+- `problem_statement`
+- `blocking_reasons`
+- `dispatch_target_skill`
+
+若处于已立单阶段，还必须补足：
+
+- `priority_rank`
+- `linked_files_to_modify`
+- `linked_records_to_update`
 
 ---
 
@@ -170,5 +209,5 @@ register_all_findings
 入口：00_HGS_Master_Loader.md
 模式：Master Loader + Roles + Tools + Automation Actions + Score-Driven Decisions + Full-Issue-Clearance Protocol
 角色治理底册：角色调用关系总表 / 角色-工具矩阵总表 / 角色边界验证台账
-强制条件：角色不能裸跑、角色不能越界、角色责任必须绑定工具/门禁/字段/清零责任
+强制条件：角色不能裸跑、角色不能越界、角色责任必须绑定工具/门禁/字段/清零责任；对话显示必须初始化为“自动化链路：已开启 / 显示：全审计”
 ```
