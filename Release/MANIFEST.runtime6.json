@@ -1,0 +1,208 @@
+{
+  "package_name": "HGS Formal Release Runtime6",
+  "package_version": "formal-2026-04-02-runtime6-v1",
+  "entrypoint": "00_HGS_Master_Loader_runtime6.md",
+  "activation_mode": "manifest_driven_runtime6_with_on_demand_specialists",
+  "default_route_mode": "full_loop",
+  "active_runtime_profile": "runtime6",
+  "load_order": [
+    "MANIFEST.runtime6.json",
+    "00_HGS_Master_Loader_runtime6.md",
+    "roles/21_Lead_Orchestrator_SKILL.md",
+    "roles/22_Policy_Domain_Owner_SKILL.md",
+    "roles/23_Identity_Security_Owner_SKILL.md",
+    "roles/24_Platform_Owner_SKILL.md",
+    "roles/25_Execution_Lead_SKILL.md",
+    "roles/26_Validation_Owner_SKILL.md",
+    "protocols/50_RE_REVIEW_PROTOCOL.md",
+    "protocols/60_HGS_IO_Protocol.md",
+    "protocols/61_Automation_Orchestration_Protocol.md",
+    "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md",
+    "docs/HGS_角色整合与最小强运行集方案.md"
+  ],
+  "on_demand_role_load_order": [
+    "roles/27_Frontend_Console_Specialist_SKILL.md",
+    "roles/28_Operations_Support_Owner_SKILL.md",
+    "roles/29_Documentation_Sink_SKILL.md",
+    "roles/10_P10_CTO_SKILL.md"
+  ],
+  "tool_load_order": [
+    "tools/70_Business_Rule_Matrix_SKILL.md",
+    "tools/71_State_Machine_Consistency_SKILL.md",
+    "tools/72_JWT_Inspector_SKILL.md",
+    "tools/73_Device_Identity_Diff_SKILL.md",
+    "tools/74_Session_Refresh_Trace_SKILL.md",
+    "tools/76_Billing_Ledger_Reconciler_SKILL.md",
+    "tools/77_Quota_Usage_Analyzer_SKILL.md",
+    "tools/78_Freeze_Reversal_Diagnoser_SKILL.md",
+    "tools/79_API_Contract_Diff_SKILL.md",
+    "tools/82_Network_Trace_Reviewer_SKILL.md",
+    "tools/85_UI_Surface_Audit_SKILL.md",
+    "tools/88_Console_Auth_Flow_Trace_SKILL.md",
+    "tools/89_Project_Context_Drift_SKILL.md",
+    "tools/90_StepUp_Resume_Checker_SKILL.md",
+    "tools/91_Worker_Identity_Stability_SKILL.md",
+    "tools/92_Heartbeat_Gap_Analyzer_SKILL.md",
+    "tools/95_Test_Matrix_Builder_SKILL.md",
+    "tools/96_Regression_Checklist_SKILL.md",
+    "tools/98_Trace_Correlation_SKILL.md",
+    "tools/101_Compatibility_Matrix_SKILL.md",
+    "tools/106_SOP_Generator_SKILL.md",
+    "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+    "tools/108_Chain_Route_Simulator_SKILL.md",
+    "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+    "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+    "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md",
+    "tools/112_Audit_Log_Consistency_Checker_SKILL.md",
+    "tools/113_Runtime_Incident_Replayer_SKILL.md",
+    "tools/114_Score_Decision_Engine_SKILL.md",
+    "tools/115_Full_Issue_Clearance_Controller_SKILL.md",
+    "tools/116_Document_State_Consistency_Sentinel_SKILL.md"
+  ],
+  "runtime_roles": [
+    {
+      "id": "lead-orchestrator",
+      "file": "roles/21_Lead_Orchestrator_SKILL.md",
+      "display_name": "Lead Orchestrator",
+      "legacy_sources": [
+        "roles/20_P9_Principal_SKILL.md",
+        "roles/10_P10_CTO_SKILL.md"
+      ]
+    },
+    {
+      "id": "policy-domain-owner",
+      "file": "roles/22_Policy_Domain_Owner_SKILL.md",
+      "display_name": "Policy / Domain Owner",
+      "legacy_sources": [
+        "roles/11_Product_Business_Rules_Owner_SKILL.md",
+        "roles/13_Billing_Entitlement_Owner_SKILL.md",
+        "roles/14_Release_Config_Owner_SKILL.md"
+      ]
+    },
+    {
+      "id": "identity-security-owner",
+      "file": "roles/23_Identity_Security_Owner_SKILL.md",
+      "display_name": "Identity / Security Owner",
+      "legacy_sources": [
+        "roles/12_Auth_Identity_Owner_SKILL.md",
+        "roles/15_Security_Risk_Owner_SKILL.md"
+      ]
+    },
+    {
+      "id": "platform-owner",
+      "file": "roles/24_Platform_Owner_SKILL.md",
+      "display_name": "Platform Owner",
+      "legacy_sources": [
+        "roles/18_Control_Plane_Owner_SKILL.md",
+        "roles/19_Execution_Plane_Owner_SKILL.md"
+      ]
+    },
+    {
+      "id": "execution-lead",
+      "file": "roles/25_Execution_Lead_SKILL.md",
+      "display_name": "Execution Lead",
+      "legacy_sources": [
+        "roles/30_P8_PUA_Enhanced_SKILL.md",
+        "roles/31_P8_Backend_PUA_SKILL.md",
+        "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+        "roles/35_P8_Agent_PUA_SKILL.md",
+        "roles/36_P8_EndUser_PUA_SKILL.md"
+      ]
+    },
+    {
+      "id": "validation-owner",
+      "file": "roles/26_Validation_Owner_SKILL.md",
+      "display_name": "Validation Owner",
+      "legacy_sources": [
+        "roles/37_QA_Validation_Owner_SKILL.md",
+        "roles/38_SRE_Observability_Owner_SKILL.md"
+      ]
+    }
+  ],
+  "on_demand_roles": [
+    {
+      "id": "frontend-console-specialist",
+      "file": "roles/27_Frontend_Console_Specialist_SKILL.md",
+      "display_name": "Frontend / Console Specialist",
+      "legacy_sources": [
+        "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
+        "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+        "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+        "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md"
+      ]
+    },
+    {
+      "id": "operations-support-owner",
+      "file": "roles/28_Operations_Support_Owner_SKILL.md",
+      "display_name": "Operations / Support Owner",
+      "legacy_sources": [
+        "roles/16_Agent_Operations_Owner_SKILL.md",
+        "roles/17_EndUser_Support_Owner_SKILL.md"
+      ]
+    },
+    {
+      "id": "documentation-sink",
+      "file": "roles/29_Documentation_Sink_SKILL.md",
+      "display_name": "Documentation Sink",
+      "legacy_sources": [
+        "roles/39_Knowledge_Documentation_Owner_SKILL.md"
+      ]
+    },
+    {
+      "id": "p10-strategic-escalation",
+      "file": "roles/10_P10_CTO_SKILL.md",
+      "display_name": "P10 Strategic Escalation",
+      "legacy_sources": [
+        "roles/10_P10_CTO_SKILL.md"
+      ]
+    }
+  ],
+  "runtime_route_policy": {
+    "owner_by_issue_type": {
+      "rule": "roles/22_Policy_Domain_Owner_SKILL.md",
+      "auth": "roles/23_Identity_Security_Owner_SKILL.md",
+      "billing": "roles/22_Policy_Domain_Owner_SKILL.md",
+      "release": "roles/22_Policy_Domain_Owner_SKILL.md",
+      "security": "roles/23_Identity_Security_Owner_SKILL.md",
+      "agent": "roles/28_Operations_Support_Owner_SKILL.md",
+      "enduser": "roles/28_Operations_Support_Owner_SKILL.md",
+      "control_plane": "roles/24_Platform_Owner_SKILL.md",
+      "execution_plane": "roles/24_Platform_Owner_SKILL.md",
+      "frontend": "roles/27_Frontend_Console_Specialist_SKILL.md",
+      "console": "roles/27_Frontend_Console_Specialist_SKILL.md",
+      "worker": "roles/24_Platform_Owner_SKILL.md",
+      "qa": "roles/26_Validation_Owner_SKILL.md",
+      "sre": "roles/26_Validation_Owner_SKILL.md",
+      "docs": "roles/29_Documentation_Sink_SKILL.md",
+      "mixed": "roles/21_Lead_Orchestrator_SKILL.md"
+    },
+    "p8_executor_by_issue_type": {
+      "rule": "roles/25_Execution_Lead_SKILL.md",
+      "auth": "roles/25_Execution_Lead_SKILL.md",
+      "billing": "roles/25_Execution_Lead_SKILL.md",
+      "release": "roles/25_Execution_Lead_SKILL.md",
+      "security": "roles/25_Execution_Lead_SKILL.md",
+      "agent": "roles/25_Execution_Lead_SKILL.md",
+      "enduser": "roles/25_Execution_Lead_SKILL.md",
+      "control_plane": "roles/25_Execution_Lead_SKILL.md",
+      "execution_plane": "roles/25_Execution_Lead_SKILL.md",
+      "frontend": "roles/27_Frontend_Console_Specialist_SKILL.md",
+      "console": "roles/27_Frontend_Console_Specialist_SKILL.md",
+      "worker": "roles/25_Execution_Lead_SKILL.md",
+      "qa": "roles/26_Validation_Owner_SKILL.md",
+      "sre": "roles/26_Validation_Owner_SKILL.md",
+      "docs": "roles/29_Documentation_Sink_SKILL.md",
+      "mixed": "roles/25_Execution_Lead_SKILL.md"
+    },
+    "escalation_policy": {
+      "default_orchestrator": "roles/21_Lead_Orchestrator_SKILL.md",
+      "strategic_escalation_only": "roles/10_P10_CTO_SKILL.md",
+      "only_trigger_p10_when": [
+        "strategy_conflict_after_internal_reroute",
+        "release_freeze_or_irreversible_tradeoff",
+        "cross_domain_conflict_unresolved_after_rereview",
+        "security_or_financial_boundary_requires_terminal_review"
+      ]
+    }
+  }
+}
