@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 from typing import Any
+from collections import defaultdict
+import json
+from pathlib import Path
 
 def _norm(text: str) -> str:
     return (text or "").lower()
@@ -70,3 +73,22 @@ def evaluate_experience_memory(issue: dict, policy: dict) -> dict:
         'human_review_required': bool(policy.get('human_review_required_for_high_risk_domain',True) and issue.get('issue_type') in set(policy.get('high_risk_domains',[])))
     }
     return summary
+
+# 新增函数：检索历史成功工具
+def retrieve_successful_tools(issue_type: str, risk_flags: list, memory_path: Path, limit: int = 3) -> list:
+    """Return list of tool paths that were successful in past similar issues."""
+    if not memory_path.exists():
+        return []
+    try:
+        memory = json.loads(memory_path.read_text(encoding='utf-8'))
+    except Exception:
+        return []
+    # memory structure: [{"issue_type": "auth", "risk_flags": [...], "successful_tools": [...]}]
+    candidates = defaultdict(int)
+    for entry in memory:
+        if entry.get('issue_type') == issue_type:
+            # 可选：也匹配 risk_flags 重叠度
+            for tool in entry.get('successful_tools', []):
+                candidates[tool] += 1
+    sorted_tools = sorted(candidates.items(), key=lambda x: -x[1])
+    return [tool for tool, _ in sorted_tools[:limit]]

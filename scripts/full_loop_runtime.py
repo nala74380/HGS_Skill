@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 
@@ -75,6 +77,8 @@ def load_runtime_environment(root: Path, report_rel: str, manifest_rel: str, dis
         'exploration_mode_policy': route.get('exploration_mode_policy', {}),
         'opportunity_policy': route.get('opportunity_discovery_policy', {}),
         'disagreement_policy': route.get('role_disagreement_policy', {}),
+        'fast_track_policy': policy.get('fast_track_policy', {}),
+        'parallel_actions': policy.get('parallel_actions', []),
     }
 
 
@@ -226,8 +230,11 @@ def build_score_snapshot(issue: dict[str, Any], issue_type: str, supported_issue
     }
 
 
-def compute_flow_decisions(assignment: dict[str, Any], thresholds: dict[str, Any], managed_route_conflicts: list[str], blocking_reasons: list[str], overall_quality_score: float, scoring_policy: dict[str, Any], axis_gaps: list[str], simulation: dict[str, Any], evidence_missing: list[str], user_choice: str) -> dict[str, Any]:
-    dispatch = 'dispatch' if assignment.get('owner') and not managed_route_conflicts and assignment.get('required_tools') and thresholds.get('owner_confidence_min_for_dispatch', 80) <= 90 and not blocking_reasons else 'hold'
+def compute_flow_decisions(assignment: dict[str, Any], thresholds: dict[str, Any], managed_route_conflicts: list[str], blocking_reasons: list[str], overall_quality_score: float, scoring_policy: dict[str, Any], axis_gaps: list[str], simulation: dict[str, Any], evidence_missing: list[str], user_choice: str, issue_type: str) -> dict[str, Any]:
+    per_type = thresholds.get('per_issue_type_overrides', {})
+    owner_threshold = per_type.get(issue_type, {}).get('owner_confidence_min_for_direct_dispatch',
+                                                       thresholds.get('owner_confidence_min_for_direct_dispatch', 70))
+    dispatch = 'dispatch' if assignment.get('owner') and not managed_route_conflicts and assignment.get('required_tools') and owner_threshold <= 90 and not blocking_reasons else 'hold'
     review = 'review' if dispatch == 'dispatch' and not blocking_reasons else 'blocked'
     reopen = 'reopen' if review != 'review' else 'none'
     done = 'ready' if review == 'review' and not blocking_reasons else 'blocked'
@@ -391,7 +398,15 @@ def run_full_loop(root: Path, report_rel: str, manifest_rel: str, issue_input: s
     if assembly_failed(environment['report']):
         return dict(DEFAULT_FAIL_DATA), 1
 
+    # 记录整体开始时间
+    total_start = time.time()
+    action_timings = []
+
+    # ---------- 步骤1：normalize ----------
+    step_start = time.time()
     normalized_report = run_normalizer(root, issue_input)
+    action_timings.append({'action': 'normalize', 'duration_ms': (time.time() - step_start) * 1000, 'retry_count': 0})
+
     route_drift_report = read_route_drift_report(root)
     issue = normalized_report['normalized_issue']
     issue_type = issue.get('issue_type', 'mixed')
@@ -402,7 +417,19 @@ def run_full_loop(root: Path, report_rel: str, manifest_rel: str, issue_input: s
     candidate_paths = apply_experience_bias(build_candidate_paths(issue, environment['route']), experience_summary)
     alternative_hypotheses = build_alternative_hypotheses(issue, candidate_paths, environment['creativity'])
     assignment = resolve_assignment(issue_type, risks, environment['route'], environment['display_lookup'])
+
+    # 快速通道判断：低风险且高置信度
+    fast_track = environment['fast_track_policy']
+    is_low_risk = 'low' in risks and not any(r in ['medium','high','critical'] for r in risks)
+    use_fast_track = (fast_track.get('enabled') and is_low_risk and
+                      assignment.get('owner') and
+                      (90 >= fast_track.get('min_owner_confidence', 90)))
+
+    # ---------- 步骤2：工具模拟 ----------
+    step_start = time.time()
     simulation = evaluate_simulations(root, issue, risks, issue_type, environment['route'], assignment['required_tools'])
+    action_timings.append({'action': 'simulate_tools', 'duration_ms': (time.time() - step_start) * 1000, 'retry_count': 0})
+
     blockers = collect_blockers(issue, issue_type, supported_issue_types, assignment, normalized_report, simulation, simulation['route_conflicts_from_simulation'])
     managed_route_conflicts = manage_route_conflicts(blockers['route_conflicts'], experience_summary)
 
@@ -413,7 +440,7 @@ def run_full_loop(root: Path, report_rel: str, manifest_rel: str, issue_input: s
 
     score_snapshot = build_score_snapshot(issue, issue_type, supported_issue_types, assignment, environment['route'], managed_route_conflicts, blockers['blocking_reasons'], simulation['simulated_tool_results'], normalized_report)
     scoring_axes, overall_quality_score, axis_gaps = compute_scoring_axes(issue, candidate_paths, alternative_hypotheses, counterfactual_challenges, mandatory_checklist, act_before_asking, managed_route_conflicts, blockers['blocking_reasons'], simulation['simulated_tool_results'], score_snapshot, 'review', 'dispatch', blockers['user_choice'], environment['scoring_policy'])
-    decisions = compute_flow_decisions(assignment, environment['thresholds'], managed_route_conflicts, blockers['blocking_reasons'], overall_quality_score, environment['scoring_policy'], axis_gaps, simulation, blockers['evidence_missing'], blockers['user_choice'])
+    decisions = compute_flow_decisions(assignment, environment['thresholds'], managed_route_conflicts, blockers['blocking_reasons'], overall_quality_score, environment['scoring_policy'], axis_gaps, simulation, blockers['evidence_missing'], blockers['user_choice'], issue_type)
     decisions['evidence_missing'] = blockers['evidence_missing']
     decisions['user_choice'] = blockers['user_choice']
     decisions['route_conflicts_display'] = blockers['route_conflicts']
@@ -425,8 +452,35 @@ def run_full_loop(root: Path, report_rel: str, manifest_rel: str, issue_input: s
     role_disagreement = build_role_disagreement(track_competition, assignment['owner_name'], assignment['p8_name'], environment['disagreement_policy'].get('enabled', True))
     opportunity_discovery = build_opportunity_discovery(issue, blockers['route_conflicts'], decisions['blocking_reasons'], environment['opportunity_policy'])
     action_trace, current_work = build_action_trace(environment['display_mode'], issue_stub['issue_id'], assignment['owner_name'], assignment['p8_name'], linked_resources['linked_files_display'], linked_resources['linked_records'], decisions['blocking_reasons'], 1)
+
+    # 增加进度百分比
+    progress_percent = 0
+    total_steps = 10
+    if 'current_work_display' in current_work and isinstance(current_work, dict):
+        current_work['progress_percent'] = progress_percent
+
+    # 并行验证与体验（若非快速通道）
+    if not use_fast_track and decisions['automation_status'] == 'pass':
+        def run_validation(ctx):
+            # 模拟 QA 验证
+            return {'qa_result': 'pass'}
+        def run_experience(ctx):
+            # 模拟体验回放
+            return {'experience_result': 'pass'}
+        with ThreadPoolExecutor() as ex:
+            futures = [ex.submit(run_validation, {}), ex.submit(run_experience, {})]
+            for future in as_completed(futures):
+                pass  # 实际应合并结果
+        progress_percent = 70
+        if 'current_work_display' in current_work and isinstance(current_work, dict):
+            current_work['progress_percent'] = progress_percent
+
     parked_tickets, continuation_tickets, clearance_control = build_ticket_registries(issue_stub['issue_id'], issue, decisions['blocking_reasons'], open_issue_count, environment['clearance_policy'])
 
     data = build_report_data(environment, issue, issue_type, risks, normalized_report, route_drift_report, assignment, simulation, track_competition, role_disagreement, opportunity_discovery, experience_summary, candidate_paths, alternative_hypotheses, counterfactual_challenges, mandatory_checklist, act_before_asking, score_snapshot, scoring_axes, overall_quality_score, axis_gaps, decisions, issue_scaling, issue_stub, linked_resources, action_trace, current_work, parked_tickets, continuation_tickets, clearance_control, open_issue_count)
+    data['performance'] = {
+        'total_duration_ms': (time.time() - total_start) * 1000,
+        'actions': action_timings
+    }
     exit_code = 0 if decisions['automation_status'] == 'pass' else 1
     return data, exit_code

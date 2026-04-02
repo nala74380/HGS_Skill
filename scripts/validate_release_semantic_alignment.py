@@ -100,6 +100,49 @@ def build_issue_alignment_explanation(root: Path, issue_type: str, owner: str, t
     }
 
 
+# 新增函数：检查 issue 内部字段一致性
+def check_issue_internal_consistency(issue: dict) -> dict:
+    """Check consistency between issue fields to prevent fake green passes."""
+    warnings = []
+    failures = []
+    title = issue.get('title', '')
+    question = issue.get('current_question', '')
+    acceptance = ' '.join(issue.get('acceptance_criteria', []))
+    paths = ' '.join(issue.get('critical_paths', []))
+    # 检查 title 和 question 相似度（简单 Jaccard）
+    title_words = set(title.lower().split())
+    question_words = set(question.lower().split())
+    if title_words and question_words:
+        intersection = title_words & question_words
+        union = title_words | question_words
+        jaccard = len(intersection) / len(union) if union else 0
+        if jaccard < 0.2:
+            warnings.append(f'title与current_question语义差异过大 (Jaccard={jaccard:.2f})')
+    # 检查 acceptance_criteria 是否与 critical_paths 有关联
+    if acceptance and paths:
+        acceptance_words = set(acceptance.lower().split())
+        path_words = set(paths.lower().split())
+        if not (acceptance_words & path_words):
+            warnings.append('acceptance_criteria与critical_paths无共同关键词，可能脱节')
+    # 检查 source_of_truth 是否为空或无效
+    source = issue.get('source_of_truth', [])
+    if not source:
+        failures.append('source_of_truth为空')
+    # 检查 max_change_boundary 是否包含必要字段
+    boundary = issue.get('max_change_boundary', {})
+    if isinstance(boundary, dict):
+        if not boundary.get('files_max') and not boundary.get('mode'):
+            warnings.append('max_change_boundary缺少files_max或mode，可能导致范围失控')
+    else:
+        warnings.append('max_change_boundary不是对象，可能不规范')
+    overall = 'fail' if failures else ('warning' if warnings else 'pass')
+    return {
+        'overall': overall,
+        'failures': failures,
+        'warnings': warnings
+    }
+
+
 def main()->int:
     ap=argparse.ArgumentParser()
     ap.add_argument('--repo-root',default='.')
