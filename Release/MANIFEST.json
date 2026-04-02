@@ -1561,6 +1561,6 @@
     "repo_owner": "nala74380",
     "repo_name": "HGS_Skill",
     "base_branch": "main",
-    "token_env_var": "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"
+    "token_env_var": "GITHUB_TOKEN"
   }
 }
