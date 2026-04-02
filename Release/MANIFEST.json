@@ -1,9 +1,3 @@
-
----
-
-# 2) `Release/MANIFEST.json`
-
-```json
 {
   "package_name": "HGS Formal Release",
   "package_version": "formal-2026-04-02-runtime6-main-v1",
