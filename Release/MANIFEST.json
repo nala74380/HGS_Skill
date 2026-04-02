@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-04-02-runtime6-main-v1",
+  "package_version": "formal-2026-04-02-runtime6-main-v2-hard-delete",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_runtime6_with_on_demand_specialists",
   "default_route_mode": "full_loop",
@@ -27,30 +27,6 @@
     "roles/28_Operations_Support_Owner_SKILL.md",
     "roles/29_Documentation_Sink_SKILL.md",
     "roles/10_P10_CTO_SKILL.md"
-  ],
-  "legacy_role_dictionary_files": [
-    "roles/11_Product_Business_Rules_Owner_SKILL.md",
-    "roles/12_Auth_Identity_Owner_SKILL.md",
-    "roles/13_Billing_Entitlement_Owner_SKILL.md",
-    "roles/14_Release_Config_Owner_SKILL.md",
-    "roles/15_Security_Risk_Owner_SKILL.md",
-    "roles/16_Agent_Operations_Owner_SKILL.md",
-    "roles/17_EndUser_Support_Owner_SKILL.md",
-    "roles/18_Control_Plane_Owner_SKILL.md",
-    "roles/19_Execution_Plane_Owner_SKILL.md",
-    "roles/20_P9_Principal_SKILL.md",
-    "roles/30_P8_PUA_Enhanced_SKILL.md",
-    "roles/31_P8_Backend_PUA_SKILL.md",
-    "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
-    "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
-    "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
-    "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md",
-    "roles/34_P8_LanrenJingling_PUA_SKILL.md",
-    "roles/35_P8_Agent_PUA_SKILL.md",
-    "roles/36_P8_EndUser_PUA_SKILL.md",
-    "roles/37_QA_Validation_Owner_SKILL.md",
-    "roles/38_SRE_Observability_Owner_SKILL.md",
-    "roles/39_Knowledge_Documentation_Owner_SKILL.md"
   ],
   "tool_load_order": [
     "tools/70_Business_Rule_Matrix_SKILL.md",
@@ -107,11 +83,7 @@
       "display_name": "Lead Orchestrator",
       "capability_tags": ["mixed"],
       "role_kind": "dispatch_orchestrator",
-      "primary_issue_types": ["mixed"],
-      "legacy_sources": [
-        "roles/20_P9_Principal_SKILL.md",
-        "roles/10_P10_CTO_SKILL.md"
-      ]
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "policy-domain-owner",
@@ -120,12 +92,7 @@
       "display_name": "Policy / Domain Owner",
       "capability_tags": ["rule", "billing", "release"],
       "role_kind": "owner",
-      "primary_issue_types": ["rule", "billing", "release"],
-      "legacy_sources": [
-        "roles/11_Product_Business_Rules_Owner_SKILL.md",
-        "roles/13_Billing_Entitlement_Owner_SKILL.md",
-        "roles/14_Release_Config_Owner_SKILL.md"
-      ]
+      "primary_issue_types": ["rule", "billing", "release"]
     },
     {
       "id": "identity-security-owner",
@@ -134,11 +101,7 @@
       "display_name": "Identity / Security Owner",
       "capability_tags": ["auth", "security"],
       "role_kind": "owner",
-      "primary_issue_types": ["auth", "security"],
-      "legacy_sources": [
-        "roles/12_Auth_Identity_Owner_SKILL.md",
-        "roles/15_Security_Risk_Owner_SKILL.md"
-      ]
+      "primary_issue_types": ["auth", "security"]
     },
     {
       "id": "platform-owner",
@@ -147,12 +110,7 @@
       "display_name": "Platform Owner",
       "capability_tags": ["control_plane", "execution_plane", "worker"],
       "role_kind": "owner",
-      "primary_issue_types": ["control_plane", "execution_plane", "worker"],
-      "legacy_sources": [
-        "roles/18_Control_Plane_Owner_SKILL.md",
-        "roles/19_Execution_Plane_Owner_SKILL.md",
-        "roles/34_P8_LanrenJingling_PUA_SKILL.md"
-      ]
+      "primary_issue_types": ["control_plane", "execution_plane", "worker"]
     },
     {
       "id": "execution-lead",
@@ -161,14 +119,7 @@
       "display_name": "Execution Lead",
       "capability_tags": ["mixed", "backend", "agent", "enduser", "worker"],
       "role_kind": "executor",
-      "primary_issue_types": ["mixed"],
-      "legacy_sources": [
-        "roles/30_P8_PUA_Enhanced_SKILL.md",
-        "roles/31_P8_Backend_PUA_SKILL.md",
-        "roles/34_P8_LanrenJingling_PUA_SKILL.md",
-        "roles/35_P8_Agent_PUA_SKILL.md",
-        "roles/36_P8_EndUser_PUA_SKILL.md"
-      ]
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "validation-owner",
@@ -177,11 +128,7 @@
       "display_name": "Validation Owner",
       "capability_tags": ["qa", "sre"],
       "role_kind": "validator",
-      "primary_issue_types": ["qa", "sre"],
-      "legacy_sources": [
-        "roles/37_QA_Validation_Owner_SKILL.md",
-        "roles/38_SRE_Observability_Owner_SKILL.md"
-      ]
+      "primary_issue_types": ["qa", "sre"]
     },
     {
       "id": "frontend-console-specialist",
@@ -191,13 +138,7 @@
       "capability_tags": ["frontend", "console"],
       "role_kind": "specialist",
       "primary_issue_types": ["frontend", "console"],
-      "activation_mode": "on_demand",
-      "legacy_sources": [
-        "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
-        "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
-        "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
-        "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md"
-      ]
+      "activation_mode": "on_demand"
     },
     {
       "id": "operations-support-owner",
@@ -207,11 +148,7 @@
       "capability_tags": ["agent", "enduser"],
       "role_kind": "owner",
       "primary_issue_types": ["agent", "enduser"],
-      "activation_mode": "on_demand",
-      "legacy_sources": [
-        "roles/16_Agent_Operations_Owner_SKILL.md",
-        "roles/17_EndUser_Support_Owner_SKILL.md"
-      ]
+      "activation_mode": "on_demand"
     },
     {
       "id": "documentation-sink",
@@ -221,10 +158,7 @@
       "capability_tags": ["docs"],
       "role_kind": "knowledge_owner",
       "primary_issue_types": ["docs"],
-      "activation_mode": "on_demand",
-      "legacy_sources": [
-        "roles/39_Knowledge_Documentation_Owner_SKILL.md"
-      ]
+      "activation_mode": "on_demand"
     },
     {
       "id": "p10-strategic-escalation",
@@ -234,10 +168,7 @@
       "capability_tags": ["mixed"],
       "role_kind": "terminal_reviewer",
       "primary_issue_types": ["mixed"],
-      "activation_mode": "on_demand",
-      "legacy_sources": [
-        "roles/10_P10_CTO_SKILL.md"
-      ]
+      "activation_mode": "on_demand"
     }
   ],
   "protocols": [
@@ -594,9 +525,9 @@
     "available": ["runtime6"],
     "principle": "6 resident roles + 4 on-demand specialists",
     "notes": [
-      "旧 23 角色继续保留为字典层与历史治理底册",
       "P10 不再默认常驻，只在战略升级时介入",
-      "Frontend/Console、Operations/Support、Documentation 改为按需唤起"
+      "Frontend/Console、Operations/Support、Documentation 改为按需唤起",
+      "已移除旧角色字典层引用，采用硬删除口径"
     ]
   },
   "automation_policy": {
@@ -920,31 +851,6 @@
         "forensic": "全审计"
       }
     }
-  },
-  "legacy_role_mapping": {
-    "roles/20_P9_Principal_SKILL.md": "roles/21_Lead_Orchestrator_SKILL.md",
-    "roles/11_Product_Business_Rules_Owner_SKILL.md": "roles/22_Policy_Domain_Owner_SKILL.md",
-    "roles/13_Billing_Entitlement_Owner_SKILL.md": "roles/22_Policy_Domain_Owner_SKILL.md",
-    "roles/14_Release_Config_Owner_SKILL.md": "roles/22_Policy_Domain_Owner_SKILL.md",
-    "roles/12_Auth_Identity_Owner_SKILL.md": "roles/23_Identity_Security_Owner_SKILL.md",
-    "roles/15_Security_Risk_Owner_SKILL.md": "roles/23_Identity_Security_Owner_SKILL.md",
-    "roles/18_Control_Plane_Owner_SKILL.md": "roles/24_Platform_Owner_SKILL.md",
-    "roles/19_Execution_Plane_Owner_SKILL.md": "roles/24_Platform_Owner_SKILL.md",
-    "roles/30_P8_PUA_Enhanced_SKILL.md": "roles/25_Execution_Lead_SKILL.md",
-    "roles/31_P8_Backend_PUA_SKILL.md": "roles/25_Execution_Lead_SKILL.md",
-    "roles/34_P8_LanrenJingling_PUA_SKILL.md": "roles/25_Execution_Lead_SKILL.md",
-    "roles/35_P8_Agent_PUA_SKILL.md": "roles/25_Execution_Lead_SKILL.md",
-    "roles/36_P8_EndUser_PUA_SKILL.md": "roles/25_Execution_Lead_SKILL.md",
-    "roles/37_QA_Validation_Owner_SKILL.md": "roles/26_Validation_Owner_SKILL.md",
-    "roles/38_SRE_Observability_Owner_SKILL.md": "roles/26_Validation_Owner_SKILL.md",
-    "roles/32A_P8_UI_Surface_Engineer_SKILL.md": "roles/27_Frontend_Console_Specialist_SKILL.md",
-    "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md": "roles/27_Frontend_Console_Specialist_SKILL.md",
-    "roles/33A_P8_Console_Runtime_Engineer_SKILL.md": "roles/27_Frontend_Console_Specialist_SKILL.md",
-    "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md": "roles/27_Frontend_Console_Specialist_SKILL.md",
-    "roles/16_Agent_Operations_Owner_SKILL.md": "roles/28_Operations_Support_Owner_SKILL.md",
-    "roles/17_EndUser_Support_Owner_SKILL.md": "roles/28_Operations_Support_Owner_SKILL.md",
-    "roles/39_Knowledge_Documentation_Owner_SKILL.md": "roles/29_Documentation_Sink_SKILL.md",
-    "roles/10_P10_CTO_SKILL.md": "roles/10_P10_CTO_SKILL.md"
   },
   "display_name_registry": {
     "roles": {
