@@ -7,7 +7,10 @@
     "Release/MANIFEST.json",
     "Release/00_HGS_Master_Loader.md"
   ],
-  "risk_flags": ["high_risk_action", "scope_risk"],
+  "risk_flags": [
+    "high_risk_action",
+    "scope_risk"
+  ],
   "critical_paths": [
     "resume protected action after reauth",
     "verify visible context matches request target"
@@ -16,5 +19,13 @@
   "acceptance_criteria": [
     "Visible context and request target remain aligned after reauth.",
     "Protected action does not resume against an unintended target."
-  ]
+  ],
+  "max_change_boundary": {
+    "files_max": 6,
+    "module_boundary": "console reauth resume path",
+    "forbidden_changes": [
+      "no destructive mutation",
+      "no billing rule reinterpretation"
+    ]
+  }
 }

@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HGS Formal Release Manifest",
+  "type": "object",
+  "required": [
+    "package_name",
+    "package_version",
+    "entrypoint",
+    "default_route_mode",
+    "load_order",
+    "tool_load_order",
+    "documentation_load_order",
+    "roles",
+    "tools",
+    "protocols",
+    "governance_docs",
+    "risk_gates",
+    "automation_policy"
+  ],
+  "properties": {
+    "package_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "package_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "entrypoint": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_route_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "load_order": {
+      "type": "array"
+    },
+    "tool_load_order": {
+      "type": "array"
+    },
+    "documentation_load_order": {
+      "type": "array"
+    },
+    "roles": {
+      "type": "array"
+    },
+    "tools": {
+      "type": "array"
+    },
+    "protocols": {
+      "type": "array"
+    },
+    "governance_docs": {
+      "type": "array"
+    },
+    "risk_gates": {
+      "type": "array"
+    },
+    "automation_policy": {
+      "type": "object",
+      "required": [
+        "action_protocol",
+        "clearance_protocol",
+        "active_actions",
+        "active_action_batches",
+        "thresholds",
+        "score_decision_rules",
+        "runtime_route_policy",
+        "scoring_axes_policy",
+        "experience_memory_policy",
+        "conversation_display_policy"
+      ],
+      "properties": {
+        "action_protocol": {
+          "type": "string"
+        },
+        "clearance_protocol": {
+          "type": "string"
+        },
+        "active_actions": {
+          "type": "array"
+        },
+        "active_action_batches": {
+          "type": "array"
+        },
+        "thresholds": {
+          "type": "object"
+        },
+        "score_decision_rules": {
+          "type": "object"
+        },
+        "runtime_route_policy": {
+          "type": "object",
+          "required": [
+            "owner_by_issue_type",
+            "tools_by_issue_type",
+            "tools_by_risk_flag",
+            "always_include_tools",
+            "required_input_fields",
+            "recommended_input_fields",
+            "supported_issue_types",
+            "inferable_input_fields",
+            "minimum_user_input_fields",
+            "tool_execution_simulation_policy",
+            "issue_type_inference_keywords",
+            "risk_flag_inference_keywords",
+            "simulation_quality_policy",
+            "exploration_mode_policy",
+            "opportunity_discovery_policy",
+            "role_disagreement_policy"
+          ],
+          "properties": {
+            "owner_by_issue_type": {
+              "type": "object"
+            },
+            "tools_by_issue_type": {
+              "type": "object"
+            },
+            "tools_by_risk_flag": {
+              "type": "object"
+            },
+            "always_include_tools": {
+              "type": "array"
+            },
+            "required_input_fields": {
+              "type": "array"
+            },
+            "recommended_input_fields": {
+              "type": "array"
+            },
+            "supported_issue_types": {
+              "type": "array"
+            },
+            "inferable_input_fields": {
+              "type": "array"
+            },
+            "minimum_user_input_fields": {
+              "type": "array"
+            },
+            "tool_execution_simulation_policy": {
+              "type": "object"
+            },
+            "issue_type_inference_keywords": {
+              "type": "object"
+            },
+            "risk_flag_inference_keywords": {
+              "type": "object"
+            },
+            "simulation_quality_policy": {
+              "type": "object"
+            },
+            "creativity_amplification_policy": {
+              "type": "object",
+              "required": [
+                "require_min_alternative_hypotheses",
+                "require_min_counterfactual_challenges",
+                "require_blue_team_challenge",
+                "require_act_before_asking_summary",
+                "mandatory_checklist",
+                "exploration_prompts",
+                "escalation_levels",
+                "loop_control"
+              ],
+              "properties": {
+                "require_min_alternative_hypotheses": {
+                  "type": "integer",
+                  "minimum": 3
+                },
+                "require_min_counterfactual_challenges": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "require_blue_team_challenge": {
+                  "type": "boolean"
+                },
+                "require_act_before_asking_summary": {
+                  "type": "boolean"
+                },
+                "mandatory_checklist": {
+                  "type": "array"
+                },
+                "exploration_prompts": {
+                  "type": "array"
+                },
+                "escalation_levels": {
+                  "type": "object"
+                },
+                "loop_control": {
+                  "type": "object"
+                }
+              }
+            },
+            "exploration_mode_policy": {
+              "type": "object"
+            },
+            "opportunity_discovery_policy": {
+              "type": "object"
+            },
+            "role_disagreement_policy": {
+              "type": "object"
+            }
+          }
+        },
+        "scoring_axes_policy": {
+          "type": "object",
+          "required": [
+            "enabled",
+            "axis_weights",
+            "minimum_axis_scores",
+            "minimum_overall_quality_score_for_confident_result",
+            "minimum_overall_quality_score_for_publish_ready_skill",
+            "axis_display_order"
+          ]
+        },
+        "experience_memory_policy": {
+          "type": "object"
+        },
+        "conversation_display_policy": {
+          "type": "object"
+        },
+        "full_issue_clearance_policy": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "issue_id": "DRYRUN-enduser-001",
+  "title": "End-user visible outcome lacks closure clarity",
+  "issue_type": "enduser",
+  "current_question": "The end-user flow completes but the visible outcome and next-step guidance are unclear.",
+  "source_of_truth": [
+    "Release/protocols/41_P8_EndUser_Experience_Protocol.md",
+    "Release/tools/107_Protocol_Field_Completeness_Checker_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "complete end-user flow",
+    "observe final state",
+    "read visible guidance"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "The end-user final state and next-step guidance are explicit and unambiguous."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "end-user outcome copy and state"
+  }
+}

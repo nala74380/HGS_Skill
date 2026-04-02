@@ -131,8 +131,8 @@ HGS_Skill/
 
 以下文件保留在仓库中仅供历史追溯，不属于正式装配链：
 
-- `Release/roles/32_P8_Frontend_PUA_SKILL.md`
-- `Release/roles/33_P8_PCConsole_PUA_SKILL.md`
+- `Release/roles/32A_P8_UI_Surface_Engineer_SKILL.md / Release/roles/32B_P8_Frontend_Logic_Engineer_SKILL.md`
+- `Release/roles/33A_P8_Console_Runtime_Engineer_SKILL.md / Release/roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md`
 
 它们已分别被以下正式角色替代：
 

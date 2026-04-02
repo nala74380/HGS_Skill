@@ -8,7 +8,9 @@
     "Release/tools/77_Quota_Usage_Analyzer_SKILL.md",
     "Release/tools/78_Freeze_Reversal_Diagnoser_SKILL.md"
   ],
-  "risk_flags": ["audit_required"],
+  "risk_flags": [
+    "audit_required"
+  ],
   "critical_paths": [
     "load quota page",
     "compare occupancy list with current records"
@@ -16,5 +18,12 @@
   "verification_target": "L3",
   "acceptance_criteria": [
     "Quota values match reconstructed occupancy truth."
-  ]
+  ],
+  "max_change_boundary": {
+    "files_max": 5,
+    "module_boundary": "quota reconstruction and display layer",
+    "forbidden_changes": [
+      "no subscription policy reinterpretation"
+    ]
+  }
 }

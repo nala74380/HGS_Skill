@@ -7,6 +7,7 @@ on:
       - 'scripts/**'
       - 'examples/**'
       - 'README.md'
+      - '.gitignore'
   workflow_dispatch:
 
 jobs:
@@ -17,9 +18,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Validate manifest schema
+        run: |
+          python scripts/validate_manifest_schema.py --strict
       - name: Validate runtime integrity
         run: |
           python scripts/validate_release_runtime_integrity.py --strict
+      - name: Validate semantic alignment
+        run: |
+          python scripts/validate_release_semantic_alignment.py --strict
 
   runtime-matrix:
     runs-on: ubuntu-latest
@@ -29,10 +36,22 @@ jobs:
       matrix:
         issue_input:
           - examples/issue_input.json
+          - examples/issue_input_auth.json
           - examples/issue_input_rule.json
           - examples/issue_input_billing.json
+          - examples/issue_input_release.json
+          - examples/issue_input_frontend.json
+          - examples/issue_input_worker.json
           - examples/issue_input_worker_incident.json
           - examples/issue_input_mixed.json
+          - examples/issue_input_security.json
+          - examples/issue_input_agent.json
+          - examples/issue_input_enduser.json
+          - examples/issue_input_control_plane.json
+          - examples/issue_input_execution_plane.json
+          - examples/issue_input_qa.json
+          - examples/issue_input_sre.json
+          - examples/issue_input_docs.json
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -55,6 +74,7 @@ jobs:
         with:
           name: runtime-artifacts-${{ matrix.issue_input }}
           path: |
+            .hgs/manifest_schema_report.json
             .hgs/assembly_ledger.json
             .hgs/assembly_report.json
             .hgs/full_loop_dry_run.json

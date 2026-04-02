@@ -1,0 +1,28 @@
+{
+  "issue_id": "DRYRUN-worker-plain-001",
+  "title": "Worker identity chain is inconsistent across normal recovery",
+  "issue_type": "worker",
+  "current_question": "Worker identity appears to drift across a non-incident recovery path and should be reconstructed.",
+  "source_of_truth": [
+    "Release/tools/91_Worker_Identity_Stability_SKILL.md",
+    "Release/tools/92_Heartbeat_Gap_Analyzer_SKILL.md"
+  ],
+  "risk_flags": [
+    "runtime_stability"
+  ],
+  "critical_paths": [
+    "identity continuity check",
+    "heartbeat recovery path"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Worker identity continuity is reconstructed with explicit evidence."
+  ],
+  "max_change_boundary": {
+    "files_max": 5,
+    "module_boundary": "worker identity and heartbeat interpretation",
+    "forbidden_changes": [
+      "no protected action behavior changes"
+    ]
+  }
+}

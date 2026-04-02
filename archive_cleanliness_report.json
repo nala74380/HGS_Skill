@@ -1,0 +1,9 @@
+{
+  "cleanliness_scope": "clean_release_archive",
+  "archive_cleanliness_status": "pass",
+  "zip_path": "/mnt/data/HGS_Skill_display_clearance_enhanced_refactor2_clean.zip",
+  "entry_count": 123,
+  "forbidden_entries": [],
+  "missing_required_paths": [],
+  "duplicated_artifact_roots": []
+}

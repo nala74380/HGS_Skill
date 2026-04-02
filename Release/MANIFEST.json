@@ -1,6 +1,6 @@
 {
   "package_name": "HGS Formal Release",
-  "package_version": "formal-2026-03-31-int11",
+  "package_version": "formal-2026-03-31-int14",
   "entrypoint": "00_HGS_Master_Loader.md",
   "activation_mode": "manifest_driven_multi_role_with_tooling",
   "default_route_mode": "full_loop",
@@ -84,83 +84,785 @@
     "docs/HGS_全局扣分点问题清单与派单台账.md"
   ],
   "roles": [
-    {"id": "p10-cto", "file": "roles/10_P10_CTO_SKILL.md", "layer": "strategy"},
-    {"id": "product-business-rules-owner", "file": "roles/11_Product_Business_Rules_Owner_SKILL.md", "layer": "truth_rules"},
-    {"id": "auth-identity-owner", "file": "roles/12_Auth_Identity_Owner_SKILL.md", "layer": "truth_rules"},
-    {"id": "billing-entitlement-owner", "file": "roles/13_Billing_Entitlement_Owner_SKILL.md", "layer": "truth_rules"},
-    {"id": "release-config-owner", "file": "roles/14_Release_Config_Owner_SKILL.md", "layer": "truth_rules"},
-    {"id": "security-risk-owner", "file": "roles/15_Security_Risk_Owner_SKILL.md", "layer": "truth_rules"},
-    {"id": "agent-operations-owner", "file": "roles/16_Agent_Operations_Owner_SKILL.md", "layer": "ops_support_owner"},
-    {"id": "enduser-support-owner", "file": "roles/17_EndUser_Support_Owner_SKILL.md", "layer": "ops_support_owner"},
-    {"id": "control-plane-owner", "file": "roles/18_Control_Plane_Owner_SKILL.md", "layer": "plane_owner"},
-    {"id": "execution-plane-owner", "file": "roles/19_Execution_Plane_Owner_SKILL.md", "layer": "plane_owner"},
-    {"id": "p9-principal", "file": "roles/20_P9_Principal_SKILL.md", "layer": "review_dispatch_rereview"},
-    {"id": "p8-pua-enhanced", "file": "roles/30_P8_PUA_Enhanced_SKILL.md", "layer": "execution_fallback"},
-    {"id": "p8-backend", "file": "roles/31_P8_Backend_PUA_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-ui-surface", "file": "roles/32A_P8_UI_Surface_Engineer_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-frontend-logic", "file": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-console-runtime", "file": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-console-management-experience", "file": "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-lanren-jingling", "file": "roles/34_P8_LanrenJingling_PUA_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-agent", "file": "roles/35_P8_Agent_PUA_SKILL.md", "layer": "execution_specialist"},
-    {"id": "p8-enduser", "file": "roles/36_P8_EndUser_PUA_SKILL.md", "layer": "execution_specialist"},
-    {"id": "qa-validation-owner", "file": "roles/37_QA_Validation_Owner_SKILL.md", "layer": "validation"},
-    {"id": "sre-observability-owner", "file": "roles/38_SRE_Observability_Owner_SKILL.md", "layer": "runtime_observability"},
-    {"id": "knowledge-documentation-owner", "file": "roles/39_Knowledge_Documentation_Owner_SKILL.md", "layer": "knowledge"}
+    {
+      "id": "p10-cto",
+      "file": "roles/10_P10_CTO_SKILL.md",
+      "layer": "strategy",
+      "display_name": "P10终审官",
+      "capability_tags": [
+        "mixed"
+      ],
+      "role_kind": "terminal_reviewer",
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "product-business-rules-owner",
+      "file": "roles/11_Product_Business_Rules_Owner_SKILL.md",
+      "layer": "truth_rules",
+      "display_name": "业务规则负责人",
+      "capability_tags": [
+        "rule"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "rule"
+      ]
+    },
+    {
+      "id": "auth-identity-owner",
+      "file": "roles/12_Auth_Identity_Owner_SKILL.md",
+      "layer": "truth_rules",
+      "display_name": "认证身份负责人",
+      "capability_tags": [
+        "auth"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "auth"
+      ]
+    },
+    {
+      "id": "billing-entitlement-owner",
+      "file": "roles/13_Billing_Entitlement_Owner_SKILL.md",
+      "layer": "truth_rules",
+      "display_name": "计费权益负责人",
+      "capability_tags": [
+        "billing"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "billing"
+      ]
+    },
+    {
+      "id": "release-config-owner",
+      "file": "roles/14_Release_Config_Owner_SKILL.md",
+      "layer": "truth_rules",
+      "display_name": "发布配置负责人",
+      "capability_tags": [
+        "release"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "release"
+      ]
+    },
+    {
+      "id": "security-risk-owner",
+      "file": "roles/15_Security_Risk_Owner_SKILL.md",
+      "layer": "truth_rules",
+      "display_name": "安全风险负责人",
+      "capability_tags": [
+        "security"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "security"
+      ]
+    },
+    {
+      "id": "agent-operations-owner",
+      "file": "roles/16_Agent_Operations_Owner_SKILL.md",
+      "layer": "ops_support_owner",
+      "display_name": "智能体运营负责人",
+      "capability_tags": [
+        "agent"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "agent"
+      ]
+    },
+    {
+      "id": "enduser-support-owner",
+      "file": "roles/17_EndUser_Support_Owner_SKILL.md",
+      "layer": "ops_support_owner",
+      "display_name": "用户支持负责人",
+      "capability_tags": [
+        "enduser"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "enduser"
+      ]
+    },
+    {
+      "id": "control-plane-owner",
+      "file": "roles/18_Control_Plane_Owner_SKILL.md",
+      "layer": "plane_owner",
+      "display_name": "控制平面负责人",
+      "capability_tags": [
+        "control_plane"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "control_plane"
+      ]
+    },
+    {
+      "id": "execution-plane-owner",
+      "file": "roles/19_Execution_Plane_Owner_SKILL.md",
+      "layer": "plane_owner",
+      "display_name": "执行平面负责人",
+      "capability_tags": [
+        "execution_plane"
+      ],
+      "role_kind": "owner",
+      "primary_issue_types": [
+        "execution_plane"
+      ]
+    },
+    {
+      "id": "p9-principal",
+      "file": "roles/20_P9_Principal_SKILL.md",
+      "layer": "review_dispatch_rereview",
+      "display_name": "P9派单官",
+      "capability_tags": [
+        "mixed"
+      ],
+      "role_kind": "dispatch_orchestrator",
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "p8-pua-enhanced",
+      "file": "roles/30_P8_PUA_Enhanced_SKILL.md",
+      "layer": "execution_fallback",
+      "display_name": "P8执行官",
+      "capability_tags": [
+        "mixed"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "p8-backend",
+      "file": "roles/31_P8_Backend_PUA_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8后端工程师",
+      "capability_tags": [
+        "release",
+        "billing",
+        "auth"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "release"
+      ]
+    },
+    {
+      "id": "p8-ui-surface",
+      "file": "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8界面工程师",
+      "capability_tags": [
+        "frontend"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "p8-frontend-logic",
+      "file": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8前端工程师",
+      "capability_tags": [
+        "frontend"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "p8-console-runtime",
+      "file": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8控制台工程师",
+      "capability_tags": [
+        "console"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "console"
+      ]
+    },
+    {
+      "id": "p8-console-management-experience",
+      "file": "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8管理体验工程师",
+      "capability_tags": [
+        "console"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "console"
+      ]
+    },
+    {
+      "id": "p8-lanren-jingling",
+      "file": "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8运行代理工程师",
+      "capability_tags": [
+        "worker"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "worker"
+      ]
+    },
+    {
+      "id": "p8-agent",
+      "file": "roles/35_P8_Agent_PUA_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8智能体工程师",
+      "capability_tags": [
+        "agent"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "agent"
+      ]
+    },
+    {
+      "id": "p8-enduser",
+      "file": "roles/36_P8_EndUser_PUA_SKILL.md",
+      "layer": "execution_specialist",
+      "display_name": "P8用户工程师",
+      "capability_tags": [
+        "enduser"
+      ],
+      "role_kind": "executor",
+      "primary_issue_types": [
+        "enduser"
+      ]
+    },
+    {
+      "id": "qa-validation-owner",
+      "file": "roles/37_QA_Validation_Owner_SKILL.md",
+      "layer": "validation",
+      "display_name": "QA验证负责人",
+      "capability_tags": [
+        "qa"
+      ],
+      "role_kind": "validator",
+      "primary_issue_types": [
+        "qa"
+      ]
+    },
+    {
+      "id": "sre-observability-owner",
+      "file": "roles/38_SRE_Observability_Owner_SKILL.md",
+      "layer": "runtime_observability",
+      "display_name": "SRE可观测负责人",
+      "capability_tags": [
+        "sre"
+      ],
+      "role_kind": "validator",
+      "primary_issue_types": [
+        "sre"
+      ]
+    },
+    {
+      "id": "knowledge-documentation-owner",
+      "file": "roles/39_Knowledge_Documentation_Owner_SKILL.md",
+      "layer": "knowledge",
+      "display_name": "文档负责人",
+      "capability_tags": [
+        "docs"
+      ],
+      "role_kind": "knowledge_owner",
+      "primary_issue_types": [
+        "docs"
+      ]
+    }
   ],
   "protocols": [
-    {"id": "agent-experience", "file": "protocols/40_P8_Agent_Experience_Protocol.md"},
-    {"id": "enduser-experience", "file": "protocols/41_P8_EndUser_Experience_Protocol.md"},
-    {"id": "re-review", "file": "protocols/50_RE_REVIEW_PROTOCOL.md"},
-    {"id": "hgs-io-protocol", "file": "protocols/60_HGS_IO_Protocol.md"},
-    {"id": "automation-orchestration", "file": "protocols/61_Automation_Orchestration_Protocol.md"},
-    {"id": "full-issue-clearance", "file": "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md"}
+    {
+      "id": "agent-experience",
+      "file": "protocols/40_P8_Agent_Experience_Protocol.md",
+      "display_name": "智能体体验协议"
+    },
+    {
+      "id": "enduser-experience",
+      "file": "protocols/41_P8_EndUser_Experience_Protocol.md",
+      "display_name": "用户体验协议"
+    },
+    {
+      "id": "re-review",
+      "file": "protocols/50_RE_REVIEW_PROTOCOL.md",
+      "display_name": "复审协议"
+    },
+    {
+      "id": "hgs-io-protocol",
+      "file": "protocols/60_HGS_IO_Protocol.md",
+      "display_name": "输入输出协议"
+    },
+    {
+      "id": "automation-orchestration",
+      "file": "protocols/61_Automation_Orchestration_Protocol.md",
+      "display_name": "自动化编排协议"
+    },
+    {
+      "id": "full-issue-clearance",
+      "file": "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md",
+      "display_name": "问题清零协议"
+    }
   ],
   "tools": [
-    {"id": "business-rule-matrix", "file": "tools/70_Business_Rule_Matrix_SKILL.md", "layer": "truth_analysis"},
-    {"id": "state-machine-consistency", "file": "tools/71_State_Machine_Consistency_SKILL.md", "layer": "drift_analysis"},
-    {"id": "jwt-inspector", "file": "tools/72_JWT_Inspector_SKILL.md", "layer": "identity_analysis"},
-    {"id": "device-identity-diff", "file": "tools/73_Device_Identity_Diff_SKILL.md", "layer": "identity_analysis"},
-    {"id": "session-refresh-trace", "file": "tools/74_Session_Refresh_Trace_SKILL.md", "layer": "identity_analysis"},
-    {"id": "billing-ledger-reconciler", "file": "tools/76_Billing_Ledger_Reconciler_SKILL.md", "layer": "billing_analysis"},
-    {"id": "quota-usage-analyzer", "file": "tools/77_Quota_Usage_Analyzer_SKILL.md", "layer": "billing_analysis"},
-    {"id": "freeze-reversal-diagnoser", "file": "tools/78_Freeze_Reversal_Diagnoser_SKILL.md", "layer": "billing_analysis"},
-    {"id": "api-contract-diff", "file": "tools/79_API_Contract_Diff_SKILL.md", "layer": "contract_analysis"},
-    {"id": "network-trace-reviewer", "file": "tools/82_Network_Trace_Reviewer_SKILL.md", "layer": "trace_analysis"},
-    {"id": "ui-surface-audit", "file": "tools/85_UI_Surface_Audit_SKILL.md", "layer": "ux_analysis"},
-    {"id": "console-auth-flow-trace", "file": "tools/88_Console_Auth_Flow_Trace_SKILL.md", "layer": "console_identity_analysis"},
-    {"id": "project-context-drift", "file": "tools/89_Project_Context_Drift_SKILL.md", "layer": "context_analysis"},
-    {"id": "stepup-resume-checker", "file": "tools/90_StepUp_Resume_Checker_SKILL.md", "layer": "context_analysis"},
-    {"id": "worker-identity-stability", "file": "tools/91_Worker_Identity_Stability_SKILL.md", "layer": "runtime_tool"},
-    {"id": "heartbeat-gap-analyzer", "file": "tools/92_Heartbeat_Gap_Analyzer_SKILL.md", "layer": "runtime_tool"},
-    {"id": "test-matrix-builder", "file": "tools/95_Test_Matrix_Builder_SKILL.md", "layer": "validation"},
-    {"id": "regression-checklist", "file": "tools/96_Regression_Checklist_SKILL.md", "layer": "validation"},
-    {"id": "trace-correlation", "file": "tools/98_Trace_Correlation_SKILL.md", "layer": "runtime_tool"},
-    {"id": "compatibility-matrix", "file": "tools/101_Compatibility_Matrix_SKILL.md", "layer": "release_analysis"},
-    {"id": "sop-generator", "file": "tools/106_SOP_Generator_SKILL.md", "layer": "knowledge_synthesis"},
-    {"id": "protocol-field-completeness-checker", "file": "tools/107_Protocol_Field_Completeness_Checker_SKILL.md", "layer": "governance_tool"},
-    {"id": "chain-route-simulator", "file": "tools/108_Chain_Route_Simulator_SKILL.md", "layer": "governance_tool"},
-    {"id": "high-risk-action-guard-checker", "file": "tools/109_High_Risk_Action_Guard_Checker_SKILL.md", "layer": "security_tool"},
-    {"id": "authorization-bypass-path-reviewer", "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md", "layer": "security_tool"},
-    {"id": "bulk-action-safety-reviewer", "file": "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md", "layer": "security_tool"},
-    {"id": "audit-log-consistency-checker", "file": "tools/112_Audit_Log_Consistency_Checker_SKILL.md", "layer": "governance_tool"},
-    {"id": "runtime-incident-replayer", "file": "tools/113_Runtime_Incident_Replayer_SKILL.md", "layer": "runtime_tool"},
-    {"id": "score-decision-engine", "file": "tools/114_Score_Decision_Engine_SKILL.md", "layer": "governance_tool"},
-    {"id": "full-issue-clearance-controller", "file": "tools/115_Full_Issue_Clearance_Controller_SKILL.md", "layer": "governance_tool"},
-    {"id": "document-state-consistency-sentinel", "file": "tools/116_Document_State_Consistency_Sentinel_SKILL.md", "layer": "knowledge_synthesis"}
+    {
+      "id": "business-rule-matrix",
+      "file": "tools/70_Business_Rule_Matrix_SKILL.md",
+      "layer": "truth_analysis",
+      "display_name": "规则矩阵",
+      "capability_tags": [
+        "rule"
+      ],
+      "primary_issue_types": [
+        "rule"
+      ]
+    },
+    {
+      "id": "state-machine-consistency",
+      "file": "tools/71_State_Machine_Consistency_SKILL.md",
+      "layer": "drift_analysis",
+      "display_name": "状态一致性",
+      "capability_tags": [
+        "rule"
+      ],
+      "primary_issue_types": [
+        "rule"
+      ]
+    },
+    {
+      "id": "jwt-inspector",
+      "file": "tools/72_JWT_Inspector_SKILL.md",
+      "layer": "identity_analysis",
+      "display_name": "JWT检查",
+      "capability_tags": [
+        "auth"
+      ],
+      "primary_issue_types": [
+        "auth"
+      ]
+    },
+    {
+      "id": "device-identity-diff",
+      "file": "tools/73_Device_Identity_Diff_SKILL.md",
+      "layer": "identity_analysis",
+      "display_name": "设备身份差异",
+      "capability_tags": [
+        "auth"
+      ],
+      "primary_issue_types": [
+        "auth"
+      ]
+    },
+    {
+      "id": "session-refresh-trace",
+      "file": "tools/74_Session_Refresh_Trace_SKILL.md",
+      "layer": "identity_analysis",
+      "display_name": "会话刷新追踪",
+      "capability_tags": [
+        "auth",
+        "console"
+      ],
+      "primary_issue_types": [
+        "auth"
+      ]
+    },
+    {
+      "id": "billing-ledger-reconciler",
+      "file": "tools/76_Billing_Ledger_Reconciler_SKILL.md",
+      "layer": "billing_analysis",
+      "display_name": "账本对账",
+      "capability_tags": [
+        "billing"
+      ],
+      "primary_issue_types": [
+        "billing"
+      ]
+    },
+    {
+      "id": "quota-usage-analyzer",
+      "file": "tools/77_Quota_Usage_Analyzer_SKILL.md",
+      "layer": "billing_analysis",
+      "display_name": "配额分析",
+      "capability_tags": [
+        "billing"
+      ],
+      "primary_issue_types": [
+        "billing"
+      ]
+    },
+    {
+      "id": "freeze-reversal-diagnoser",
+      "file": "tools/78_Freeze_Reversal_Diagnoser_SKILL.md",
+      "layer": "billing_analysis",
+      "display_name": "冻结诊断",
+      "capability_tags": [
+        "billing"
+      ],
+      "primary_issue_types": [
+        "billing"
+      ]
+    },
+    {
+      "id": "api-contract-diff",
+      "file": "tools/79_API_Contract_Diff_SKILL.md",
+      "layer": "contract_analysis",
+      "display_name": "接口契约差异",
+      "capability_tags": [
+        "frontend"
+      ],
+      "primary_issue_types": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "network-trace-reviewer",
+      "file": "tools/82_Network_Trace_Reviewer_SKILL.md",
+      "layer": "trace_analysis",
+      "display_name": "网络链路审查",
+      "capability_tags": [
+        "frontend",
+        "console"
+      ],
+      "primary_issue_types": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "ui-surface-audit",
+      "file": "tools/85_UI_Surface_Audit_SKILL.md",
+      "layer": "ux_analysis",
+      "display_name": "界面审计",
+      "capability_tags": [
+        "frontend"
+      ],
+      "primary_issue_types": [
+        "frontend"
+      ]
+    },
+    {
+      "id": "console-auth-flow-trace",
+      "file": "tools/88_Console_Auth_Flow_Trace_SKILL.md",
+      "layer": "console_identity_analysis",
+      "display_name": "控制台认证追踪",
+      "capability_tags": [
+        "console",
+        "auth"
+      ],
+      "primary_issue_types": [
+        "console"
+      ]
+    },
+    {
+      "id": "project-context-drift",
+      "file": "tools/89_Project_Context_Drift_SKILL.md",
+      "layer": "context_analysis",
+      "display_name": "上下文漂移检查",
+      "capability_tags": [
+        "console"
+      ],
+      "primary_issue_types": [
+        "console"
+      ]
+    },
+    {
+      "id": "stepup-resume-checker",
+      "file": "tools/90_StepUp_Resume_Checker_SKILL.md",
+      "layer": "context_analysis",
+      "display_name": "Step-Up恢复校验",
+      "capability_tags": [
+        "console",
+        "auth"
+      ],
+      "primary_issue_types": [
+        "console"
+      ]
+    },
+    {
+      "id": "worker-identity-stability",
+      "file": "tools/91_Worker_Identity_Stability_SKILL.md",
+      "layer": "runtime_tool",
+      "display_name": "Worker稳定性检查",
+      "capability_tags": [
+        "worker"
+      ],
+      "primary_issue_types": [
+        "worker"
+      ]
+    },
+    {
+      "id": "heartbeat-gap-analyzer",
+      "file": "tools/92_Heartbeat_Gap_Analyzer_SKILL.md",
+      "layer": "runtime_tool",
+      "display_name": "心跳缺口分析",
+      "capability_tags": [
+        "worker",
+        "sre"
+      ],
+      "primary_issue_types": [
+        "worker"
+      ]
+    },
+    {
+      "id": "test-matrix-builder",
+      "file": "tools/95_Test_Matrix_Builder_SKILL.md",
+      "layer": "validation",
+      "display_name": "测试矩阵",
+      "capability_tags": [
+        "qa"
+      ],
+      "primary_issue_types": [
+        "qa"
+      ]
+    },
+    {
+      "id": "regression-checklist",
+      "file": "tools/96_Regression_Checklist_SKILL.md",
+      "layer": "validation",
+      "display_name": "回归清单",
+      "capability_tags": [
+        "qa"
+      ],
+      "primary_issue_types": [
+        "qa"
+      ]
+    },
+    {
+      "id": "trace-correlation",
+      "file": "tools/98_Trace_Correlation_SKILL.md",
+      "layer": "runtime_tool",
+      "display_name": "链路关联分析",
+      "capability_tags": [
+        "worker",
+        "sre",
+        "console"
+      ],
+      "primary_issue_types": [
+        "worker",
+        "sre"
+      ]
+    },
+    {
+      "id": "compatibility-matrix",
+      "file": "tools/101_Compatibility_Matrix_SKILL.md",
+      "layer": "release_analysis",
+      "display_name": "兼容矩阵",
+      "capability_tags": [
+        "release"
+      ],
+      "primary_issue_types": [
+        "release"
+      ]
+    },
+    {
+      "id": "sop-generator",
+      "file": "tools/106_SOP_Generator_SKILL.md",
+      "layer": "knowledge_synthesis",
+      "display_name": "SOP生成",
+      "capability_tags": [
+        "docs"
+      ],
+      "primary_issue_types": [
+        "docs"
+      ]
+    },
+    {
+      "id": "protocol-field-completeness-checker",
+      "file": "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+      "layer": "governance_tool",
+      "display_name": "协议字段校验",
+      "capability_tags": [
+        "docs"
+      ],
+      "primary_issue_types": [
+        "docs"
+      ]
+    },
+    {
+      "id": "chain-route-simulator",
+      "file": "tools/108_Chain_Route_Simulator_SKILL.md",
+      "layer": "governance_tool",
+      "display_name": "链路模拟",
+      "capability_tags": [
+        "mixed"
+      ],
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "high-risk-action-guard-checker",
+      "file": "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+      "layer": "security_tool",
+      "display_name": "高风险门禁",
+      "capability_tags": [
+        "security",
+        "release"
+      ],
+      "primary_issue_types": [
+        "security"
+      ]
+    },
+    {
+      "id": "authorization-bypass-path-reviewer",
+      "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+      "layer": "security_tool",
+      "display_name": "授权绕过审查",
+      "capability_tags": [
+        "security",
+        "auth"
+      ],
+      "primary_issue_types": [
+        "auth",
+        "security"
+      ]
+    },
+    {
+      "id": "bulk-action-safety-reviewer",
+      "file": "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md",
+      "layer": "security_tool",
+      "display_name": "批量动作审查",
+      "capability_tags": [
+        "security"
+      ],
+      "primary_issue_types": [
+        "security"
+      ]
+    },
+    {
+      "id": "audit-log-consistency-checker",
+      "file": "tools/112_Audit_Log_Consistency_Checker_SKILL.md",
+      "layer": "governance_tool",
+      "display_name": "审计日志校验",
+      "capability_tags": [
+        "security",
+        "release"
+      ],
+      "primary_issue_types": [
+        "security"
+      ]
+    },
+    {
+      "id": "runtime-incident-replayer",
+      "file": "tools/113_Runtime_Incident_Replayer_SKILL.md",
+      "layer": "runtime_tool",
+      "display_name": "运行事故回放",
+      "capability_tags": [
+        "worker",
+        "sre"
+      ],
+      "primary_issue_types": [
+        "sre"
+      ]
+    },
+    {
+      "id": "score-decision-engine",
+      "file": "tools/114_Score_Decision_Engine_SKILL.md",
+      "layer": "governance_tool",
+      "display_name": "评分决策引擎",
+      "capability_tags": [
+        "mixed",
+        "sre"
+      ],
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "full-issue-clearance-controller",
+      "file": "tools/115_Full_Issue_Clearance_Controller_SKILL.md",
+      "layer": "governance_tool",
+      "display_name": "问题清零控制器",
+      "capability_tags": [
+        "mixed"
+      ],
+      "primary_issue_types": [
+        "mixed"
+      ]
+    },
+    {
+      "id": "document-state-consistency-sentinel",
+      "file": "tools/116_Document_State_Consistency_Sentinel_SKILL.md",
+      "layer": "knowledge_synthesis",
+      "display_name": "文档一致性哨兵",
+      "capability_tags": [
+        "docs",
+        "rule"
+      ],
+      "primary_issue_types": [
+        "docs"
+      ]
+    }
   ],
   "governance_docs": [
-    {"id": "formal-review-report", "file": "docs/正式发布版全局审查报告.md", "kind": "historical_baseline"},
-    {"id": "release-loading-guide", "file": "docs/发布说明与加载方式.md", "kind": "operator_guide"},
-    {"id": "role-invocation-table", "file": "docs/角色调用关系总表.md", "kind": "role_governance"},
-    {"id": "role-tool-matrix", "file": "docs/角色-工具矩阵总表.md", "kind": "role_tool_governance"},
-    {"id": "role-boundary-ledger", "file": "docs/角色边界验证台账.md", "kind": "role_boundary_validation"},
-    {"id": "tool-invocation-table", "file": "docs/工具调用关系总表.md", "kind": "tool_governance"},
-    {"id": "automation-action-table", "file": "docs/HGS_自动化联动动作总表（正式版）.md", "kind": "automation_governance"},
-    {"id": "automation-score-review", "file": "docs/HGS_自动化联动装配后复核（评分驱动版）.md", "kind": "automation_audit"},
-    {"id": "clearance-review", "file": "docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md", "kind": "clearance_audit"},
-    {"id": "global-score-report", "file": "docs/HGS_全局检查与清理评分报告.md", "kind": "global_audit"},
-    {"id": "deduction-ledger", "file": "docs/HGS_全局扣分点问题清单与派单台账.md", "kind": "issue_dispatch_ledger"}
+    {
+      "id": "formal-review-report",
+      "file": "docs/正式发布版全局审查报告.md",
+      "kind": "historical_baseline"
+    },
+    {
+      "id": "release-loading-guide",
+      "file": "docs/发布说明与加载方式.md",
+      "kind": "operator_guide"
+    },
+    {
+      "id": "role-invocation-table",
+      "file": "docs/角色调用关系总表.md",
+      "kind": "role_governance"
+    },
+    {
+      "id": "role-tool-matrix",
+      "file": "docs/角色-工具矩阵总表.md",
+      "kind": "role_tool_governance"
+    },
+    {
+      "id": "role-boundary-ledger",
+      "file": "docs/角色边界验证台账.md",
+      "kind": "role_boundary_validation"
+    },
+    {
+      "id": "tool-invocation-table",
+      "file": "docs/工具调用关系总表.md",
+      "kind": "tool_governance"
+    },
+    {
+      "id": "automation-action-table",
+      "file": "docs/HGS_自动化联动动作总表（正式版）.md",
+      "kind": "automation_governance"
+    },
+    {
+      "id": "automation-score-review",
+      "file": "docs/HGS_自动化联动装配后复核（评分驱动版）.md",
+      "kind": "automation_audit"
+    },
+    {
+      "id": "clearance-review",
+      "file": "docs/HGS_全量问题发现—全量派单—持续回流直到清零协议_装配后复核.md",
+      "kind": "clearance_audit"
+    },
+    {
+      "id": "global-score-report",
+      "file": "docs/HGS_全局检查与清理评分报告.md",
+      "kind": "global_audit"
+    },
+    {
+      "id": "deduction-ledger",
+      "file": "docs/HGS_全局扣分点问题清单与派单台账.md",
+      "kind": "issue_dispatch_ledger"
+    }
   ],
   "risk_gates": [
     "irreversible_delete_or_overwrite",
@@ -203,10 +905,57 @@
     "action_protocol": "protocols/61_Automation_Orchestration_Protocol.md",
     "clearance_protocol": "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md",
     "active_actions": [
-      "create_issue_stub","infer_owner_candidates","infer_required_tools","compute_owner_confidence","compute_route_stability_score","route_dry_run","provisional_boundary_build","owner_self_resolve_attempt","peer_role_consult","split_subissues","fallback_to_p8_enhanced","p9_reframe_and_redispatch","generate_exec_plan","auto_reroute_on_new_truth","high_risk_guard_gate","auth_bypass_guard_gate","runtime_stability_gate","register_all_findings","dispatch_all_registered_issues","execute_by_owner","validate_and_experience_by_issue","rereview_all_open_issues","register_new_findings_if_any","continue_loop_until_open_issue_zero","must_run_tool_gate","autofill_exec_report","generate_validation_bundle","experience_replay","compute_tool_coverage_score","compute_evidence_completeness_score","tool_result_landing_check","compute_reopen_risk_score","auto_reopen_on_drift","auto_docs_sink","compute_closeout_readiness_score","closeout_candidate_check"
+      "create_issue_stub",
+      "infer_owner_candidates",
+      "infer_required_tools",
+      "compute_owner_confidence",
+      "compute_route_stability_score",
+      "route_dry_run",
+      "provisional_boundary_build",
+      "owner_self_resolve_attempt",
+      "peer_role_consult",
+      "split_subissues",
+      "fallback_to_p8_enhanced",
+      "p9_reframe_and_redispatch",
+      "generate_exec_plan",
+      "auto_reroute_on_new_truth",
+      "high_risk_guard_gate",
+      "auth_bypass_guard_gate",
+      "runtime_stability_gate",
+      "register_all_findings",
+      "dispatch_all_registered_issues",
+      "execute_by_owner",
+      "validate_and_experience_by_issue",
+      "rereview_all_open_issues",
+      "register_new_findings_if_any",
+      "continue_loop_until_open_issue_zero",
+      "must_run_tool_gate",
+      "autofill_exec_report",
+      "generate_validation_bundle",
+      "experience_replay",
+      "compute_tool_coverage_score",
+      "compute_evidence_completeness_score",
+      "tool_result_landing_check",
+      "compute_reopen_risk_score",
+      "auto_reopen_on_drift",
+      "auto_docs_sink",
+      "compute_closeout_readiness_score",
+      "closeout_candidate_check"
     ],
     "active_action_batches": [
-      "intake_normalization","score_driven_routing","self_resolution_and_internal_deliberation","redispatch_and_fallback","risk_guarding_and_runtime_gating","full_issue_clearance_actions","tool_gating","execution_reporting","validation_generation","experience_replay_and_reopen","docs_sink_and_closeout","score_driven_decisioning","full_issue_clearance_loop"
+      "intake_normalization",
+      "score_driven_routing",
+      "self_resolution_and_internal_deliberation",
+      "redispatch_and_fallback",
+      "risk_guarding_and_runtime_gating",
+      "full_issue_clearance_actions",
+      "tool_gating",
+      "execution_reporting",
+      "validation_generation",
+      "experience_replay_and_reopen",
+      "docs_sink_and_closeout",
+      "score_driven_decisioning",
+      "full_issue_clearance_loop"
     ],
     "thresholds": {
       "owner_confidence_min_for_direct_dispatch": 70,
@@ -217,10 +966,25 @@
       "reopen_risk_high": 60
     },
     "score_decision_rules": {
-      "dispatch": {"require_owner_confidence_gte": 70,"require_route_stability_gte": 65,"otherwise": "route_dry_run_or_p9_reframe_and_redispatch"},
-      "review": {"require_tool_coverage_gte": 85,"require_evidence_completeness_gte": 80,"otherwise": "tool_missing_or_evidence_incomplete"},
-      "reopen": {"when_reopen_risk_gte": 60,"action": "auto_reopen_on_drift"},
-      "done": {"require_closeout_readiness_gte": 85,"require_reopen_risk_lt": 60,"otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"}
+      "dispatch": {
+        "require_owner_confidence_gte": 70,
+        "require_route_stability_gte": 65,
+        "otherwise": "route_dry_run_or_p9_reframe_and_redispatch"
+      },
+      "review": {
+        "require_tool_coverage_gte": 85,
+        "require_evidence_completeness_gte": 80,
+        "otherwise": "tool_missing_or_evidence_incomplete"
+      },
+      "reopen": {
+        "when_reopen_risk_gte": 60,
+        "action": "auto_reopen_on_drift"
+      },
+      "done": {
+        "require_closeout_readiness_gte": 85,
+        "require_reopen_risk_lt": 60,
+        "otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"
+      }
     },
     "full_issue_clearance_policy": {
       "require_register_all_findings": true,
@@ -230,8 +994,26 @@
       "require_validation_or_experience_for_each_completed_issue": true,
       "require_rereview_new_findings_to_register_and_dispatch": true,
       "require_continue_loop_until_open_issue_zero": true,
-      "closeout_condition": {"open_issue_count_equals": 0,"review_pending_count_equals": 0,"verification_pending_count_equals": 0,"experience_pending_count_equals": 0,"docs_sink_pending_count_equals": 0},
-      "default_behavior_on_new_findings": "register_dispatch_and_continue_loop"
+      "closeout_condition": {
+        "open_issue_count_equals": 0,
+        "review_pending_count_equals": 0,
+        "verification_pending_count_equals": 0,
+        "experience_pending_count_equals": 0,
+        "docs_sink_pending_count_equals": 0
+      },
+      "default_behavior_on_new_findings": "register_dispatch_and_continue_loop",
+      "continuous_dispatch_required": true,
+      "redispatch_after_each_failed_review": true,
+      "redispatch_after_new_findings": true,
+      "continuous_rereview_required": true,
+      "review_loop_until_ticket_reaches_terminal_state": true,
+      "parked_ticket_must_have_reason": true,
+      "parked_ticket_must_have_reactivation_condition": true,
+      "parked_ticket_not_equal_cleared": true,
+      "mainline_ticket_zero_required": true,
+      "parked_ticket_registry_required": true,
+      "closeout_forbidden_if_untracked_parked_tickets_exist": true,
+      "clearance_control_is_primary_theme": true
     },
     "hard_gates": {
       "require_issue_stub_before_dispatch": true,
@@ -257,9 +1039,22 @@
       "require_full_issue_inventory_before_done": true,
       "require_open_issue_zero_before_done": true
     },
-    "internal_escalation_chain": ["current_owner_self_resolution","peer_role_consultation_or_split_dispatch","p9_coordination_and_reframing","p10_strategic_reroute","user_escalation_only_if_internal_options_exhausted"],
+    "internal_escalation_chain": [
+      "current_owner_self_resolution",
+      "peer_role_consultation_or_split_dispatch",
+      "p9_coordination_and_reframing",
+      "p10_strategic_reroute",
+      "user_escalation_only_if_internal_options_exhausted"
+    ],
     "question_policy": "forbid_direct_user_confirmation_before_internal_exhaustion",
-    "ask_user_only_when": ["irreversible_delete_or_overwrite","production_data_destructive_change","real_external_send_or_real_user_action_required","requires_user_business_tradeoff_after_internal_options_exhausted","legal_security_financial_boundary_exceeded","strategy_conflict_after_p10_review"],
+    "ask_user_only_when": [
+      "irreversible_delete_or_overwrite",
+      "production_data_destructive_change",
+      "real_external_send_or_real_user_action_required",
+      "requires_user_business_tradeoff_after_internal_options_exhausted",
+      "legal_security_financial_boundary_exceeded",
+      "strategy_conflict_after_p10_review"
+    ],
     "soft_block_resolution": {
       "source_of_truth_partially_unclear": "use_current_batch_as_primary_source_and_log_assumption_then_continue",
       "boundary_not_precise_enough": "create_provisional_boundary_and_continue_non_destructive_work",
@@ -271,6 +1066,793 @@
       "closeout_not_ready": "compute_closeout_readiness_score_then_auto_docs_sink_or_reopen_then_recheck",
       "global_review_finds_many_issues": "register_all_findings_then_full_dispatch_then_continue_clearance_loop",
       "document_state_is_stale_or_misaligned": "run_document_state_consistency_sentinel_then_sync_docs_and_ledgers"
+    },
+    "runtime_route_policy": {
+      "owner_by_issue_type": {
+        "rule": "roles/11_Product_Business_Rules_Owner_SKILL.md",
+        "auth": "roles/12_Auth_Identity_Owner_SKILL.md",
+        "billing": "roles/13_Billing_Entitlement_Owner_SKILL.md",
+        "release": "roles/14_Release_Config_Owner_SKILL.md",
+        "security": "roles/15_Security_Risk_Owner_SKILL.md",
+        "agent": "roles/16_Agent_Operations_Owner_SKILL.md",
+        "enduser": "roles/17_EndUser_Support_Owner_SKILL.md",
+        "control_plane": "roles/18_Control_Plane_Owner_SKILL.md",
+        "execution_plane": "roles/19_Execution_Plane_Owner_SKILL.md",
+        "frontend": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+        "console": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+        "worker": "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+        "qa": "roles/37_QA_Validation_Owner_SKILL.md",
+        "sre": "roles/38_SRE_Observability_Owner_SKILL.md",
+        "docs": "roles/39_Knowledge_Documentation_Owner_SKILL.md",
+        "mixed": "roles/20_P9_Principal_SKILL.md"
+      },
+      "tools_by_issue_type": {
+        "rule": [
+          "tools/70_Business_Rule_Matrix_SKILL.md",
+          "tools/71_State_Machine_Consistency_SKILL.md"
+        ],
+        "auth": [
+          "tools/72_JWT_Inspector_SKILL.md",
+          "tools/74_Session_Refresh_Trace_SKILL.md",
+          "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
+        ],
+        "billing": [
+          "tools/76_Billing_Ledger_Reconciler_SKILL.md",
+          "tools/77_Quota_Usage_Analyzer_SKILL.md",
+          "tools/78_Freeze_Reversal_Diagnoser_SKILL.md"
+        ],
+        "frontend": [
+          "tools/79_API_Contract_Diff_SKILL.md",
+          "tools/82_Network_Trace_Reviewer_SKILL.md",
+          "tools/85_UI_Surface_Audit_SKILL.md"
+        ],
+        "console": [
+          "tools/88_Console_Auth_Flow_Trace_SKILL.md",
+          "tools/89_Project_Context_Drift_SKILL.md",
+          "tools/90_StepUp_Resume_Checker_SKILL.md"
+        ],
+        "worker": [
+          "tools/91_Worker_Identity_Stability_SKILL.md",
+          "tools/92_Heartbeat_Gap_Analyzer_SKILL.md",
+          "tools/98_Trace_Correlation_SKILL.md"
+        ],
+        "release": [
+          "tools/101_Compatibility_Matrix_SKILL.md",
+          "tools/109_High_Risk_Action_Guard_Checker_SKILL.md"
+        ],
+        "qa": [
+          "tools/95_Test_Matrix_Builder_SKILL.md",
+          "tools/96_Regression_Checklist_SKILL.md"
+        ],
+        "docs": [
+          "tools/106_SOP_Generator_SKILL.md",
+          "tools/107_Protocol_Field_Completeness_Checker_SKILL.md"
+        ],
+        "mixed": [
+          "tools/108_Chain_Route_Simulator_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md",
+          "tools/115_Full_Issue_Clearance_Controller_SKILL.md"
+        ],
+        "security": [
+          "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+          "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+          "tools/112_Audit_Log_Consistency_Checker_SKILL.md"
+        ],
+        "agent": [
+          "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+          "tools/108_Chain_Route_Simulator_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md"
+        ],
+        "enduser": [
+          "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+          "tools/108_Chain_Route_Simulator_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md"
+        ],
+        "control_plane": [
+          "tools/108_Chain_Route_Simulator_SKILL.md",
+          "tools/101_Compatibility_Matrix_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md"
+        ],
+        "execution_plane": [
+          "tools/108_Chain_Route_Simulator_SKILL.md",
+          "tools/101_Compatibility_Matrix_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md"
+        ],
+        "sre": [
+          "tools/98_Trace_Correlation_SKILL.md",
+          "tools/113_Runtime_Incident_Replayer_SKILL.md",
+          "tools/114_Score_Decision_Engine_SKILL.md"
+        ]
+      },
+      "tools_by_risk_flag": {
+        "high_risk_action": [
+          "tools/109_High_Risk_Action_Guard_Checker_SKILL.md"
+        ],
+        "destructive_change": [
+          "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+          "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md"
+        ],
+        "auth_bypass": [
+          "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
+        ],
+        "scope_risk": [
+          "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
+        ],
+        "runtime_stability": [
+          "tools/113_Runtime_Incident_Replayer_SKILL.md",
+          "tools/98_Trace_Correlation_SKILL.md"
+        ],
+        "incident": [
+          "tools/113_Runtime_Incident_Replayer_SKILL.md",
+          "tools/98_Trace_Correlation_SKILL.md"
+        ],
+        "bulk_action": [
+          "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md",
+          "tools/112_Audit_Log_Consistency_Checker_SKILL.md"
+        ],
+        "audit_required": [
+          "tools/112_Audit_Log_Consistency_Checker_SKILL.md"
+        ]
+      },
+      "always_include_tools": [
+        "tools/114_Score_Decision_Engine_SKILL.md",
+        "tools/115_Full_Issue_Clearance_Controller_SKILL.md",
+        "tools/107_Protocol_Field_Completeness_Checker_SKILL.md"
+      ],
+      "required_input_fields": [
+        "issue_type",
+        "title",
+        "current_question",
+        "source_of_truth",
+        "critical_paths",
+        "verification_target",
+        "acceptance_criteria",
+        "max_change_boundary",
+        "risk_flags"
+      ],
+      "recommended_input_fields": [
+        "risk_flags",
+        "secondary_findings",
+        "reopened_findings"
+      ],
+      "supported_issue_types": [
+        "rule",
+        "auth",
+        "billing",
+        "release",
+        "security",
+        "agent",
+        "enduser",
+        "control_plane",
+        "execution_plane",
+        "frontend",
+        "console",
+        "worker",
+        "qa",
+        "sre",
+        "docs",
+        "mixed"
+      ],
+      "inferable_input_fields": [
+        "title",
+        "source_of_truth",
+        "verification_target",
+        "max_change_boundary",
+        "risk_flags"
+      ],
+      "minimum_user_input_fields": [
+        "issue_type",
+        "current_question"
+      ],
+      "tool_execution_simulation_policy": {
+        "enable_simulation": true,
+        "result_fields": [
+          "tool",
+          "status",
+          "angle",
+          "evidence_used",
+          "findings",
+          "confidence"
+        ],
+        "minimum_tool_result_count_before_review": 2
+      },
+      "issue_type_inference_keywords": {
+        "auth": [
+          "auth",
+          "login",
+          "reauth",
+          "step-up",
+          "token",
+          "jwt",
+          "session",
+          "identity"
+        ],
+        "billing": [
+          "billing",
+          "quota",
+          "entitlement",
+          "slot",
+          "occupancy",
+          "subscription",
+          "freeze"
+        ],
+        "release": [
+          "release",
+          "config",
+          "compatibility",
+          "version",
+          "rollout"
+        ],
+        "frontend": [
+          "frontend",
+          "ui",
+          "surface",
+          "browser",
+          "render",
+          "interaction"
+        ],
+        "console": [
+          "console",
+          "management page",
+          "protected action",
+          "project context",
+          "context switch"
+        ],
+        "worker": [
+          "worker",
+          "heartbeat",
+          "runtime",
+          "flap",
+          "telemetry",
+          "incident"
+        ],
+        "rule": [
+          "rule",
+          "state",
+          "status naming",
+          "lifecycle",
+          "documented semantics"
+        ],
+        "security": [
+          "security",
+          "audit",
+          "bypass",
+          "scope",
+          "protected action"
+        ],
+        "mixed": [
+          "cross-cutting",
+          "multiple systems",
+          "mixed"
+        ]
+      },
+      "risk_flag_inference_keywords": {
+        "high_risk_action": [
+          "protected action",
+          "high-risk",
+          "dangerous action",
+          "critical action"
+        ],
+        "scope_risk": [
+          "wrong target",
+          "wrong object",
+          "wrong project",
+          "context drift"
+        ],
+        "auth_bypass": [
+          "bypass",
+          "skip auth",
+          "unauthorized",
+          "auth bypass"
+        ],
+        "runtime_stability": [
+          "flap",
+          "unstable",
+          "heartbeat gap",
+          "runtime issue"
+        ],
+        "incident": [
+          "incident",
+          "outage",
+          "sev",
+          "degradation"
+        ],
+        "audit_required": [
+          "audit trail",
+          "audit log",
+          "traceability"
+        ],
+        "bulk_action": [
+          "bulk",
+          "mass update",
+          "batch action"
+        ]
+      },
+      "simulation_quality_policy": {
+        "minimum_simulation_confidence_before_review": 0.3,
+        "escalate_findings_to_route_conflicts": [
+          "auth_scope_conflict",
+          "governance_conflict"
+        ],
+        "retain_as_findings_only": [
+          "context_or_state_drift_signal",
+          "runtime_replay_or_trace_needed",
+          "high_risk_guard_required"
+        ]
+      },
+      "p8_executor_by_issue_type": {
+        "rule": "roles/30_P8_PUA_Enhanced_SKILL.md",
+        "auth": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+        "billing": "roles/31_P8_Backend_PUA_SKILL.md",
+        "release": "roles/31_P8_Backend_PUA_SKILL.md",
+        "security": "roles/30_P8_PUA_Enhanced_SKILL.md",
+        "agent": "roles/35_P8_Agent_PUA_SKILL.md",
+        "enduser": "roles/36_P8_EndUser_PUA_SKILL.md",
+        "control_plane": "roles/31_P8_Backend_PUA_SKILL.md",
+        "execution_plane": "roles/31_P8_Backend_PUA_SKILL.md",
+        "frontend": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
+        "console": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
+        "worker": "roles/34_P8_LanrenJingling_PUA_SKILL.md",
+        "qa": "roles/37_QA_Validation_Owner_SKILL.md",
+        "sre": "roles/38_SRE_Observability_Owner_SKILL.md",
+        "docs": "roles/39_Knowledge_Documentation_Owner_SKILL.md",
+        "mixed": "roles/30_P8_PUA_Enhanced_SKILL.md"
+      },
+      "display_actor_policy": {
+        "response_header": "全自动化链路Skill：已开启",
+        "current_work_display_required": true,
+        "actor_action_trace_required": true,
+        "use_skill_display_name_first": true
+      },
+      "creativity_amplification_policy": {
+        "require_min_alternative_hypotheses": 3,
+        "require_min_counterfactual_challenges": 1,
+        "require_blue_team_challenge": true,
+        "require_act_before_asking_summary": true,
+        "mandatory_checklist": [
+          "error_and_signal_review",
+          "environment_and_context_review",
+          "dependency_and_contract_review",
+          "alternative_path_search",
+          "documentation_and_history_review",
+          "rollback_and_safety_review",
+          "root_cause_and_verification_review"
+        ],
+        "exploration_prompts": [
+          "至少提出3条可行解释，不得只保留单一路径",
+          "至少挑战当前主假设1次，说明如果主假设错误，最可能错在哪",
+          "向用户追问前，先给出已经完成的内部探索与仍缺的证据"
+        ],
+        "escalation_levels": {
+          "L0": "正常探索",
+          "L1": "增加替代路径",
+          "L2": "强制补充3条假设与1次反向挑战",
+          "L3": "执行7项检查清单并记录未完成项",
+          "L4": "连续空转或高风险时进入绝境模式并要求P9/P10复盘"
+        },
+        "loop_control": {
+          "max_rounds": 30,
+          "abort_signals": [
+            "legal_boundary",
+            "security_boundary",
+            "financial_boundary",
+            "irreversible_delete"
+          ],
+          "pause_signals": [
+            "user_choice_required",
+            "external_approval_required"
+          ]
+        }
+      },
+      "route_policy_maintenance_policy": {
+        "auto_generate_candidate_policy": true,
+        "candidate_generation_sources": [
+          "roles_catalog",
+          "tools_catalog",
+          "examples_catalog"
+        ],
+        "require_drift_check_against_generated_policy": true,
+        "maximum_allowed_unreviewed_route_drift_items": 0,
+        "issue_type_tool_cluster_generation_rule": "topic_overlap",
+        "issue_type_owner_generation_rule": "owner_topic_match",
+        "allow_curated_policy_override": true,
+        "strict_mode_requires_override_review_metadata": true,
+        "override_pass_status": "pass_with_curated_override",
+        "reviewed_by": "P10终审官",
+        "rationale": "仅允许少量人工精修覆盖自动候选，且必须显式复审",
+        "approved_at": "2026-04-02T00:00:00+00:00"
+      },
+      "exploration_mode_policy": {
+        "default_mode": "tri_track",
+        "modes": [
+          "single_track",
+          "dual_track",
+          "tri_track"
+        ],
+        "main_track_name": "主线解释轨",
+        "challenge_track_name": "反主线挑战轨",
+        "experience_reverse_track_name": "体验逆向轨",
+        "track_winner_selection_policy": "score_then_risk_then_user_impact",
+        "retain_losing_track_as_reopen_signal": true
+      },
+      "opportunity_discovery_policy": {
+        "enabled": true,
+        "minimum_score_to_show": 70,
+        "mainline_preservation_policy": "do_not_replace_main_request_without_review",
+        "show_top_opportunity_only_for_user_view": true
+      },
+      "role_disagreement_policy": {
+        "enabled": true,
+        "show_when_real_divergence_exists": true,
+        "retain_dissenting_view_for_rereview": true
+      }
+    },
+    "scoring_axes_policy": {
+      "enabled": true,
+      "axis_weights": {
+        "exploration_breadth": 0.16,
+        "counterfactual_rigor": 0.12,
+        "act_before_asking_rigor": 0.12,
+        "convergence_quality": 0.16,
+        "execution_readiness": 0.18,
+        "user_fit": 0.1,
+        "result_adequacy": 0.16
+      },
+      "minimum_axis_scores": {
+        "exploration_breadth": 72,
+        "counterfactual_rigor": 70,
+        "act_before_asking_rigor": 72,
+        "convergence_quality": 75,
+        "execution_readiness": 82,
+        "user_fit": 68,
+        "result_adequacy": 78
+      },
+      "minimum_overall_quality_score_for_confident_result": 84,
+      "minimum_overall_quality_score_for_publish_ready_skill": 88,
+      "axis_display_order": [
+        "exploration_breadth",
+        "counterfactual_rigor",
+        "act_before_asking_rigor",
+        "convergence_quality",
+        "execution_readiness",
+        "user_fit",
+        "result_adequacy"
+      ]
+    },
+    "semantic_alignment_policy": {
+      "require_full_text_semantic_scan": true,
+      "minimum_semantic_coverage_per_issue_type": 1,
+      "require_example_for_every_supported_issue_type": true,
+      "semantic_source_buckets": [
+        "roles",
+        "tools",
+        "protocols",
+        "examples"
+      ]
+    },
+    "experience_memory_policy": {
+      "enabled": true,
+      "mode": "dual_track",
+      "principle": "experience_is_bias_not_verdict",
+      "support_track_name": "经验支持轨",
+      "challenge_track_name": "经验挑战轨",
+      "states": [
+        "support",
+        "challenge",
+        "invalidate"
+      ],
+      "auto_bias_downgrade_enabled": true,
+      "auto_freeze_suggestion_enabled": true,
+      "auto_retire_suggestion_enabled": true,
+      "promotion_requires_p10_review": true,
+      "retirement_requires_p10_review": true,
+      "human_review_required_for_high_risk_domain": true,
+      "high_risk_domains": [
+        "auth",
+        "billing",
+        "security",
+        "release",
+        "mixed"
+      ],
+      "experience_bias_max_influence": 12,
+      "candidate_experience_patterns": [
+        {
+          "id": "console-context-drift",
+          "issue_types": [
+            "console",
+            "frontend",
+            "mixed"
+          ],
+          "risk_flags": [
+            "scope_risk",
+            "high_risk_action"
+          ],
+          "keywords": [
+            "context",
+            "project",
+            "step-up",
+            "reauth",
+            "resume",
+            "target"
+          ],
+          "bias_hint": "先检查上下文恢复、目标对象对齐与高风险动作恢复链",
+          "valid_for_scope": "console_runtime_and_context_resume",
+          "introduced_in_version": "formal-2026-03-31-int11"
+        },
+        {
+          "id": "auth-refresh-mismatch",
+          "issue_types": [
+            "auth",
+            "security",
+            "mixed"
+          ],
+          "risk_flags": [
+            "auth_bypass",
+            "scope_risk"
+          ],
+          "keywords": [
+            "token",
+            "jwt",
+            "refresh",
+            "session",
+            "step-up",
+            "reauth",
+            "scope"
+          ],
+          "bias_hint": "优先检查刷新链、scope 继承与授权绕过路径",
+          "valid_for_scope": "auth_refresh_and_scope",
+          "introduced_in_version": "formal-2026-03-31-int11"
+        },
+        {
+          "id": "worker-heartbeat-instability",
+          "issue_types": [
+            "worker",
+            "execution_plane",
+            "sre"
+          ],
+          "risk_flags": [
+            "runtime_stability",
+            "incident"
+          ],
+          "keywords": [
+            "worker",
+            "heartbeat",
+            "offline",
+            "online",
+            "incident",
+            "identity"
+          ],
+          "bias_hint": "优先检查身份稳定性、心跳缺口与运行时事故时间线",
+          "valid_for_scope": "worker_runtime_observability",
+          "introduced_in_version": "formal-2026-03-31-int11"
+        }
+      ],
+      "approved_experience_patterns": [
+        {
+          "id": "quota-occupancy-desync",
+          "issue_types": [
+            "billing",
+            "enduser",
+            "mixed"
+          ],
+          "risk_flags": [
+            "audit_required"
+          ],
+          "keywords": [
+            "quota",
+            "occupancy",
+            "slot",
+            "device",
+            "billing"
+          ],
+          "bias_hint": "优先核对账本、占用记录与可用配额是否一致",
+          "valid_for_scope": "billing_quota_and_occupancy",
+          "introduced_in_version": "formal-2026-03-31-int11"
+        },
+        {
+          "id": "ui-api-contract-drift",
+          "issue_types": [
+            "frontend",
+            "console",
+            "enduser"
+          ],
+          "risk_flags": [],
+          "keywords": [
+            "ui",
+            "api",
+            "field",
+            "status",
+            "display",
+            "contract"
+          ],
+          "bias_hint": "优先核对 UI 字段、API 契约与显示语义一致性",
+          "valid_for_scope": "ui_api_semantic_alignment",
+          "introduced_in_version": "formal-2026-03-31-int11"
+        }
+      ],
+      "failure_mode_catalog": [
+        {
+          "id": "premature-route-convergence",
+          "description": "过早收敛到第一条 issue_type/owner 主线，遗漏对立解释",
+          "trigger_signals": [
+            "single_hypothesis_only",
+            "route_conflicts_present"
+          ]
+        },
+        {
+          "id": "stale-experience-bias",
+          "description": "旧经验继续高强度影响新版本问题判断",
+          "trigger_signals": [
+            "version_shift_detected",
+            "experience_challenge_win"
+          ]
+        }
+      ]
+    },
+    "issue_scaling_policy": {
+      "max_open_issues_before_wave_dispatch": 12,
+      "max_subissues_per_wave": 6,
+      "require_wave_planning_when_issue_inventory_exceeds_threshold": true,
+      "wave_priority_order": [
+        "high_risk",
+        "user_visible",
+        "root_cause",
+        "dependent_followups"
+      ],
+      "require_pause_and_compact_context_every_n_issues": 5,
+      "require_summary_handoff_between_waves": true,
+      "fallback_mode_when_context_pressure_high": "wave_dispatch_and_compact_state",
+      "forbid_full_parallel_execution_when_context_pressure_high": true
+    },
+    "package_cleanliness_policy": {
+      "archive_scope_name": "clean_release_archive",
+      "runtime_scope_name": "runtime_workspace_after_extraction_or_execution",
+      "require_dual_cleanliness_checks": true,
+      "clean_archive_forbidden_paths": [
+        ".hgs",
+        "hgs",
+        ".pytest_cache",
+        "__pycache__",
+        "*.pyc"
+      ],
+      "runtime_workspace_forbidden_paths": [
+        ".hgs",
+        "hgs",
+        ".pytest_cache",
+        "__pycache__",
+        "*.pyc"
+      ],
+      "required_dotfiles": [
+        ".gitignore",
+        ".gitattributes",
+        ".github/workflows/release-runtime-acceptance.yml"
+      ],
+      "require_single_artifact_root": true,
+      "single_artifact_root": ".hgs",
+      "clean_archive_must_be_verified_before_release": true,
+      "runtime_workspace_must_be_reported_separately": true,
+      "enforce_clean_package_before_release": true
+    },
+    "adversarial_review_policy": {
+      "enabled": true,
+      "checklists": [
+        "fake_green_pass",
+        "override_swallowing",
+        "empty_display_fields",
+        "artifact_directory_duplication",
+        "heuristic_confidence_overstatement",
+        "dotfile_loss"
+      ],
+      "require_hostile_review_before_release": true
+    },
+    "conversation_display_policy": {
+      "status_header_exact_text": "自动化链路：已开启",
+      "display_mode_default": "forensic",
+      "display_mode_command_keywords": {
+        "compact": [
+          "显示：简版",
+          "display:compact"
+        ],
+        "standard": [
+          "显示：标准",
+          "display:standard"
+        ],
+        "forensic": [
+          "显示：全审计",
+          "display:forensic"
+        ],
+        "off": [
+          "显示：关闭",
+          "display:off"
+        ]
+      },
+      "forensic_fields_required": [
+        "ticket_id",
+        "priority_rank",
+        "problem_statement",
+        "blocking_reasons",
+        "linked_files_to_modify",
+        "linked_records_to_update",
+        "dispatch_target_skill"
+      ],
+      "show_stage_label": true,
+      "show_ticket_binding": true,
+      "show_root_cause_hints": true,
+      "display_mode_exact_text": "全审计",
+      "display_mode_label_map": {
+        "off": "关闭",
+        "compact": "简版",
+        "standard": "标准",
+        "forensic": "全审计"
+      }
+    }
+  },
+  "display_name_registry": {
+    "roles": {
+      "roles/10_P10_CTO_SKILL.md": "P10终审官",
+      "roles/11_Product_Business_Rules_Owner_SKILL.md": "业务规则负责人",
+      "roles/12_Auth_Identity_Owner_SKILL.md": "认证身份负责人",
+      "roles/13_Billing_Entitlement_Owner_SKILL.md": "计费权益负责人",
+      "roles/14_Release_Config_Owner_SKILL.md": "发布配置负责人",
+      "roles/15_Security_Risk_Owner_SKILL.md": "安全风险负责人",
+      "roles/16_Agent_Operations_Owner_SKILL.md": "智能体运营负责人",
+      "roles/17_EndUser_Support_Owner_SKILL.md": "用户支持负责人",
+      "roles/18_Control_Plane_Owner_SKILL.md": "控制平面负责人",
+      "roles/19_Execution_Plane_Owner_SKILL.md": "执行平面负责人",
+      "roles/20_P9_Principal_SKILL.md": "P9派单官",
+      "roles/30_P8_PUA_Enhanced_SKILL.md": "P8执行官",
+      "roles/31_P8_Backend_PUA_SKILL.md": "P8后端工程师",
+      "roles/32A_P8_UI_Surface_Engineer_SKILL.md": "P8界面工程师",
+      "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md": "P8前端工程师",
+      "roles/33A_P8_Console_Runtime_Engineer_SKILL.md": "P8控制台工程师",
+      "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md": "P8管理体验工程师",
+      "roles/34_P8_LanrenJingling_PUA_SKILL.md": "P8运行代理工程师",
+      "roles/35_P8_Agent_PUA_SKILL.md": "P8智能体工程师",
+      "roles/36_P8_EndUser_PUA_SKILL.md": "P8用户工程师",
+      "roles/37_QA_Validation_Owner_SKILL.md": "QA验证负责人",
+      "roles/38_SRE_Observability_Owner_SKILL.md": "SRE可观测负责人",
+      "roles/39_Knowledge_Documentation_Owner_SKILL.md": "文档负责人"
+    },
+    "tools": {
+      "tools/70_Business_Rule_Matrix_SKILL.md": "规则矩阵",
+      "tools/71_State_Machine_Consistency_SKILL.md": "状态一致性",
+      "tools/72_JWT_Inspector_SKILL.md": "JWT检查",
+      "tools/73_Device_Identity_Diff_SKILL.md": "设备身份差异",
+      "tools/74_Session_Refresh_Trace_SKILL.md": "会话刷新追踪",
+      "tools/76_Billing_Ledger_Reconciler_SKILL.md": "账本对账",
+      "tools/77_Quota_Usage_Analyzer_SKILL.md": "配额分析",
+      "tools/78_Freeze_Reversal_Diagnoser_SKILL.md": "冻结诊断",
+      "tools/79_API_Contract_Diff_SKILL.md": "接口契约差异",
+      "tools/82_Network_Trace_Reviewer_SKILL.md": "网络链路审查",
+      "tools/85_UI_Surface_Audit_SKILL.md": "界面审计",
+      "tools/88_Console_Auth_Flow_Trace_SKILL.md": "控制台认证追踪",
+      "tools/89_Project_Context_Drift_SKILL.md": "上下文漂移检查",
+      "tools/90_StepUp_Resume_Checker_SKILL.md": "Step-Up恢复校验",
+      "tools/91_Worker_Identity_Stability_SKILL.md": "Worker稳定性检查",
+      "tools/92_Heartbeat_Gap_Analyzer_SKILL.md": "心跳缺口分析",
+      "tools/95_Test_Matrix_Builder_SKILL.md": "测试矩阵",
+      "tools/96_Regression_Checklist_SKILL.md": "回归清单",
+      "tools/98_Trace_Correlation_SKILL.md": "链路关联分析",
+      "tools/101_Compatibility_Matrix_SKILL.md": "兼容矩阵",
+      "tools/106_SOP_Generator_SKILL.md": "SOP生成",
+      "tools/107_Protocol_Field_Completeness_Checker_SKILL.md": "协议字段校验",
+      "tools/108_Chain_Route_Simulator_SKILL.md": "链路模拟",
+      "tools/109_High_Risk_Action_Guard_Checker_SKILL.md": "高风险门禁",
+      "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md": "授权绕过审查",
+      "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md": "批量动作审查",
+      "tools/112_Audit_Log_Consistency_Checker_SKILL.md": "审计日志校验",
+      "tools/113_Runtime_Incident_Replayer_SKILL.md": "运行事故回放",
+      "tools/114_Score_Decision_Engine_SKILL.md": "评分决策引擎",
+      "tools/115_Full_Issue_Clearance_Controller_SKILL.md": "问题清零控制器",
+      "tools/116_Document_State_Consistency_Sentinel_SKILL.md": "文档一致性哨兵"
+    },
+    "protocols": {
+      "protocols/40_P8_Agent_Experience_Protocol.md": "智能体体验协议",
+      "protocols/41_P8_EndUser_Experience_Protocol.md": "用户体验协议",
+      "protocols/50_RE_REVIEW_PROTOCOL.md": "复审协议",
+      "protocols/60_HGS_IO_Protocol.md": "输入输出协议",
+      "protocols/61_Automation_Orchestration_Protocol.md": "自动化编排协议",
+      "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md": "问题清零协议"
     }
   }
 }

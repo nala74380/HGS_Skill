@@ -1,0 +1,30 @@
+{
+  "issue_id": "DRYRUN-release-001",
+  "title": "Compatibility matrix not aligned with release toggle set",
+  "issue_type": "release",
+  "current_question": "A release toggle combination appears unsupported by the documented compatibility matrix.",
+  "source_of_truth": [
+    "Release/tools/101_Compatibility_Matrix_SKILL.md",
+    "Release/tools/109_High_Risk_Action_Guard_Checker_SKILL.md"
+  ],
+  "risk_flags": [
+    "high_risk_action"
+  ],
+  "critical_paths": [
+    "toggle set validation",
+    "compatibility lookup",
+    "guard gate before rollout"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Compatibility matrix reflects supported toggle combinations.",
+    "Guard gate blocks unsupported rollout combinations."
+  ],
+  "max_change_boundary": {
+    "files_max": 4,
+    "module_boundary": "release compatibility matrix",
+    "forbidden_changes": [
+      "no runtime identity changes"
+    ]
+  }
+}

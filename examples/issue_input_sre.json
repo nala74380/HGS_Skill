@@ -1,0 +1,27 @@
+{
+  "issue_id": "DRYRUN-sre-001",
+  "title": "Observability trace stitching may hide causal gap",
+  "issue_type": "sre",
+  "current_question": "The current observability trace may hide a causal gap between runtime events and user-visible failure.",
+  "source_of_truth": [
+    "Release/tools/98_Trace_Correlation_SKILL.md",
+    "Release/tools/113_Runtime_Incident_Replayer_SKILL.md"
+  ],
+  "risk_flags": [
+    "incident",
+    "runtime_stability"
+  ],
+  "critical_paths": [
+    "stitch runtime traces",
+    "replay incident window",
+    "identify causal gap"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Observability data reconstructs a consistent causal chain for the incident path."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "trace correlation and replay analysis"
+  }
+}

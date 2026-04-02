@@ -1,0 +1,26 @@
+{
+  "issue_id": "DRYRUN-executionplane-001",
+  "title": "Execution plane step ordering drifts under retry",
+  "issue_type": "execution_plane",
+  "current_question": "Under retry conditions, the execution plane may reorder steps and create inconsistent state transitions.",
+  "source_of_truth": [
+    "Release/tools/108_Chain_Route_Simulator_SKILL.md",
+    "Release/tools/101_Compatibility_Matrix_SKILL.md"
+  ],
+  "risk_flags": [
+    "runtime_stability"
+  ],
+  "critical_paths": [
+    "trigger retry",
+    "replay step ordering",
+    "verify state transition consistency"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Retry does not reorder execution steps into an invalid state transition."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "execution step orchestration"
+  }
+}

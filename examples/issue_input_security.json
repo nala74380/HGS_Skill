@@ -1,0 +1,28 @@
+{
+  "issue_id": "DRYRUN-security-001",
+  "title": "Authorization path may bypass guard under resumed flow",
+  "issue_type": "security",
+  "current_question": "A resumed protected flow may bypass the intended authorization guard and requires audit-level review.",
+  "source_of_truth": [
+    "Release/tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
+    "Release/tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
+    "Release/tools/112_Audit_Log_Consistency_Checker_SKILL.md"
+  ],
+  "risk_flags": [
+    "auth_bypass",
+    "audit_required"
+  ],
+  "critical_paths": [
+    "resume protected flow",
+    "verify authorization guard path",
+    "verify audit trail consistency"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Protected flow cannot bypass the intended authorization guard."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "authorization guard path"
+  }
+}

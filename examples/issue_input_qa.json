@@ -1,0 +1,23 @@
+{
+  "issue_id": "DRYRUN-qa-001",
+  "title": "Validation matrix misses one critical regression path",
+  "issue_type": "qa",
+  "current_question": "The current validation plan appears to miss a critical regression path in the affected area.",
+  "source_of_truth": [
+    "Release/tools/95_Test_Matrix_Builder_SKILL.md",
+    "Release/tools/96_Regression_Checklist_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "build test matrix",
+    "compare against regression checklist"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "The validation plan covers all critical regression paths for the scoped change."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "validation planning artifacts"
+  }
+}

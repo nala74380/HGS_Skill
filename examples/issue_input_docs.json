@@ -1,0 +1,24 @@
+{
+  "issue_id": "DRYRUN-docs-001",
+  "title": "Operational SOP does not reflect current execution path",
+  "issue_type": "docs",
+  "current_question": "The operational SOP appears to lag behind the current execution path and protocol field requirements.",
+  "source_of_truth": [
+    "Release/tools/106_SOP_Generator_SKILL.md",
+    "Release/tools/107_Protocol_Field_Completeness_Checker_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "read SOP",
+    "compare protocol fields",
+    "compare live execution path"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "SOP and required protocol fields align with the current execution path."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "documentation and SOP"
+  }
+}

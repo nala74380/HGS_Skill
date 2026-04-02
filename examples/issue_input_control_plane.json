@@ -1,0 +1,26 @@
+{
+  "issue_id": "DRYRUN-controlplane-001",
+  "title": "Control plane route drift after configuration update",
+  "issue_type": "control_plane",
+  "current_question": "A control plane configuration update may cause route drift across dependent execution paths.",
+  "source_of_truth": [
+    "Release/tools/101_Compatibility_Matrix_SKILL.md",
+    "Release/tools/108_Chain_Route_Simulator_SKILL.md"
+  ],
+  "risk_flags": [
+    "scope_risk"
+  ],
+  "critical_paths": [
+    "apply control plane config",
+    "propagate route change",
+    "verify downstream alignment"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Control plane updates do not create inconsistent downstream routing."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "control plane routing config"
+  }
+}

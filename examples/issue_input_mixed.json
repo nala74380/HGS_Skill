@@ -8,7 +8,11 @@
     "Release/tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
     "Release/tools/112_Audit_Log_Consistency_Checker_SKILL.md"
   ],
-  "risk_flags": ["high_risk_action", "bulk_action", "audit_required"],
+  "risk_flags": [
+    "high_risk_action",
+    "bulk_action",
+    "audit_required"
+  ],
   "critical_paths": [
     "switch management context",
     "resume protected action",
@@ -18,5 +22,13 @@
   "acceptance_criteria": [
     "Protected action does not resume against an unintended target object.",
     "Audit trail captures actor, object, and time consistently."
-  ]
+  ],
+  "max_change_boundary": {
+    "files_max": 7,
+    "module_boundary": "context switching and protected action resume",
+    "forbidden_changes": [
+      "no billing policy changes",
+      "no destructive object mutation"
+    ]
+  }
 }

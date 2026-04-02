@@ -1,0 +1,28 @@
+{
+  "issue_id": "DRYRUN-frontend-001",
+  "title": "UI surface and API contract drift in management console",
+  "issue_type": "frontend",
+  "current_question": "The UI surface exposes a field sequence that no longer matches the API contract and breaks a high-value path.",
+  "source_of_truth": [
+    "Release/tools/79_API_Contract_Diff_SKILL.md",
+    "Release/tools/82_Network_Trace_Reviewer_SKILL.md",
+    "Release/tools/85_UI_Surface_Audit_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "UI render",
+    "payload composition",
+    "network trace contract match"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "UI surface fields and API contract stay aligned for the validated path."
+  ],
+  "max_change_boundary": {
+    "files_max": 6,
+    "module_boundary": "frontend surface and payload mapping",
+    "forbidden_changes": [
+      "no backend entitlement changes"
+    ]
+  }
+}

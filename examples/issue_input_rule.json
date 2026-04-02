@@ -15,5 +15,12 @@
   "verification_target": "L3",
   "acceptance_criteria": [
     "Status naming and semantics are unified across docs, UI, and API response."
-  ]
+  ],
+  "max_change_boundary": {
+    "files_max": 4,
+    "module_boundary": "status naming and mapping layer",
+    "forbidden_changes": [
+      "no auth logic changes"
+    ]
+  }
 }

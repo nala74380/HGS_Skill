@@ -1,0 +1,33 @@
+{
+  "issue_id": "DRYRUN-auth-001",
+  "title": "JWT refresh chain drops auth scope after forced token renewal",
+  "issue_type": "auth",
+  "current_question": "A forced token renewal appears to lose one auth scope and leads to inconsistent object access checks.",
+  "source_of_truth": [
+    "Release/tools/72_JWT_Inspector_SKILL.md",
+    "Release/tools/74_Session_Refresh_Trace_SKILL.md",
+    "Release/tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md"
+  ],
+  "risk_flags": [
+    "auth_bypass",
+    "scope_risk"
+  ],
+  "critical_paths": [
+    "forced refresh",
+    "renewed token scope check",
+    "subsequent object access check"
+  ],
+  "verification_target": "L4",
+  "acceptance_criteria": [
+    "Renewed token preserves required scope set.",
+    "Object access check remains consistent before and after forced renewal."
+  ],
+  "max_change_boundary": {
+    "files_max": 5,
+    "module_boundary": "auth renewal and scope verification",
+    "forbidden_changes": [
+      "no high-risk action bypass",
+      "no production destructive change"
+    ]
+  }
+}

@@ -9,7 +9,6 @@ CLEARANCE_DOCS = ['Release/protocols/61_Automation_Orchestration_Protocol.md','R
 SCORING_DOCS = ['Release/docs/HGS_全局检查与清理评分报告.md']
 LEDGER_DOCS = ['Release/docs/HGS_全局扣分点问题清单与派单台账.md']
 
-
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument('--repo-root', default='.')
@@ -29,6 +28,7 @@ def main() -> int:
 
     status = 'pass' if all([
         ledger.get('assembly_status') == 'pass',
+        'Release/MANIFEST.json' in loaded,
         entry in loaded,
         ledger.get('roles_loaded') == ledger.get('roles_expected'),
         ledger.get('tools_loaded') == ledger.get('tools_expected'),

@@ -1,0 +1,24 @@
+{
+  "issue_id": "DRYRUN-agent-001",
+  "title": "Agent handoff protocol loses remediation context",
+  "issue_type": "agent",
+  "current_question": "The internal agent handoff protocol may lose remediation context between intake and execution.",
+  "source_of_truth": [
+    "Release/tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
+    "Release/tools/108_Chain_Route_Simulator_SKILL.md"
+  ],
+  "risk_flags": [],
+  "critical_paths": [
+    "agent intake",
+    "owner handoff",
+    "execution context preservation"
+  ],
+  "verification_target": "L3",
+  "acceptance_criteria": [
+    "Required protocol fields remain complete across handoff."
+  ],
+  "max_change_boundary": {
+    "mode": "bounded",
+    "surface": "agent orchestration protocol"
+  }
+}
