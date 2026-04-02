@@ -1,39 +1,47 @@
-# HGS 正式发布版
+# HGS 正式发布版总览（Runtime6 默认）
 
-这是把“纯净包”重构为 **Master Loader + Roles + Manifest** 的正式发布结构。
+这是按“**Manifest 驱动、最小强运行集、GitHub/Thinking 场景优先、旧角色保留为字典层**”原则整理后的正式发布仓库。
 
-## 目录
+## 当前默认运行特点
 
-- `MANIFEST.json`：唯一装配清单与加载顺序
-- `00_HGS_Master_Loader.md`：唯一启动入口
-- `roles/`：角色 Skill
-- `protocols/`：体验 / 再审 / I/O 协议
-- `docs/`：审查报告与发布说明
+- 只有 **1 个默认正式入口**：`Release/00_HGS_Master_Loader.md`
+- 只有 **1 个默认正式装配清单**：`Release/MANIFEST.json`
+- 默认运行集从 **23 角色全量常驻** 收敛为 **6 个常驻角色 + 4 个按需唤起角色**
+- 旧 23 角色继续保留在仓库中，但**不再作为默认对话 runtime 常驻集**
+- 主链路固定为：  
+  `Lead Orchestrator → 真相 Owner → Execution Lead → Validation Owner → 按需专家 → Docs Sink → P10终审(按需) → Closeout`
 
-## 使用原则
+---
 
-1. 运行时不是只读一个入口，而是**按 Manifest 装配全角色**
-2. 角色文件保留独立职责，避免被主入口吞没
-3. 所有产物格式以 `protocols/60_HGS_IO_Protocol.md` 为准
-4. 主装配器只负责流程、路由、停机条件与状态机，不替代角色本体
+## 当前默认运行角色
 
-## 建议加载口令
+### 常驻角色（6）
+
+1. Lead Orchestrator  
+2. Policy / Domain Owner  
+3. Identity / Security Owner  
+4. Platform Owner  
+5. Execution Lead  
+6. Validation Owner  
+
+### 按需唤起角色（4）
+
+1. Frontend / Console Specialist  
+2. Operations / Support Owner  
+3. Documentation Sink  
+4. P10 Strategic Escalation  
+
+---
+
+## 当前正式仓库结构
 
 ```text
-读取 MANIFEST.json，并按其中 load_order 装配 HGS 正式发布版：
-- 入口：00_HGS_Master_Loader.md
-- 角色：roles/ 下全部文件
-- 协议：protocols/ 下全部文件
-执行模式：full_loop
-后续我上传的文件默认进入全链路自动处理，命中停机条件时显式停下。
-```
-
-## 包内角色
-
-- P10：战略裁剪
-- P9：审查 / 派单 / 复审
-- P8 Enhanced：兜底接管
-- P8 Backend / Frontend / PCConsole / LanrenJingling / Agent / EndUser：专项执行
-- Agent / EndUser Experience：体验证据采集
-- Re-Review：收口前再审
-- HGS I/O Protocol：统一产物协议
+HGS_Skill/
+├─ README.md
+└─ Release/
+   ├─ MANIFEST.json
+   ├─ 00_HGS_Master_Loader.md
+   ├─ roles/
+   ├─ tools/
+   ├─ protocols/
+   └─ docs/
