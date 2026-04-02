@@ -89,301 +89,207 @@
       "file": "roles/10_P10_CTO_SKILL.md",
       "layer": "strategy",
       "display_name": "P10终审官",
-      "capability_tags": [
-        "mixed"
-      ],
+      "capability_tags": ["mixed"],
       "role_kind": "terminal_reviewer",
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "product-business-rules-owner",
       "file": "roles/11_Product_Business_Rules_Owner_SKILL.md",
       "layer": "truth_rules",
       "display_name": "业务规则负责人",
-      "capability_tags": [
-        "rule"
-      ],
+      "capability_tags": ["rule"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "rule"
-      ]
+      "primary_issue_types": ["rule"]
     },
     {
       "id": "auth-identity-owner",
       "file": "roles/12_Auth_Identity_Owner_SKILL.md",
       "layer": "truth_rules",
       "display_name": "认证身份负责人",
-      "capability_tags": [
-        "auth"
-      ],
+      "capability_tags": ["auth"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "auth"
-      ]
+      "primary_issue_types": ["auth"]
     },
     {
       "id": "billing-entitlement-owner",
       "file": "roles/13_Billing_Entitlement_Owner_SKILL.md",
       "layer": "truth_rules",
       "display_name": "计费权益负责人",
-      "capability_tags": [
-        "billing"
-      ],
+      "capability_tags": ["billing"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "billing"
-      ]
+      "primary_issue_types": ["billing"]
     },
     {
       "id": "release-config-owner",
       "file": "roles/14_Release_Config_Owner_SKILL.md",
       "layer": "truth_rules",
       "display_name": "发布配置负责人",
-      "capability_tags": [
-        "release"
-      ],
+      "capability_tags": ["release"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "release"
-      ]
+      "primary_issue_types": ["release"]
     },
     {
       "id": "security-risk-owner",
       "file": "roles/15_Security_Risk_Owner_SKILL.md",
       "layer": "truth_rules",
       "display_name": "安全风险负责人",
-      "capability_tags": [
-        "security"
-      ],
+      "capability_tags": ["security"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "security"
-      ]
+      "primary_issue_types": ["security"]
     },
     {
       "id": "agent-operations-owner",
       "file": "roles/16_Agent_Operations_Owner_SKILL.md",
       "layer": "ops_support_owner",
       "display_name": "智能体运营负责人",
-      "capability_tags": [
-        "agent"
-      ],
+      "capability_tags": ["agent"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "agent"
-      ]
+      "primary_issue_types": ["agent"]
     },
     {
       "id": "enduser-support-owner",
       "file": "roles/17_EndUser_Support_Owner_SKILL.md",
       "layer": "ops_support_owner",
       "display_name": "用户支持负责人",
-      "capability_tags": [
-        "enduser"
-      ],
+      "capability_tags": ["enduser"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "enduser"
-      ]
+      "primary_issue_types": ["enduser"]
     },
     {
       "id": "control-plane-owner",
       "file": "roles/18_Control_Plane_Owner_SKILL.md",
       "layer": "plane_owner",
       "display_name": "控制平面负责人",
-      "capability_tags": [
-        "control_plane"
-      ],
+      "capability_tags": ["control_plane"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "control_plane"
-      ]
+      "primary_issue_types": ["control_plane"]
     },
     {
       "id": "execution-plane-owner",
       "file": "roles/19_Execution_Plane_Owner_SKILL.md",
       "layer": "plane_owner",
       "display_name": "执行平面负责人",
-      "capability_tags": [
-        "execution_plane"
-      ],
+      "capability_tags": ["execution_plane"],
       "role_kind": "owner",
-      "primary_issue_types": [
-        "execution_plane"
-      ]
+      "primary_issue_types": ["execution_plane"]
     },
     {
       "id": "p9-principal",
       "file": "roles/20_P9_Principal_SKILL.md",
       "layer": "review_dispatch_rereview",
       "display_name": "P9派单官",
-      "capability_tags": [
-        "mixed"
-      ],
+      "capability_tags": ["mixed"],
       "role_kind": "dispatch_orchestrator",
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "p8-pua-enhanced",
       "file": "roles/30_P8_PUA_Enhanced_SKILL.md",
       "layer": "execution_fallback",
       "display_name": "P8执行官",
-      "capability_tags": [
-        "mixed"
-      ],
+      "capability_tags": ["mixed"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "p8-backend",
       "file": "roles/31_P8_Backend_PUA_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8后端工程师",
-      "capability_tags": [
-        "release",
-        "billing",
-        "auth"
-      ],
+      "capability_tags": ["release", "billing", "auth"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "release"
-      ]
+      "primary_issue_types": ["release"]
     },
     {
       "id": "p8-ui-surface",
       "file": "roles/32A_P8_UI_Surface_Engineer_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8界面工程师",
-      "capability_tags": [
-        "frontend"
-      ],
+      "capability_tags": ["frontend"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "frontend"
-      ]
+      "primary_issue_types": ["frontend"]
     },
     {
       "id": "p8-frontend-logic",
       "file": "roles/32B_P8_Frontend_Logic_Engineer_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8前端工程师",
-      "capability_tags": [
-        "frontend"
-      ],
+      "capability_tags": ["frontend"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "frontend"
-      ]
+      "primary_issue_types": ["frontend"]
     },
     {
       "id": "p8-console-runtime",
       "file": "roles/33A_P8_Console_Runtime_Engineer_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8控制台工程师",
-      "capability_tags": [
-        "console"
-      ],
+      "capability_tags": ["console"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "console"
-      ]
+      "primary_issue_types": ["console"]
     },
     {
       "id": "p8-console-management-experience",
       "file": "roles/33B_P8_Console_Management_Experience_Engineer_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8管理体验工程师",
-      "capability_tags": [
-        "console"
-      ],
+      "capability_tags": ["console"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "console"
-      ]
+      "primary_issue_types": ["console"]
     },
     {
       "id": "p8-lanren-jingling",
       "file": "roles/34_P8_LanrenJingling_PUA_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8运行代理工程师",
-      "capability_tags": [
-        "worker"
-      ],
+      "capability_tags": ["worker"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "worker"
-      ]
+      "primary_issue_types": ["worker"]
     },
     {
       "id": "p8-agent",
       "file": "roles/35_P8_Agent_PUA_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8智能体工程师",
-      "capability_tags": [
-        "agent"
-      ],
+      "capability_tags": ["agent"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "agent"
-      ]
+      "primary_issue_types": ["agent"]
     },
     {
       "id": "p8-enduser",
       "file": "roles/36_P8_EndUser_PUA_SKILL.md",
       "layer": "execution_specialist",
       "display_name": "P8用户工程师",
-      "capability_tags": [
-        "enduser"
-      ],
+      "capability_tags": ["enduser"],
       "role_kind": "executor",
-      "primary_issue_types": [
-        "enduser"
-      ]
+      "primary_issue_types": ["enduser"]
     },
     {
       "id": "qa-validation-owner",
       "file": "roles/37_QA_Validation_Owner_SKILL.md",
       "layer": "validation",
       "display_name": "QA验证负责人",
-      "capability_tags": [
-        "qa"
-      ],
+      "capability_tags": ["qa"],
       "role_kind": "validator",
-      "primary_issue_types": [
-        "qa"
-      ]
+      "primary_issue_types": ["qa"]
     },
     {
       "id": "sre-observability-owner",
       "file": "roles/38_SRE_Observability_Owner_SKILL.md",
       "layer": "runtime_observability",
       "display_name": "SRE可观测负责人",
-      "capability_tags": [
-        "sre"
-      ],
+      "capability_tags": ["sre"],
       "role_kind": "validator",
-      "primary_issue_types": [
-        "sre"
-      ]
+      "primary_issue_types": ["sre"]
     },
     {
       "id": "knowledge-documentation-owner",
       "file": "roles/39_Knowledge_Documentation_Owner_SKILL.md",
       "layer": "knowledge",
       "display_name": "文档负责人",
-      "capability_tags": [
-        "docs"
-      ],
+      "capability_tags": ["docs"],
       "role_kind": "knowledge_owner",
-      "primary_issue_types": [
-        "docs"
-      ]
+      "primary_issue_types": ["docs"]
     }
   ],
   "protocols": [
@@ -424,387 +330,248 @@
       "file": "tools/70_Business_Rule_Matrix_SKILL.md",
       "layer": "truth_analysis",
       "display_name": "规则矩阵",
-      "capability_tags": [
-        "rule"
-      ],
-      "primary_issue_types": [
-        "rule"
-      ]
+      "capability_tags": ["rule"],
+      "primary_issue_types": ["rule"]
     },
     {
       "id": "state-machine-consistency",
       "file": "tools/71_State_Machine_Consistency_SKILL.md",
       "layer": "drift_analysis",
       "display_name": "状态一致性",
-      "capability_tags": [
-        "rule"
-      ],
-      "primary_issue_types": [
-        "rule"
-      ]
+      "capability_tags": ["rule"],
+      "primary_issue_types": ["rule"]
     },
     {
       "id": "jwt-inspector",
       "file": "tools/72_JWT_Inspector_SKILL.md",
       "layer": "identity_analysis",
       "display_name": "JWT检查",
-      "capability_tags": [
-        "auth"
-      ],
-      "primary_issue_types": [
-        "auth"
-      ]
+      "capability_tags": ["auth"],
+      "primary_issue_types": ["auth"]
     },
     {
       "id": "device-identity-diff",
       "file": "tools/73_Device_Identity_Diff_SKILL.md",
       "layer": "identity_analysis",
       "display_name": "设备身份差异",
-      "capability_tags": [
-        "auth"
-      ],
-      "primary_issue_types": [
-        "auth"
-      ]
+      "capability_tags": ["auth"],
+      "primary_issue_types": ["auth"]
     },
     {
       "id": "session-refresh-trace",
       "file": "tools/74_Session_Refresh_Trace_SKILL.md",
       "layer": "identity_analysis",
       "display_name": "会话刷新追踪",
-      "capability_tags": [
-        "auth",
-        "console"
-      ],
-      "primary_issue_types": [
-        "auth"
-      ]
+      "capability_tags": ["auth", "console"],
+      "primary_issue_types": ["auth"]
     },
     {
       "id": "billing-ledger-reconciler",
       "file": "tools/76_Billing_Ledger_Reconciler_SKILL.md",
       "layer": "billing_analysis",
       "display_name": "账本对账",
-      "capability_tags": [
-        "billing"
-      ],
-      "primary_issue_types": [
-        "billing"
-      ]
+      "capability_tags": ["billing"],
+      "primary_issue_types": ["billing"]
     },
     {
       "id": "quota-usage-analyzer",
       "file": "tools/77_Quota_Usage_Analyzer_SKILL.md",
       "layer": "billing_analysis",
       "display_name": "配额分析",
-      "capability_tags": [
-        "billing"
-      ],
-      "primary_issue_types": [
-        "billing"
-      ]
+      "capability_tags": ["billing"],
+      "primary_issue_types": ["billing"]
     },
     {
       "id": "freeze-reversal-diagnoser",
       "file": "tools/78_Freeze_Reversal_Diagnoser_SKILL.md",
       "layer": "billing_analysis",
       "display_name": "冻结诊断",
-      "capability_tags": [
-        "billing"
-      ],
-      "primary_issue_types": [
-        "billing"
-      ]
+      "capability_tags": ["billing"],
+      "primary_issue_types": ["billing"]
     },
     {
       "id": "api-contract-diff",
       "file": "tools/79_API_Contract_Diff_SKILL.md",
       "layer": "contract_analysis",
       "display_name": "接口契约差异",
-      "capability_tags": [
-        "frontend"
-      ],
-      "primary_issue_types": [
-        "frontend"
-      ]
+      "capability_tags": ["frontend"],
+      "primary_issue_types": ["frontend"]
     },
     {
       "id": "network-trace-reviewer",
       "file": "tools/82_Network_Trace_Reviewer_SKILL.md",
       "layer": "trace_analysis",
       "display_name": "网络链路审查",
-      "capability_tags": [
-        "frontend",
-        "console"
-      ],
-      "primary_issue_types": [
-        "frontend"
-      ]
+      "capability_tags": ["frontend", "console"],
+      "primary_issue_types": ["frontend"]
     },
     {
       "id": "ui-surface-audit",
       "file": "tools/85_UI_Surface_Audit_SKILL.md",
       "layer": "ux_analysis",
       "display_name": "界面审计",
-      "capability_tags": [
-        "frontend"
-      ],
-      "primary_issue_types": [
-        "frontend"
-      ]
+      "capability_tags": ["frontend"],
+      "primary_issue_types": ["frontend"]
     },
     {
       "id": "console-auth-flow-trace",
       "file": "tools/88_Console_Auth_Flow_Trace_SKILL.md",
       "layer": "console_identity_analysis",
       "display_name": "控制台认证追踪",
-      "capability_tags": [
-        "console",
-        "auth"
-      ],
-      "primary_issue_types": [
-        "console"
-      ]
+      "capability_tags": ["console", "auth"],
+      "primary_issue_types": ["console"]
     },
     {
       "id": "project-context-drift",
       "file": "tools/89_Project_Context_Drift_SKILL.md",
       "layer": "context_analysis",
       "display_name": "上下文漂移检查",
-      "capability_tags": [
-        "console"
-      ],
-      "primary_issue_types": [
-        "console"
-      ]
+      "capability_tags": ["console"],
+      "primary_issue_types": ["console"]
     },
     {
       "id": "stepup-resume-checker",
       "file": "tools/90_StepUp_Resume_Checker_SKILL.md",
       "layer": "context_analysis",
       "display_name": "Step-Up恢复校验",
-      "capability_tags": [
-        "console",
-        "auth"
-      ],
-      "primary_issue_types": [
-        "console"
-      ]
+      "capability_tags": ["console", "auth"],
+      "primary_issue_types": ["console"]
     },
     {
       "id": "worker-identity-stability",
       "file": "tools/91_Worker_Identity_Stability_SKILL.md",
       "layer": "runtime_tool",
       "display_name": "Worker稳定性检查",
-      "capability_tags": [
-        "worker"
-      ],
-      "primary_issue_types": [
-        "worker"
-      ]
+      "capability_tags": ["worker"],
+      "primary_issue_types": ["worker"]
     },
     {
       "id": "heartbeat-gap-analyzer",
       "file": "tools/92_Heartbeat_Gap_Analyzer_SKILL.md",
       "layer": "runtime_tool",
       "display_name": "心跳缺口分析",
-      "capability_tags": [
-        "worker",
-        "sre"
-      ],
-      "primary_issue_types": [
-        "worker"
-      ]
+      "capability_tags": ["worker", "sre"],
+      "primary_issue_types": ["worker"]
     },
     {
       "id": "test-matrix-builder",
       "file": "tools/95_Test_Matrix_Builder_SKILL.md",
       "layer": "validation",
       "display_name": "测试矩阵",
-      "capability_tags": [
-        "qa"
-      ],
-      "primary_issue_types": [
-        "qa"
-      ]
+      "capability_tags": ["qa"],
+      "primary_issue_types": ["qa"]
     },
     {
       "id": "regression-checklist",
       "file": "tools/96_Regression_Checklist_SKILL.md",
       "layer": "validation",
       "display_name": "回归清单",
-      "capability_tags": [
-        "qa"
-      ],
-      "primary_issue_types": [
-        "qa"
-      ]
+      "capability_tags": ["qa"],
+      "primary_issue_types": ["qa"]
     },
     {
       "id": "trace-correlation",
       "file": "tools/98_Trace_Correlation_SKILL.md",
       "layer": "runtime_tool",
       "display_name": "链路关联分析",
-      "capability_tags": [
-        "worker",
-        "sre",
-        "console"
-      ],
-      "primary_issue_types": [
-        "worker",
-        "sre"
-      ]
+      "capability_tags": ["worker", "sre", "console"],
+      "primary_issue_types": ["worker", "sre"]
     },
     {
       "id": "compatibility-matrix",
       "file": "tools/101_Compatibility_Matrix_SKILL.md",
       "layer": "release_analysis",
       "display_name": "兼容矩阵",
-      "capability_tags": [
-        "release"
-      ],
-      "primary_issue_types": [
-        "release"
-      ]
+      "capability_tags": ["release"],
+      "primary_issue_types": ["release"]
     },
     {
       "id": "sop-generator",
       "file": "tools/106_SOP_Generator_SKILL.md",
       "layer": "knowledge_synthesis",
       "display_name": "SOP生成",
-      "capability_tags": [
-        "docs"
-      ],
-      "primary_issue_types": [
-        "docs"
-      ]
+      "capability_tags": ["docs"],
+      "primary_issue_types": ["docs"]
     },
     {
       "id": "protocol-field-completeness-checker",
       "file": "tools/107_Protocol_Field_Completeness_Checker_SKILL.md",
       "layer": "governance_tool",
       "display_name": "协议字段校验",
-      "capability_tags": [
-        "docs"
-      ],
-      "primary_issue_types": [
-        "docs"
-      ]
+      "capability_tags": ["docs"],
+      "primary_issue_types": ["docs"]
     },
     {
       "id": "chain-route-simulator",
       "file": "tools/108_Chain_Route_Simulator_SKILL.md",
       "layer": "governance_tool",
       "display_name": "链路模拟",
-      "capability_tags": [
-        "mixed"
-      ],
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "capability_tags": ["mixed"],
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "high-risk-action-guard-checker",
       "file": "tools/109_High_Risk_Action_Guard_Checker_SKILL.md",
       "layer": "security_tool",
       "display_name": "高风险门禁",
-      "capability_tags": [
-        "security",
-        "release"
-      ],
-      "primary_issue_types": [
-        "security"
-      ]
+      "capability_tags": ["security", "release"],
+      "primary_issue_types": ["security"]
     },
     {
       "id": "authorization-bypass-path-reviewer",
       "file": "tools/110_Authorization_Bypass_Path_Reviewer_SKILL.md",
       "layer": "security_tool",
       "display_name": "授权绕过审查",
-      "capability_tags": [
-        "security",
-        "auth"
-      ],
-      "primary_issue_types": [
-        "auth",
-        "security"
-      ]
+      "capability_tags": ["security", "auth"],
+      "primary_issue_types": ["auth", "security"]
     },
     {
       "id": "bulk-action-safety-reviewer",
       "file": "tools/111_Bulk_Action_Safety_Reviewer_SKILL.md",
       "layer": "security_tool",
       "display_name": "批量动作审查",
-      "capability_tags": [
-        "security"
-      ],
-      "primary_issue_types": [
-        "security"
-      ]
+      "capability_tags": ["security"],
+      "primary_issue_types": ["security"]
     },
     {
       "id": "audit-log-consistency-checker",
       "file": "tools/112_Audit_Log_Consistency_Checker_SKILL.md",
       "layer": "governance_tool",
       "display_name": "审计日志校验",
-      "capability_tags": [
-        "security",
-        "release"
-      ],
-      "primary_issue_types": [
-        "security"
-      ]
+      "capability_tags": ["security", "release"],
+      "primary_issue_types": ["security"]
     },
     {
       "id": "runtime-incident-replayer",
       "file": "tools/113_Runtime_Incident_Replayer_SKILL.md",
       "layer": "runtime_tool",
       "display_name": "运行事故回放",
-      "capability_tags": [
-        "worker",
-        "sre"
-      ],
-      "primary_issue_types": [
-        "sre"
-      ]
+      "capability_tags": ["worker", "sre"],
+      "primary_issue_types": ["sre"]
     },
     {
       "id": "score-decision-engine",
       "file": "tools/114_Score_Decision_Engine_SKILL.md",
       "layer": "governance_tool",
       "display_name": "评分决策引擎",
-      "capability_tags": [
-        "mixed",
-        "sre"
-      ],
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "capability_tags": ["mixed", "sre"],
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "full-issue-clearance-controller",
       "file": "tools/115_Full_Issue_Clearance_Controller_SKILL.md",
       "layer": "governance_tool",
       "display_name": "问题清零控制器",
-      "capability_tags": [
-        "mixed"
-      ],
-      "primary_issue_types": [
-        "mixed"
-      ]
+      "capability_tags": ["mixed"],
+      "primary_issue_types": ["mixed"]
     },
     {
       "id": "document-state-consistency-sentinel",
       "file": "tools/116_Document_State_Consistency_Sentinel_SKILL.md",
       "layer": "knowledge_synthesis",
       "display_name": "文档一致性哨兵",
-      "capability_tags": [
-        "docs",
-        "rule"
-      ],
-      "primary_issue_types": [
-        "docs"
-      ]
+      "capability_tags": ["docs", "rule"],
+      "primary_issue_types": ["docs"]
     }
   ],
   "governance_docs": [
@@ -963,7 +730,15 @@
       "tool_coverage_min_before_review": 85,
       "evidence_completeness_min_before_review": 80,
       "closeout_readiness_min_before_done": 85,
-      "reopen_risk_high": 60
+      "reopen_risk_high": 60,
+      "per_issue_type_overrides": {
+        "auth": {
+          "owner_confidence_min_for_direct_dispatch": 80
+        },
+        "docs": {
+          "owner_confidence_min_for_direct_dispatch": 60
+        }
+      }
     },
     "score_decision_rules": {
       "dispatch": {
@@ -986,6 +761,16 @@
         "otherwise": "auto_reopen_on_drift_or_auto_docs_sink_then_recheck"
       }
     },
+    "fast_track_policy": {
+      "enabled": true,
+      "skip_validation_for_risk_levels": ["low"],
+      "skip_experience_for_risk_levels": ["low"],
+      "min_owner_confidence": 90
+    },
+    "parallel_actions": [
+      ["validate_by_qa", "experience_replay"],
+      ["sre_observability_check", "docs_sink"]
+    ],
     "full_issue_clearance_policy": {
       "require_register_all_findings": true,
       "forbid_priority_only_dispatch": true,
@@ -1558,70 +1343,27 @@
       "candidate_experience_patterns": [
         {
           "id": "console-context-drift",
-          "issue_types": [
-            "console",
-            "frontend",
-            "mixed"
-          ],
-          "risk_flags": [
-            "scope_risk",
-            "high_risk_action"
-          ],
-          "keywords": [
-            "context",
-            "project",
-            "step-up",
-            "reauth",
-            "resume",
-            "target"
-          ],
+          "issue_types": ["console", "frontend", "mixed"],
+          "risk_flags": ["scope_risk", "high_risk_action"],
+          "keywords": ["context", "project", "step-up", "reauth", "resume", "target"],
           "bias_hint": "先检查上下文恢复、目标对象对齐与高风险动作恢复链",
           "valid_for_scope": "console_runtime_and_context_resume",
           "introduced_in_version": "formal-2026-03-31-int11"
         },
         {
           "id": "auth-refresh-mismatch",
-          "issue_types": [
-            "auth",
-            "security",
-            "mixed"
-          ],
-          "risk_flags": [
-            "auth_bypass",
-            "scope_risk"
-          ],
-          "keywords": [
-            "token",
-            "jwt",
-            "refresh",
-            "session",
-            "step-up",
-            "reauth",
-            "scope"
-          ],
+          "issue_types": ["auth", "security", "mixed"],
+          "risk_flags": ["auth_bypass", "scope_risk"],
+          "keywords": ["token", "jwt", "refresh", "session", "step-up", "reauth", "scope"],
           "bias_hint": "优先检查刷新链、scope 继承与授权绕过路径",
           "valid_for_scope": "auth_refresh_and_scope",
           "introduced_in_version": "formal-2026-03-31-int11"
         },
         {
           "id": "worker-heartbeat-instability",
-          "issue_types": [
-            "worker",
-            "execution_plane",
-            "sre"
-          ],
-          "risk_flags": [
-            "runtime_stability",
-            "incident"
-          ],
-          "keywords": [
-            "worker",
-            "heartbeat",
-            "offline",
-            "online",
-            "incident",
-            "identity"
-          ],
+          "issue_types": ["worker", "execution_plane", "sre"],
+          "risk_flags": ["runtime_stability", "incident"],
+          "keywords": ["worker", "heartbeat", "offline", "online", "incident", "identity"],
           "bias_hint": "优先检查身份稳定性、心跳缺口与运行时事故时间线",
           "valid_for_scope": "worker_runtime_observability",
           "introduced_in_version": "formal-2026-03-31-int11"
@@ -1630,41 +1372,18 @@
       "approved_experience_patterns": [
         {
           "id": "quota-occupancy-desync",
-          "issue_types": [
-            "billing",
-            "enduser",
-            "mixed"
-          ],
-          "risk_flags": [
-            "audit_required"
-          ],
-          "keywords": [
-            "quota",
-            "occupancy",
-            "slot",
-            "device",
-            "billing"
-          ],
+          "issue_types": ["billing", "enduser", "mixed"],
+          "risk_flags": ["audit_required"],
+          "keywords": ["quota", "occupancy", "slot", "device", "billing"],
           "bias_hint": "优先核对账本、占用记录与可用配额是否一致",
           "valid_for_scope": "billing_quota_and_occupancy",
           "introduced_in_version": "formal-2026-03-31-int11"
         },
         {
           "id": "ui-api-contract-drift",
-          "issue_types": [
-            "frontend",
-            "console",
-            "enduser"
-          ],
+          "issue_types": ["frontend", "console", "enduser"],
           "risk_flags": [],
-          "keywords": [
-            "ui",
-            "api",
-            "field",
-            "status",
-            "display",
-            "contract"
-          ],
+          "keywords": ["ui", "api", "field", "status", "display", "contract"],
           "bias_hint": "优先核对 UI 字段、API 契约与显示语义一致性",
           "valid_for_scope": "ui_api_semantic_alignment",
           "introduced_in_version": "formal-2026-03-31-int11"
@@ -1674,18 +1393,12 @@
         {
           "id": "premature-route-convergence",
           "description": "过早收敛到第一条 issue_type/owner 主线，遗漏对立解释",
-          "trigger_signals": [
-            "single_hypothesis_only",
-            "route_conflicts_present"
-          ]
+          "trigger_signals": ["single_hypothesis_only", "route_conflicts_present"]
         },
         {
           "id": "stale-experience-bias",
           "description": "旧经验继续高强度影响新版本问题判断",
-          "trigger_signals": [
-            "version_shift_detected",
-            "experience_challenge_win"
-          ]
+          "trigger_signals": ["version_shift_detected", "experience_challenge_win"]
         }
       ]
     },
@@ -1749,22 +1462,10 @@
       "status_header_exact_text": "自动化链路：已开启",
       "display_mode_default": "forensic",
       "display_mode_command_keywords": {
-        "compact": [
-          "显示：简版",
-          "display:compact"
-        ],
-        "standard": [
-          "显示：标准",
-          "display:standard"
-        ],
-        "forensic": [
-          "显示：全审计",
-          "display:forensic"
-        ],
-        "off": [
-          "显示：关闭",
-          "display:off"
-        ]
+        "compact": ["显示：简版", "display:compact"],
+        "standard": ["显示：标准", "display:standard"],
+        "forensic": ["显示：全审计", "display:forensic"],
+        "off": ["显示：关闭", "display:off"]
       },
       "forensic_fields_required": [
         "ticket_id",
@@ -1854,5 +1555,12 @@
       "protocols/61_Automation_Orchestration_Protocol.md": "自动化编排协议",
       "protocols/62_Full_Issue_Discovery_Dispatch_and_Clearance_Protocol.md": "问题清零协议"
     }
+  },
+  "github_integration": {
+    "enabled": false,
+    "repo_owner": "nala74380",
+    "repo_name": "HGS_Skill",
+    "base_branch": "main",
+    "token_env_var": "GITHUB_TOKEN"
   }
 }
