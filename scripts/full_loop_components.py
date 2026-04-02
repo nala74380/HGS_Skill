@@ -62,8 +62,6 @@ def resolve_display_mode(explicit_mode: str | None, display_policy: dict) -> str
     return mode if mode in allowed else 'standard'
 
 
-
-
 def resolve_display_mode_text(display_mode: str, display_policy: dict) -> str:
     label_map = display_policy.get("display_mode_label_map", {}) or {}
     return str(label_map.get(display_mode, display_policy.get("display_mode_exact_text", "全审计" if display_mode == "forensic" else display_mode)))
@@ -303,3 +301,117 @@ def build_mandatory_checklist(issue: dict, simulated_tool_results: list[dict], r
 
 def build_act_before_asking(candidate_paths: list[dict], simulated_tool_results: list[dict], blocking_reasons: list[str], evidence_missing: list[str]) -> dict:
     return {'internal_actions_attempted':['候选 issue type 推断','候选 owner/tool 路径收敛','模拟工具结果生成','验证与体验门槛评估','复审与清零条件评估'],'candidate_paths_count':len(candidate_paths),'simulated_tool_results_count':len(simulated_tool_results),'remaining_blockers':blocking_reasons,'remaining_evidence_gaps':evidence_missing,'ask_user_only_if_internal_options_exhausted':True}
+
+
+# ==================== 快速通道辅助函数 ====================
+def should_use_fast_track(issue: dict, score_snapshot: dict, fast_track_policy: dict) -> bool:
+    """Determine if fast track should be used (skip validation and experience)."""
+    if not fast_track_policy.get('enabled'):
+        return False
+    risks = issue.get('risk_flags', [])
+    # Check if only low risk (no medium/high/critical)
+    is_low_risk = 'low' in risks and not any(r in {'medium','high','critical'} for r in risks)
+    if not is_low_risk:
+        return False
+    min_conf = fast_track_policy.get('min_owner_confidence', 90)
+    owner_conf = score_snapshot.get('owner_confidence', 0)
+    return owner_conf >= min_conf
+
+
+def build_report_data(environment: dict[str, Any], issue: dict[str, Any], issue_type: str, risks: list[str], normalized_report: dict[str, Any], route_drift_report: dict[str, Any], assignment: dict[str, Any], simulation: dict[str, Any], track_competition: dict[str, Any], role_disagreement: dict[str, Any], opportunity_discovery: dict[str, Any], experience_summary: dict[str, Any], candidate_paths: list[dict[str, Any]], alternative_hypotheses: list[dict[str, Any]], counterfactual_challenges: list[dict[str, Any]], mandatory_checklist: list[dict[str, Any]], act_before_asking: dict[str, Any], score_snapshot: dict[str, Any], scoring_axes: dict[str, Any], overall_quality_score: float, axis_gaps: list[str], decisions: dict[str, Any], issue_scaling: dict[str, Any], issue_stub: dict[str, Any], linked_resources: dict[str, Any], action_trace: list[dict[str, Any]], current_work: dict[str, Any], parked_tickets: list[dict[str, Any]], continuation_tickets: list[dict[str, Any]], clearance_control: dict[str, Any], open_issue_count: int) -> dict[str, Any]:
+    display_lookup = environment['display_lookup']
+    policy = environment['policy']
+    route = environment['route']
+    clearance_policy = environment['clearance_policy']
+    display_mode = environment['display_mode']
+    conversation_display_policy = environment['conversation_display_policy']
+    fast_track_policy = environment.get('fast_track_policy', {})
+    priority_rank = 1
+
+    # 快速通道判断
+    use_fast = should_use_fast_track(issue, score_snapshot, fast_track_policy)
+
+    p9_dispatch_checklist = {
+        'ticket_id': issue_stub['issue_id'],
+        'dispatch_target_skill': assignment['p8_name'],
+        'linked_files_to_modify': linked_resources['linked_files_display'],
+        'linked_protocols_to_apply': linked_resources['linked_protocols_display'],
+        'linked_records_to_update': linked_resources['linked_records'],
+        'linked_docs_to_sync': linked_resources['linked_docs'],
+        'status': 'checked',
+        'current_phase': '派单编排',
+    }
+
+    # 根据快速通道决定是否创建验证计划和体验计划
+    validation_plan_created = 'yes' if (issue.get('critical_paths') and issue.get('acceptance_criteria') and not use_fast) else 'no'
+    experience_plan_created = 'yes' if (not use_fast) else 'no'
+
+    return {
+        'response_header': conversation_display_policy.get('status_header_exact_text', '自动化链路：已开启'),
+        'display_mode': display_mode,
+        'display_mode_text': resolve_display_mode_text(display_mode, conversation_display_policy),
+        'mode': 'full_loop',
+        'chain': DEFAULT_CHAIN,
+        'issue_stub_created': 'yes' if assignment['owner'] else 'no',
+        'owner_identified': 'yes' if assignment['owner'] else 'no',
+        'owner_name': assignment['owner_name'],
+        'ticket_id': issue_stub['issue_id'],
+        'ticket_priority_rank': priority_rank,
+        'problem_statement': issue_stub['problem_statement'],
+        'required_tools_identified': 'yes' if assignment['required_tools'] else 'no',
+        'required_tools': assignment['required_tool_names'],
+        'p8_executor_skill': assignment['p8_name'],
+        'p8_executor_skill_display': assignment['p8_name'],
+        'risk_gates_checked': 'yes',
+        'risk_gate_plan': {
+            'high_risk_guard_gate': any(r in {'high_risk_action', 'destructive_change'} for r in risks),
+            'auth_bypass_guard_gate': any(r in {'auth_bypass', 'scope_risk'} for r in risks),
+            'runtime_stability_gate': any(r in {'runtime_stability', 'incident'} for r in risks),
+            'must_run_tool_gate': bool(assignment['required_tools']),
+        },
+        'exec_plan_created': 'yes' if assignment['owner'] else 'no',
+        'exec_plan': {'owner': assignment['owner_name'], 'max_change_boundary': issue.get('max_change_boundary', 'provisional'), 'success_definition': issue.get('acceptance_criteria', [])},
+        'validation_plan_created': validation_plan_created,
+        'validation_plan': {'required_level': issue.get('verification_target', 'L3'), 'critical_paths': issue.get('critical_paths', [])},
+        'experience_plan_created': experience_plan_created,
+        'experience_plan': {'experience_protocols': ['智能体体验协议', '用户体验协议'], 'replay_required_when_real_feedback_missing': True, 'user_angle_checks': ['clarity_of_outcome', 'visible_state_alignment', 'post_action_safety'], 'agent_angle_checks': ['operator_context_alignment', 'handoff_clarity', 'scope_safety']},
+        'rereview_path_created': 'yes',
+        'rereview_path': {'p9_rereview': True, 'p10_on_demand': True, 'protocol': '复审协议'},
+        'issue_inventory_created': 'yes',
+        'issue_inventory': {'open_issue_count_initialized': open_issue_count, 'items': [issue_stub] + list(issue.get('secondary_findings', [])) + list(issue.get('reopened_findings', [])), 'scaling_strategy': issue_scaling, 'parked_tickets': parked_tickets, 'continuation_tickets': continuation_tickets},
+        'clearance_gate_created': 'yes',
+        'clearance_loop_created': 'yes',
+        'clearance_loop': {'controller': '问题清零控制器', 'rule': 'continue until open_issue_count = 0', 'next_required_action': decisions['next_action'], 'continuous_dispatch_required': clearance_policy.get('continuous_dispatch_required', True), 'continuous_rereview_required': clearance_policy.get('continuous_rereview_required', True), 'redispatch_after_each_failed_review': clearance_policy.get('redispatch_after_each_failed_review', True), 'redispatch_after_new_findings': clearance_policy.get('redispatch_after_new_findings', True), 'parked_ticket_registry_required': clearance_policy.get('parked_ticket_registry_required', True), 'clearance_control_is_primary_theme': clearance_policy.get('clearance_control_is_primary_theme', True)},
+        'clearance_control': clearance_control,
+        'normalized_input_summary': {'minimum_user_input_fields': route.get('minimum_user_input_fields', ['issue_type', 'current_question']), 'inferred_fields': issue.get('normalization_metadata', {}).get('inference_hits', []), 'recommended_missing': [f for f in route.get('recommended_input_fields', []) if not issue.get(f)]},
+        'exploration_summary': {'candidate_paths': candidate_paths, 'alternative_hypotheses': alternative_hypotheses, 'counterfactual_challenges': counterfactual_challenges, 'mandatory_checklist': mandatory_checklist, 'principle': route.get('execution_style_balance', {}).get('principle', 'front_explore_mid_converge_late_strict')},
+        'track_competition': track_competition,
+        'role_disagreement': role_disagreement,
+        'opportunity_discovery': opportunity_discovery,
+        'experience_memory': experience_summary,
+        'act_before_asking_summary': act_before_asking,
+        'creativity_amplification_summary': {'policy': environment['creativity'], 'alternative_hypotheses_count': len(alternative_hypotheses), 'counterfactual_challenges_count': len(counterfactual_challenges), 'mandatory_checklist_completion': sum(1 for x in mandatory_checklist if x['status'] == 'done')},
+        'route_simulation': {'simulated_route': [{'step': 1, 'actor': assignment['owner_name'], 'action': 'truth_owner_identification'}, {'step': 2, 'actor': 'P9派单官', 'action': 'dispatch_review'}, {'step': 3, 'actor': assignment['required_tool_names'], 'action': 'must_run_tools'}, {'step': 4, 'actor': 'QA验证负责人', 'action': 'validation_plan'}, {'step': 5, 'actor': '文档负责人', 'action': 'docs_sink'}], 'route_conflicts': decisions.get('route_conflicts_display', []), 'must_trigger_tools': assignment['required_tool_names'], 'likely_stop_conditions': decisions['blocking_reasons'] + [f"evidence_missing:{x}" for x in decisions['evidence_missing']] + [f"low_confidence:{x}" for x in simulation['low_confidence_tools']]},
+        'simulated_tool_results': simulation['simulated_tool_results'],
+        'simulation_findings_summary': simulation['simulation_findings'],
+        'route_drift_report': route_drift_report,
+        'action_trace': action_trace,
+        'current_work_display': current_work,
+        'p9_dispatch_checklist': p9_dispatch_checklist,
+        'issue_priority_ranking': [{'ticket_id': issue_stub['issue_id'], 'priority_rank': priority_rank, 'severity': 'P1', 'reason': 'mainline issue after initial review'}],
+        'review_result': {'review_passed': decisions['review'] == 'review' and decisions['done'] != 'blocked', 'remaining_issues': decisions['blocking_reasons'], 'review_notes': '复审不合格时继续回原单；复审合格时允许挂单治理'},
+        'score_snapshot': score_snapshot,
+        'scoring_axes': scoring_axes,
+        'overall_quality_score': overall_quality_score,
+        'score_axis_gaps': axis_gaps,
+        'scoring_axis_summary': {'display_order': environment['scoring_policy'].get('axis_display_order', []), 'minimum_axis_scores': environment['scoring_policy'].get('minimum_axis_scores', {}), 'minimum_overall_quality_score_for_confident_result': environment['scoring_policy'].get('minimum_overall_quality_score_for_confident_result', 84), 'minimum_overall_quality_score_for_publish_ready_skill': environment['scoring_policy'].get('minimum_overall_quality_score_for_publish_ready_skill', 88)},
+        'dispatch_decision': decisions['dispatch'],
+        'review_decision': decisions['review'],
+        'reopen_decision': decisions['reopen'],
+        'done_decision': decisions['done'],
+        'blocking_reasons': decisions['blocking_reasons'],
+        'evidence_missing': decisions['evidence_missing'],
+        'user_choice_required': decisions['user_choice'],
+        'suggestion_mode': decisions['suggestion_mode'],
+        'automation_execution_status': decisions['automation_status'],
+    }
